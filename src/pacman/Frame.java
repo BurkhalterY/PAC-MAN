@@ -21,7 +21,7 @@ public class Frame extends JFrame{
 
     public Frame(){
         this.setTitle("PAC-MAN");
-        this.setSize(300, 400);
+        this.setSize(500, 700);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(pan);

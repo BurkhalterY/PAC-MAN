@@ -5,9 +5,6 @@
  */
 package pacman;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -20,13 +17,12 @@ import javax.imageio.ImageIO;
  * @author BuYa
  */
 public class Clyde extends Ghost{
-    private BufferedImage clyde;
     
     public Clyde(float x, float y, float vitesse) {
         super(x, y, vitesse);
         
         try {
-            clyde = ImageIO.read(new File("res/clyde.png"));
+            img = ImageIO.read(new File("res/clyde.png"));
         } catch (IOException ex) {
             Logger.getLogger(Pacman.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -39,15 +35,5 @@ public class Clyde extends Ghost{
         } else {
             cible = new Tile(0, 36, 0);
         }
-    }
-    
-    public void afficher(Graphics g){    
-        Graphics2D g2d = (Graphics2D)g;
-        AffineTransform rotation = new AffineTransform();
-        
-        rotation.translate(x*8-4, y*8-4);
-        g2d.drawImage(clyde, rotation, null);
-        
-        super.afficher(g);
     }
 }

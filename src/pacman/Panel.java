@@ -128,10 +128,10 @@ public class Panel extends JPanel{
     
     public void paintComponent(Graphics g){
         Singleton.getInstance().getMap().afficher(g, this.getWidth(), this.getHeight());
-        pacman.afficher(g);
-        blinky.afficher(g);
-        pinky.afficher(g);
-        inky.afficher(g);
-        clyde.afficher(g);
+        pacman.afficher(g, this.getWidth(), this.getHeight());
+        blinky.afficher(g, this.getWidth(), this.getHeight());
+        pinky.afficher(g, this.getWidth(), this.getHeight());
+        inky.afficher(g, this.getWidth(), this.getHeight());
+        clyde.afficher(g, this.getWidth(), this.getHeight());
     }
 }

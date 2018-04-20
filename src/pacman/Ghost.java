@@ -23,13 +23,13 @@ public class Ghost extends Entity{
     
     protected Tile cible;
     protected boolean peur, retour;
-    protected BufferedImage ghostPeur, ghostRetour;
+    protected BufferedImage img;
     
     public Ghost(float x, float y, float vitesse) {
         super(x, y, vitesse);
         
         try {
-            ghostPeur = ImageIO.read(new File("res/peur.png"));
+            img = ImageIO.read(new File("res/peur.png"));
         } catch (IOException ex) {
             Logger.getLogger(Pacman.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -130,20 +130,23 @@ public class Ghost extends Entity{
         return touche;
     }
     
-    public void afficher(Graphics g){
-        if(peur){
-            Graphics2D g2d = (Graphics2D)g;
-            AffineTransform rotation = new AffineTransform();
-
-            rotation.translate(x*8-4, y*8-4);
-            g2d.drawImage(ghostPeur, rotation, null);
-        } else if (retour){
-            Graphics2D g2d = (Graphics2D)g;
-            AffineTransform rotation = new AffineTransform();
-
-            rotation.translate(x*8-4, y*8-4);
-            g2d.drawImage(ghostRetour, rotation, null);
+    public void afficher(Graphics g, int width, int height){
+        double size;
+        int mapWidth = Singleton.getInstance().getMap().getMapWidth();
+        int mapHeight = Singleton.getInstance().getMap().getMapHeight();
+        
+        if(width/mapWidth > height/mapHeight){
+            size = height/mapHeight;
+        } else {
+            size = width/mapWidth;
         }
+        
+        Graphics2D g2d = (Graphics2D)g;
+        AffineTransform rotation = new AffineTransform();
+        
+        rotation.translate((x-0.5)*size, (y-0.5)*size);
+        rotation.scale(size/8, size/8);
+        g2d.drawImage(img, rotation, null);
     }
 
     /**

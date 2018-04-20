@@ -141,7 +141,12 @@ public class Map {
     
     public void afficher(Graphics g, int width, int height){
         
-        int size = width/(mapWidth);
+        double size;
+        if(width/mapWidth > height/mapHeight){
+            size = height/mapHeight;
+        } else {
+            size = width/mapWidth;
+        }
         
         Graphics2D g2d = (Graphics2D)g;
 
@@ -149,8 +154,23 @@ public class Map {
             for(int x=0; x < 28; x++){
                 AffineTransform rotation = new AffineTransform();
                 rotation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
+                rotation.scale(size/8, size/8);
                 g2d.drawImage(tiles[map[x][y].getType()], rotation, null);
             }
         }
+    }
+    
+    /**
+     * @return the mapWidth
+     */
+    public int getMapWidth() {
+        return mapWidth;
+    }
+
+    /**
+     * @return the mapHeight
+     */
+    public int getMapHeight() {
+        return mapHeight;
     }
 }

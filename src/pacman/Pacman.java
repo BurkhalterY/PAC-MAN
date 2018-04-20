@@ -33,7 +33,17 @@ public class Pacman extends Player {
         
     }
     
-    public void afficher(Graphics g){    
+    public void afficher(Graphics g, int width, int height){
+        double size;
+        int mapWidth = Singleton.getInstance().getMap().getMapWidth();
+        int mapHeight = Singleton.getInstance().getMap().getMapHeight();
+        
+        if(width/mapWidth > height/mapHeight){
+            size = height/mapHeight;
+        } else {
+            size = width/mapWidth;
+        }
+        
         Graphics2D g2d = (Graphics2D)g;
         AffineTransform rotation = new AffineTransform();
         int a = 0;
@@ -53,7 +63,8 @@ public class Pacman extends Player {
             default:
                 break;
         }
-        rotation.translate(x*8-4, y*8-4);
+        rotation.translate((x-0.5)*size, (y-0.5)*size);
+        rotation.scale(size/8, size/8);
         rotation.rotate(Math.toRadians(a), 8, 8);
         g2d.drawImage(pacman, rotation, null);
     }
