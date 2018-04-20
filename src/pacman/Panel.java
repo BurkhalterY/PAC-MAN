@@ -8,6 +8,7 @@ package pacman;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 import pacman.Entity.Direction;
+import pacman.Ghost.Etat;
 
 /**
  *
@@ -15,10 +16,10 @@ import pacman.Entity.Direction;
  */
 public class Panel extends JPanel{
     private Pacman pacman = new Pacman(13.5f, 26, 0.125f);
-    private Blinky blinky = new Blinky(13.5f, 14, 0.125f);
-    private Pinky pinky = new Pinky(13.5f, 17, 0.125f);
-    private Inky inky = new Inky(11.5f, 17, 0.125f);
-    private Clyde clyde = new Clyde(15.5f, 17, 0.125f);
+    private Blinky blinky = new Blinky(13.5f, 14, 0.125f, 26, 0);
+    private Pinky pinky = new Pinky(13.5f, 17, 0.125f, 3, 0);
+    private Inky inky = new Inky(11.5f, 17, 0.125f, 28, 36);
+    private Clyde clyde = new Clyde(15.5f, 17, 0.125f, 0, 36);
     private boolean run, scatter, peur;
     private int phase;
     private int phases[] = {7, 20, 7, 20, 5, 20, 5};
@@ -53,10 +54,10 @@ public class Panel extends JPanel{
                 pauseDuree = System.currentTimeMillis() - pauseStart;
                 
                 peur = false;
-                blinky.setPeur(false);
-                pinky.setPeur(false);
-                inky.setPeur(false);
-                clyde.setPeur(false);
+                blinky.setEtat(Etat.Normal);
+                pinky.setEtat(Etat.Normal);
+                inky.setEtat(Etat.Normal);
+                clyde.setEtat(Etat.Normal);
             }
         } else {
             if(phase >= phases.length){
@@ -73,10 +74,10 @@ public class Panel extends JPanel{
         pacman.setDirection(direction);
         
         if(scatter || peur){
-            blinky.setScatterCible(26, 0);
-            pinky.setScatterCible(3, 0);
-            inky.setScatterCible(28, 36);
-            clyde.setScatterCible(0, 36);
+            blinky.setScatterCible();
+            pinky.setScatterCible();
+            inky.setScatterCible();
+            clyde.setScatterCible();
         } else {
             blinky.setCible((int) pacman.getX(), (int) pacman.getY());
             pinky.setCible((int) pacman.getX(), (int) pacman.getY(), pacman.getDirectionCourente());
@@ -94,24 +95,24 @@ public class Panel extends JPanel{
             peur = true;
             pauseStart = System.currentTimeMillis();
             
-            blinky.setPeur(true);
-            pinky.setPeur(true);
-            inky.setPeur(true);
-            clyde.setPeur(true);
+            blinky.setEtat(Etat.Peur);
+            pinky.setEtat(Etat.Peur);
+            inky.setEtat(Etat.Peur);
+            clyde.setEtat(Etat.Peur);
         }
         
         if(peur){
             if(blinky.touherPacman(pacman.getX(), pacman.getY())){
-                blinky.setRetour(true);
+                blinky.setEtat(Etat.Retour);
             }
             if(pinky.touherPacman(pacman.getX(), pacman.getY())){
-                pinky.setRetour(true);
+                pinky.setEtat(Etat.Retour);
             }
             if(inky.touherPacman(pacman.getX(), pacman.getY())){
-                inky.setRetour(true);
+                inky.setEtat(Etat.Retour);
             }
             if(clyde.touherPacman(pacman.getX(), pacman.getY())){
-                clyde.setRetour(true);
+                clyde.setEtat(Etat.Retour);
             }
         } else {
             if(blinky.touherPacman(pacman.getX(), pacman.getY())
@@ -121,7 +122,6 @@ public class Panel extends JPanel{
                 run = false;
             }
         }
-        
         
         repaint();
     }

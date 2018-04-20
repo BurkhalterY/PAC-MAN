@@ -17,8 +17,8 @@ import javax.imageio.ImageIO;
  */
 public class Pinky extends Ghost{
     
-    public Pinky(float x, float y, float vitesse) {
-        super(x, y, vitesse);
+    public Pinky(float x, float y, float vitesse, int xScatter, int yScatter) {
+        super(x, y, vitesse, xScatter, yScatter);
         
         try {
             img = ImageIO.read(new File("res/pinky.png"));

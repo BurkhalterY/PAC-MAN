@@ -21,12 +21,22 @@ import javax.imageio.ImageIO;
  */
 public class Ghost extends Entity{
     
+    public enum Etat{
+        Attente,
+        Normal,
+        Scatter,
+        Peur,
+        Retour;
+    }
     protected Tile cible;
-    protected boolean peur, retour;
+    protected Etat etat;
     protected BufferedImage img;
+    protected int xScatter, yScatter;
     
-    public Ghost(float x, float y, float vitesse) {
+    public Ghost(float x, float y, float vitesse, int xScatter, int yScatter) {
         super(x, y, vitesse);
+        this.xScatter = xScatter;
+        this.yScatter = yScatter;
         
         try {
             img = ImageIO.read(new File("res/peur.png"));
@@ -116,8 +126,8 @@ public class Ghost extends Entity{
         return directionsPossibles;
     }
     
-    public void setScatterCible(int xCible, int yCible){
-        cible = new Tile(xCible, yCible, 0);
+    public void setScatterCible(){
+        cible = new Tile(xScatter, yScatter, 0);
     }
     
     public boolean touherPacman(float xPacman, float yPacman){
@@ -150,16 +160,16 @@ public class Ghost extends Entity{
     }
 
     /**
-     * @param peur the peur to set
+     * @return the etat
      */
-    public void setPeur(boolean peur) {
-        this.peur = peur;
+    public Etat getEtat() {
+        return etat;
     }
-    
+
     /**
-     * @param retour the peur to set
+     * @param etat the etat to set
      */
-    public void setRetour(boolean retour) {
-        this.retour = retour;
+    public void setEtat(Etat etat) {
+        this.etat = etat;
     }
 }

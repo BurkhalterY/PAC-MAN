@@ -5,7 +5,6 @@
  */
 package pacman;
 
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -18,8 +17,8 @@ import javax.imageio.ImageIO;
  */
 public class Clyde extends Ghost{
     
-    public Clyde(float x, float y, float vitesse) {
-        super(x, y, vitesse);
+    public Clyde(float x, float y, float vitesse, int xScatter, int yScatter) {
+        super(x, y, vitesse, xScatter, yScatter);
         
         try {
             img = ImageIO.read(new File("res/clyde.png"));
