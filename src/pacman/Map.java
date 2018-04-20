@@ -6,6 +6,8 @@
 package pacman;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -21,14 +23,16 @@ import pacman.Entity.Direction;
  *
  * @author BuYa
  */
-public class Map implements Affichable{
+public class Map {
     private Tile map[][];
     private BufferedImage tileset;
     private BufferedImage tiles[] = new BufferedImage[48];
     private int tilesID = 0;
+    private int mapWidth = 28;
+    private int mapHeight = 36;
     
     public Map(String path){
-        map = new Tile[28][36];
+        map = new Tile[mapWidth][mapHeight];
         
         try
         {
@@ -47,7 +51,7 @@ public class Map implements Affichable{
                     String tableLigne[] = line.split(";");
                     line = br.readLine();
                     
-                    for(int x = 0; x < 28; x++){
+                    for(int x = 0; x < mapWidth; x++){
                         map[x][y] = new Tile(x, y, Integer.parseInt(tableLigne[x]));
                     }
                     y++;
@@ -85,28 +89,28 @@ public class Map implements Affichable{
         
         switch (direction) {
             case Gauche:
-                if(x-1 >= 0 && x-1 < 28 && y >= 0 && y < 36){
+                if(x-1 >= 0 && x-1 < mapWidth && y >= 0 && y < mapHeight){
                     if(map[x-1][y].isSolide()){
                         libre = false;
                     }
                 }
                 break;
             case Droite:
-                if(x+1 >= 0 && x+1 < 28 && y >= 0 && y < 36){
+                if(x+1 >= 0 && x+1 < mapWidth && y >= 0 && y < mapHeight){
                     if(map[x+1][y].isSolide()){
                         libre = false;
                     }
                 }
                 break;
             case Haut:
-                if(x >= 0 && x < 28 && y-1 >= 0 && y-1 < 36){
+                if(x >= 0 && x < mapWidth && y-1 >= 0 && y-1 < mapHeight){
                     if(map[x][y-1].isSolide()){
                         libre = false;
                     }
                 }
                 break;
             case Bas:
-                if(x >= 0 && x < 28 && y+1 >= 0 && y+1 < 36){
+                if(x >= 0 && x < mapWidth && y+1 >= 0 && y+1 < mapHeight){
                     if(map[x][y+1].isSolide()){
                         libre = false;
                     }
@@ -135,10 +139,17 @@ public class Map implements Affichable{
         return puissance;
     }
     
-    public void afficher(Graphics g){    
+    public void afficher(Graphics g, int width, int height){
+        
+        int size = width/(mapWidth);
+        
+        Graphics2D g2d = (Graphics2D)g;
+
         for(int y=0; y < 36; y++){
             for(int x=0; x < 28; x++){
-                g.drawImage(tiles[map[x][y].getType()], map[x][y].getX()*8, map[x][y].getY()*8, null);
+                AffineTransform rotation = new AffineTransform();
+                rotation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
+                g2d.drawImage(tiles[map[x][y].getType()], rotation, null);
             }
         }
     }

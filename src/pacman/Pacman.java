@@ -19,7 +19,7 @@ import javax.imageio.ImageIO;
  *
  * @author BuYa
  */
-public class Pacman extends Player implements Affichable{
+public class Pacman extends Player {
     private BufferedImage pacman;
 
     public Pacman(float x, float y, float vitesse){

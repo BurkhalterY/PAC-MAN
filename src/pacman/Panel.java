@@ -127,7 +127,7 @@ public class Panel extends JPanel{
     }
     
     public void paintComponent(Graphics g){
-        Singleton.getInstance().getMap().afficher(g);
+        Singleton.getInstance().getMap().afficher(g, this.getWidth(), this.getHeight());
         pacman.afficher(g);
         blinky.afficher(g);
         pinky.afficher(g);
