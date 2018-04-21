@@ -26,7 +26,7 @@ import pacman.Entity.Direction;
 public class Map {
     private Tile map[][];
     private BufferedImage tileset;
-    private BufferedImage tiles[] = new BufferedImage[48];
+    private BufferedImage tiles[] = new BufferedImage[6*9];
     private int tilesID = 0;
     private int mapWidth = 28;
     private int mapHeight = 36;
@@ -48,7 +48,7 @@ public class Map {
                 
                 while (line != null)
                 {
-                    String tableLigne[] = line.split(";");
+                    String tableLigne[] = line.split("\t");
                     line = br.readLine();
                     
                     for(int x = 0; x < mapWidth; x++){
@@ -70,13 +70,13 @@ public class Map {
         }
         
         try {
-            tileset = ImageIO.read(new File("res/tileset.png"));
+            tileset = ImageIO.read(new File("res/tileset1.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        for(int y = 3; y < 6; y++){
-            for(int x = 0; x < 16; x++){
+        for(int y = 0; y < 6; y++){
+            for(int x = 0; x < 9; x++){
                 tiles[tilesID] = new BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB);
                 tiles[tilesID].getGraphics().drawImage(tileset, 0, 0, 8, 8, x*9, y*9, (x*9)+8, (y*9)+8, null);
                 tilesID++;
@@ -130,10 +130,10 @@ public class Map {
         int ya = (int)(y + 0.5f);
         
         if(map[xa][ya].getType() == 45){
-            map[xa][ya].setType(44);
+            map[xa][ya].setType(10);
         }
         if(map[xa][ya].getType() == 47){
-            map[xa][ya].setType(44);
+            map[xa][ya].setType(10);
             puissance = true;
         }
         return puissance;

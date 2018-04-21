@@ -20,7 +20,7 @@ public class Tile {
         this.x = x;
         this.y = y;
         this.type = type;
-        if(type == 44 || type == 45 || type == 46 || type == 47){
+        if(type == 10 || type == 45 || type == 46 || type == 47){
             this.solide = false;
         } else {
             this.solide = true;

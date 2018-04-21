@@ -23,7 +23,7 @@ public class Clyde extends Ghost{
         try {
             img = ImageIO.read(new File("res/clyde.png"));
         } catch (IOException ex) {
-            Logger.getLogger(Pacman.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Clyde.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }

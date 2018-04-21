@@ -23,7 +23,7 @@ public class Inky extends Ghost{
         try {
             img = ImageIO.read(new File("res/inky.png"));
         } catch (IOException ex) {
-            Logger.getLogger(Pacman.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Inky.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }

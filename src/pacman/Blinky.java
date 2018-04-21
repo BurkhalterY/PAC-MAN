@@ -23,7 +23,7 @@ public class Blinky extends Ghost{
         try {
             img = ImageIO.read(new File("res/blinky.png"));
         } catch (IOException ex) {
-            Logger.getLogger(Pacman.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Blinky.class.getName()).log(Level.SEVERE, null, ex);
         }
         
     }
