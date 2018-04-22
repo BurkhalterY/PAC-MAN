@@ -6,6 +6,16 @@
 
 package pacman;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+
 /**
  *
  * @author BuYa
@@ -23,7 +33,7 @@ public class Entity {
     protected float vitesse;
     protected Direction directionCourente;
     protected Direction directionSuivante;
-    
+    protected BufferedImage img;
     
     public Entity(float x, float y, float vitesse){
         this.x = x;
@@ -31,6 +41,11 @@ public class Entity {
         this.vitesse = vitesse;
         directionCourente = Direction.Gauche;
         directionSuivante = Direction.Gauche;
+        try {
+            img = ImageIO.read(new File("res/peur.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
@@ -90,7 +105,7 @@ public class Entity {
     
     public boolean collisionDroite(){
         boolean libre = false;
-        if(Singleton.getInstance().getMap().libreA((int) x, (int) y, Direction.Droite) && y == (int)y){
+        if(Panel.getMap().libreA((int) x, (int) y, Direction.Droite) && y == (int)y){
             libre = true;
         }
         return libre;
@@ -98,7 +113,7 @@ public class Entity {
     
     public boolean collisionGauche(){
         boolean libre = false;
-        if(Singleton.getInstance().getMap().libreA((int) Math.ceil(x), (int) y, Direction.Gauche) && y == (int)y){
+        if(Panel.getMap().libreA((int) Math.ceil(x), (int) y, Direction.Gauche) && y == (int)y){
             libre = true;
         }
         return libre;
@@ -106,7 +121,7 @@ public class Entity {
     
     public boolean collisionHaut(){
         boolean libre = false;
-        if(Singleton.getInstance().getMap().libreA((int) x, (int) Math.ceil(y), Direction.Haut) && x == (int)x){
+        if(Panel.getMap().libreA((int) x, (int) Math.ceil(y), Direction.Haut) && x == (int)x){
             libre = true;
         }
         return libre;
@@ -114,14 +129,14 @@ public class Entity {
     
     public boolean collisionBas(){
         boolean libre = false;
-        if(Singleton.getInstance().getMap().libreA((int) x, (int) y, Direction.Bas) && x == (int)x){
+        if(Panel.getMap().libreA((int) x, (int) y, Direction.Bas) && x == (int)x){
             libre = true;
         }
         return libre;
     }
     
     public void avancer(){
-        if(x > 0 && x < Singleton.getInstance().getMap().getMapWidth()){    
+        if(x > 0 && x < Panel.getMap().getMapWidth()){    
             verifDirection();
         }
         switch (directionCourente) {
@@ -146,8 +161,8 @@ public class Entity {
         }
         
         if(x <= -2){
-            x = Singleton.getInstance().getMap().getMapWidth() + 1;
-        } else if(x >= Singleton.getInstance().getMap().getMapWidth() + 2){
+            x = Panel.getMap().getMapWidth() + 1;
+        } else if(x >= Panel.getMap().getMapWidth() + 2){
             x = -1;
         }
     }
@@ -171,5 +186,30 @@ public class Entity {
             }
         }
     }
-   
+    
+    /**
+     * @param vitesse the vitesse to set
+     */
+    public void setVitesse(float vitesse) {
+        this.vitesse = vitesse;
+    }
+    
+    public void afficher(Graphics g, int width, int height){
+        double size;
+        int mapWidth = Panel.getMap().getMapWidth();
+        int mapHeight = Panel.getMap().getMapHeight();
+        
+        if(width/mapWidth > height/mapHeight){
+            size = height/mapHeight;
+        } else {
+            size = width/mapWidth;
+        }
+        
+        Graphics2D g2d = (Graphics2D)g;
+        AffineTransform rotation = new AffineTransform();
+        
+        rotation.translate((x-0.5)*size, (y-0.5)*size);
+        rotation.scale(size/8, size/8);
+        g2d.drawImage(img, rotation, null);
+    }
 }

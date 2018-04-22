@@ -39,5 +39,6 @@ public class Clavier extends KeyAdapter{
             direction = Direction.Bas;
         }
 
+        Panel.getPlayersTab()[0].setDirection(direction);
     }
 }

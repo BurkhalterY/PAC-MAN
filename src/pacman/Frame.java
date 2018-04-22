@@ -33,7 +33,7 @@ public class Frame extends JFrame{
         while(pan.isRun()){
             tempsDebut = System.currentTimeMillis();
             
-            pan.go(clav.getDirection());
+            pan.go();
             
             tempsFin = System.currentTimeMillis();
             dureeBoucle = tempsFin-tempsDebut;

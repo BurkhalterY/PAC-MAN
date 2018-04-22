@@ -31,6 +31,8 @@ public class Map {
     private int tilesID = 0;
     private int mapWidth = 28;
     private int mapHeight = 36;
+    private int nbBulletTotal = 0;
+    private int nbBulletRestantes = 0;
     
     public Map(String path){
         map = new Tile[mapWidth][mapHeight];
@@ -54,6 +56,9 @@ public class Map {
                     
                     for(int x = 0; x < mapWidth; x++){
                         map[x][y] = new Tile(x, y, Integer.parseInt(tableLigne[x]));
+                        if(map[x][y].getType() == 45 || map[x][y].getType() == 47){
+                            nbBulletTotal++;
+                        }
                     }
                     y++;
                 }
@@ -69,6 +74,7 @@ public class Map {
         {
             System.out.println ("Le fichier n'a pas été trouvé");
         }
+        nbBulletRestantes = nbBulletTotal;
         
         mapSp = new int[mapWidth][mapHeight];
         
@@ -164,10 +170,12 @@ public class Map {
         if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
             if(map[x][y].getType() == 45){
                 map[x][y].setType(10);
+                nbBulletRestantes--;
             }
             if(map[x][y].getType() == 47){
                 map[x][y].setType(10);
                 puissance = true;
+                nbBulletRestantes--;
             }
         }
         
@@ -216,5 +224,23 @@ public class Map {
      */
     public int getMapHeight() {
         return mapHeight;
+    }
+
+    /**
+     * @return the nbBulletTotal
+     */
+    public int getNbBulletTotal() {
+        return nbBulletTotal;
+    }
+
+    /**
+     * @return the nbBulletRestantes
+     */
+    public int getNbBulletRestantes() {
+        return nbBulletRestantes;
+    }
+    
+    public int getNbBulletMangees() {
+        return nbBulletTotal-nbBulletRestantes;
     }
 }

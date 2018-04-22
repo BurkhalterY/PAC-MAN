@@ -28,8 +28,15 @@ public class Inky extends Ghost{
         
     }
     
-    public void setCible(int xPacman, int yPacman, int xBlinky, int yBlinky, Direction direction){
-        switch (directionCourente) {
+    public void setCible(){
+        int xPacman = Panel.getPlayersTab()[0].getX();
+        int yPacman = Panel.getPlayersTab()[0].getY();
+        Direction direction = Panel.getPlayersTab()[0].getDirectionCourente();
+        
+        int xBlinky = Panel.getGhostsTab()[0].getX();
+        int yBlinky = Panel.getGhostsTab()[0].getY();
+        
+        switch (direction) {
             case Gauche:
                 xPacman -= 2;
                 break;
@@ -47,5 +54,13 @@ public class Inky extends Ghost{
         }
         
         cible = new Tile(xPacman + (xBlinky - xPacman), yPacman + (yBlinky - yPacman), 0);
+    }
+    
+    public boolean peutSortir(){
+        boolean sortir = false;
+        if(Panel.getMap().getNbBulletMangees() >= 30){
+            sortir = true;
+        }
+        return sortir;
     }
 }

@@ -19,6 +19,7 @@ public class Blinky extends Ghost{
 
     public Blinky(float x, float y, float vitesse, int xScatter, int yScatter) {
         super(x, y, vitesse, xScatter, yScatter);
+        etat = Etat.Scatter;
         
         try {
             img = ImageIO.read(new File("res/blinky.png"));
@@ -28,7 +29,7 @@ public class Blinky extends Ghost{
         
     }
     
-    public void setCible(int xPacman, int yPacman){
-        cible = new Tile(xPacman, yPacman, 0);
+    public void setCible(){
+        cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY(), 0);
     }
 }

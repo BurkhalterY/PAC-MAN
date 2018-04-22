@@ -35,8 +35,8 @@ public class Pacman extends Player {
     
     public void afficher(Graphics g, int width, int height){
         double size;
-        int mapWidth = Singleton.getInstance().getMap().getMapWidth();
-        int mapHeight = Singleton.getInstance().getMap().getMapHeight();
+        int mapWidth = Panel.getMap().getMapWidth();
+        int mapHeight = Panel.getMap().getMapHeight();
         
         if(width/mapWidth > height/mapHeight){
             size = height/mapHeight;

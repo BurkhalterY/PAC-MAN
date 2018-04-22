@@ -26,17 +26,24 @@ public class Ghost extends Entity{
         Normal,
         Scatter,
         Peur,
-        Retour;
+        Retour,
+        AttenteBleu;
     }
     protected Tile cible;
     protected Etat etat;
     protected BufferedImage img;
     protected int xScatter, yScatter;
+    protected boolean basAttente, enTrainDeSortir;
+    private static boolean scatter;
+    private static int phase;
+    private static int phases[] = {7, 20, 7, 20, 5, 20, 5};
+    private static long start, pauseStart, pauseDuree;
     
     public Ghost(float x, float y, float vitesse, int xScatter, int yScatter) {
         super(x, y, vitesse);
         this.xScatter = xScatter;
         this.yScatter = yScatter;
+        etat = Etat.Attente;
         
         try {
             img = ImageIO.read(new File("res/peur.png"));
@@ -46,13 +53,92 @@ public class Ghost extends Entity{
     }
     
     public void avancer(){
-        setDirection();
-        if(Singleton.getInstance().getMap().effet(getX(), getY()) == 1){
-            vitesse = 0.0625f;
-        } else {
-            vitesse = 0.125f;
+            
+        switch (etat) {
+            case Attente:
+                if((peutSortir() && y == 17) || enTrainDeSortir){
+                    if(x > 13.5f){
+                        x-=vitesse;
+                    } else if(x < 13.5f){
+                        x+=vitesse;
+                    } else {
+                        sortir();
+                    }
+                } else {
+                    if(basAttente){
+                        y+=vitesse;
+                        if(y >= 18){
+                            basAttente = false;
+                        }
+                    } else {
+                        y-=vitesse;
+                        if(y <= 16){
+                            basAttente = true;
+                        }
+                    }
+                }
+                break;
+            case Normal:
+                setCible();
+                setDirection();
+                if(Panel.getMap().effet(getX(), getY()) == 1){
+                    vitesse = 0.0625f;
+                } else {
+                    vitesse = 0.125f;
+                }
+                super.avancer();
+                break;
+            case Scatter:
+                cible = new Tile(xScatter, yScatter, 0);
+                setDirection();
+                if(Panel.getMap().effet(getX(), getY()) == 1){
+                    vitesse = 0.0625f;
+                } else {
+                    vitesse = 0.125f;
+                }
+                super.avancer();
+                break;
+            case Peur:
+                setDirection();
+                if(Panel.getMap().effet(getX(), getY()) == 1){
+                    vitesse = 0.0625f;
+                } else {
+                    vitesse = 0.125f;
+                }
+                super.avancer();
+                break;
+            case Retour:
+                cible = new Tile(13, 14, 0);
+                setDirection();
+                vitesse = 0.25f;
+                super.avancer();
+                break;
+            case AttenteBleu:
+                if((peutSortir() && y == 17) || enTrainDeSortir){
+                    if(x > 13.5f){
+                        x-=vitesse;
+                    } else if(x < 13.5f){
+                        x+=vitesse;
+                    } else {
+                        sortir();
+                    }
+                } else {
+                    if(basAttente){
+                        y+=vitesse;
+                        if(y == 18){
+                            basAttente = false;
+                        }
+                    } else {
+                        y-=vitesse;
+                        if(y == 16){
+                            basAttente = true;
+                        }
+                    }
+                }
+                break;
+            default:
+                break;
         }
-        super.avancer();
     }
     
     public void setDirection(){
@@ -93,11 +179,19 @@ public class Ghost extends Entity{
             }
         }
         
+        if(etat == Etat.Peur){
+            for(int i = 0; i < directionsPreferees.length / 2; i++){
+                Direction temp = directionsPreferees[i];
+                directionsPreferees[i] = directionsPreferees[directionsPreferees.length - i - 1];
+                directionsPreferees[directionsPreferees.length - i - 1] = temp;
+            }
+        }
+        
         Direction newDirection = null;
         
         int i=0;
-        while(newDirection == null && i < 4){
-            for(int j=0; j < 4; j++){
+        while(newDirection == null && i < directionsPreferees.length){
+            for(int j=0; j < directionsPossibles.length; j++){
                 if(directionsPreferees[i] == directionsPossibles[j]){
                     newDirection = directionsPreferees[i];
                 }
@@ -112,7 +206,7 @@ public class Ghost extends Entity{
         
         Direction directionsPossibles[] = new Direction[4];
         int i = 0;
-        if(collisionHaut() && directionCourente != Direction.Bas && Singleton.getInstance().getMap().effet(getX(), getY()) != 2){
+        if(collisionHaut() && directionCourente != Direction.Bas && Panel.getMap().effet(getX(), getY()) != 2){
             directionsPossibles[i] = Direction.Haut;
             i++;
         }
@@ -132,8 +226,12 @@ public class Ghost extends Entity{
         return directionsPossibles;
     }
     
-    public void setScatterCible(){
-        cible = new Tile(xScatter, yScatter, 0);
+    public void setCible(){
+        cible = new Tile(0, 0, 0);
+    }
+    
+    public void setCiblePeur(int xPacman, int yPacman){
+        cible = new Tile(xPacman, yPacman, 0);
     }
     
     public boolean touherPacman(int xPacman, int yPacman){
@@ -148,8 +246,8 @@ public class Ghost extends Entity{
     
     public void afficher(Graphics g, int width, int height){
         double size;
-        int mapWidth = Singleton.getInstance().getMap().getMapWidth();
-        int mapHeight = Singleton.getInstance().getMap().getMapHeight();
+        int mapWidth = Panel.getMap().getMapWidth();
+        int mapHeight = Panel.getMap().getMapHeight();
         
         if(width/mapWidth > height/mapHeight){
             size = height/mapHeight;
@@ -177,5 +275,20 @@ public class Ghost extends Entity{
      */
     public void setEtat(Etat etat) {
         this.etat = etat;
+    }
+    
+    public boolean peutSortir(){
+        return false;
+    }
+    
+    public void sortir(){
+        enTrainDeSortir = true;
+        if(y > 14){
+            y-=vitesse;
+        } else if(y == 14){
+            etat = Etat.Scatter;
+            enTrainDeSortir = false;
+            vitesse = 0.125f;
+        }
     }
 }

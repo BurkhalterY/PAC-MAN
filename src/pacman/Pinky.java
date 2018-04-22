@@ -19,6 +19,7 @@ public class Pinky extends Ghost{
     
     public Pinky(float x, float y, float vitesse, int xScatter, int yScatter) {
         super(x, y, vitesse, xScatter, yScatter);
+        basAttente = true;
         
         try {
             img = ImageIO.read(new File("res/pinky.png"));
@@ -28,8 +29,11 @@ public class Pinky extends Ghost{
         
     }
     
-    public void setCible(int xPacman, int yPacman, Direction direction){
-        switch (directionCourente) {
+    public void setCible(){
+        int xPacman = Panel.getPlayersTab()[0].getX();
+        int yPacman = Panel.getPlayersTab()[0].getY();
+        Direction direction = Panel.getPlayersTab()[0].getDirectionCourente();
+        switch (direction) {
             case Gauche:
                 xPacman -= 4;
                 break;
@@ -47,5 +51,9 @@ public class Pinky extends Ghost{
         }
         
         cible = new Tile(xPacman, yPacman, 0);
+    }
+    
+    public boolean peutSortir(){
+        return true;
     }
 }

@@ -28,11 +28,22 @@ public class Clyde extends Ghost{
         
     }
     
-    public void setCible(int xPacman, int yPacman){
+    public void setCible(){
+        int xPacman = Panel.getPlayersTab()[0].getX();
+        int yPacman = Panel.getPlayersTab()[0].getY();
+        
         if(Math.sqrt(Math.pow(x - xPacman, 2) + Math.pow(y - yPacman, 2)) > 8){
             cible = new Tile(xPacman, yPacman, 0);
         } else {
             cible = new Tile(xScatter, yScatter, 0);
         }
+    }
+    
+    public boolean peutSortir(){
+        boolean sortir = false;
+        if(Panel.getMap().getNbBulletMangees() > Panel.getMap().getNbBulletTotal()/3){
+            sortir = true;
+        }
+        return sortir;
     }
 }
