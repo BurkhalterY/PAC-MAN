@@ -32,7 +32,7 @@ public class Clyde extends Ghost{
         if(Math.sqrt(Math.pow(x - xPacman, 2) + Math.pow(y - yPacman, 2)) > 8){
             cible = new Tile(xPacman, yPacman, 0);
         } else {
-            cible = new Tile(0, 36, 0);
+            cible = new Tile(xScatter, yScatter, 0);
         }
     }
 }

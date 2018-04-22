@@ -16,10 +16,10 @@ import pacman.Ghost.Etat;
  */
 public class Panel extends JPanel{
     private Pacman pacman = new Pacman(13.5f, 26, 0.125f);
-    private Blinky blinky = new Blinky(13.5f, 14, 0.125f, 26, 0);
-    private Pinky pinky = new Pinky(13.5f, 17, 0.125f, 3, 0);
-    private Inky inky = new Inky(11.5f, 17, 0.125f, 28, 36);
-    private Clyde clyde = new Clyde(15.5f, 17, 0.125f, 0, 36);
+    private Blinky blinky = new Blinky(13.5f, 14, 0.125f, Singleton.getInstance().getMap().getMapWidth()-3, 0);
+    private Pinky pinky = new Pinky(13.5f, 17, 0.125f, 2, 0);
+    private Inky inky = new Inky(11.5f, 17, 0.125f, Singleton.getInstance().getMap().getMapWidth(), Singleton.getInstance().getMap().getMapHeight());
+    private Clyde clyde = new Clyde(15.5f, 17, 0.125f, 0, Singleton.getInstance().getMap().getMapHeight());
     private boolean run, scatter, peur;
     private int phase;
     private int phases[] = {7, 20, 7, 20, 5, 20, 5};
@@ -79,10 +79,10 @@ public class Panel extends JPanel{
             inky.setScatterCible();
             clyde.setScatterCible();
         } else {
-            blinky.setCible((int) pacman.getX(), (int) pacman.getY());
-            pinky.setCible((int) pacman.getX(), (int) pacman.getY(), pacman.getDirectionCourente());
-            inky.setCible((int) pacman.getX(), (int) pacman.getY(), (int) blinky.getX(), (int) blinky.getY(), pacman.getDirectionCourente());
-            clyde.setCible((int) pacman.getX(), (int) pacman.getY());
+            blinky.setCible(pacman.getX(), pacman.getY());
+            pinky.setCible(pacman.getX(), pacman.getY(), pacman.getDirectionCourente());
+            inky.setCible(pacman.getX(), pacman.getY(), blinky.getX(), blinky.getY(), pacman.getDirectionCourente());
+            clyde.setCible(pacman.getX(), pacman.getY());
         }
         
         pacman.avancer();

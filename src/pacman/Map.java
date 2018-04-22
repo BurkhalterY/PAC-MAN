@@ -25,6 +25,7 @@ import pacman.Entity.Direction;
  */
 public class Map {
     private Tile map[][];
+    private int mapSp[][];
     private BufferedImage tileset;
     private BufferedImage tiles[] = new BufferedImage[6*9];
     private int tilesID = 0;
@@ -36,7 +37,7 @@ public class Map {
         
         try
         {
-            File f = new File (path);
+            File f = new File (path+".txt");
             FileReader fr = new FileReader (f);
             BufferedReader br = new BufferedReader (fr);
 
@@ -53,6 +54,43 @@ public class Map {
                     
                     for(int x = 0; x < mapWidth; x++){
                         map[x][y] = new Tile(x, y, Integer.parseInt(tableLigne[x]));
+                    }
+                    y++;
+                }
+                br.close();
+                fr.close();                
+            }
+            catch (IOException exception)
+            {
+                System.out.println ("Erreur lors de la lecture : " + exception.getMessage());
+            }
+        }
+        catch (FileNotFoundException exception)
+        {
+            System.out.println ("Le fichier n'a pas été trouvé");
+        }
+        
+        mapSp = new int[mapWidth][mapHeight];
+        
+        try
+        {
+            File f = new File (path+"_sp.txt");
+            FileReader fr = new FileReader (f);
+            BufferedReader br = new BufferedReader (fr);
+
+            try
+            {
+                String line = br.readLine();
+               
+                int y = 0;
+                
+                while (line != null)
+                {
+                    String tableLigne[] = line.split("\t");
+                    line = br.readLine();
+                    
+                    for(int x = 0; x < mapWidth; x++){
+                        mapSp[x][y] = Integer.parseInt(tableLigne[x]);
                     }
                     y++;
                 }
@@ -87,56 +125,62 @@ public class Map {
     public boolean libreA(int x, int y, Direction direction){
         boolean libre = true;
         
+        int xa = -1;
+        int ya = -1;
+        
         switch (direction) {
             case Gauche:
-                if(x-1 >= 0 && x-1 < mapWidth && y >= 0 && y < mapHeight){
-                    if(map[x-1][y].isSolide()){
-                        libre = false;
-                    }
-                }
+                xa = x-1;
+                ya = y;
                 break;
             case Droite:
-                if(x+1 >= 0 && x+1 < mapWidth && y >= 0 && y < mapHeight){
-                    if(map[x+1][y].isSolide()){
-                        libre = false;
-                    }
-                }
+                xa = x+1;
+                ya = y;
                 break;
             case Haut:
-                if(x >= 0 && x < mapWidth && y-1 >= 0 && y-1 < mapHeight){
-                    if(map[x][y-1].isSolide()){
-                        libre = false;
-                    }
-                }
+                xa = x;
+                ya = y-1;
                 break;
             case Bas:
-                if(x >= 0 && x < mapWidth && y+1 >= 0 && y+1 < mapHeight){
-                    if(map[x][y+1].isSolide()){
-                        libre = false;
-                    }
-                }
+                xa = x;
+                ya = y+1;
                 break;
             default:
                 break;
         }
         
+        if(xa >= 0 && xa < mapWidth && ya >= 0 && ya < mapHeight){
+            if(map[xa][ya].isSolide()){
+                libre = false;
+            }
+        }
+        
         return libre;
     }
     
-    public boolean mangerGraine(float x, float y){
+    public boolean mangerGraine(int x, int y){
         boolean puissance = false;
         
-        int xa = (int)(x + 0.5f);
-        int ya = (int)(y + 0.5f);
+        if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
+            if(map[x][y].getType() == 45){
+                map[x][y].setType(10);
+            }
+            if(map[x][y].getType() == 47){
+                map[x][y].setType(10);
+                puissance = true;
+            }
+        }
         
-        if(map[xa][ya].getType() == 45){
-            map[xa][ya].setType(10);
-        }
-        if(map[xa][ya].getType() == 47){
-            map[xa][ya].setType(10);
-            puissance = true;
-        }
         return puissance;
+    }
+    
+    public int effet(int x, int y){
+        int sp = 0;
+        
+        if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
+            sp = mapSp[x][y];
+        }
+        return sp;
     }
     
     public void afficher(Graphics g, int width, int height){

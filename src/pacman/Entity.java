@@ -36,15 +36,49 @@ public class Entity {
     /**
      * @return the x
      */
-    public float getX() {
-        return x;
+    public int getX() {
+        int xa = 0;
+        switch (directionCourente) {
+            case Gauche:
+                xa = (int) Math.ceil(x);
+                break;
+            case Haut:
+                xa = (int) x;
+                break;
+            case Droite:
+                xa = (int) x;
+                break;
+            case Bas:
+                xa = (int) x;
+                break;
+            default:
+                break;
+        }
+        return xa;
     }
 
     /**
      * @return the y
      */
-    public float getY() {
-        return y;
+    public int getY() {
+        int ya = 0;
+        switch (directionCourente) {
+            case Gauche:
+                ya = (int) y;
+                break;
+            case Haut:
+                ya = (int) Math.ceil(y);
+                break;
+            case Droite:
+                ya = (int) y;
+                break;
+            case Bas:
+                ya = (int) y;
+                break;
+            default:
+                break;
+        }
+        return ya;
     }
     
     /**
@@ -87,30 +121,34 @@ public class Entity {
     }
     
     public void avancer(){
-        verifDirection();
-        
-        if(directionCourente == Direction.Gauche){
-            if(collisionGauche()){
-                x-=vitesse;
-            }
-        } else if(directionCourente == Direction.Haut){
-            if(collisionHaut()){
-                y-=vitesse;
-            }
-        } else if(directionCourente == Direction.Droite){
-            if(collisionDroite()){
-                x+=vitesse;
-            }
-        } else if(directionCourente == Direction.Bas){
-            if(collisionBas()){
-                y+=vitesse;
-            }
+        if(x > 0 && x < Singleton.getInstance().getMap().getMapWidth()){    
+            verifDirection();
+        }
+        switch (directionCourente) {
+            case Gauche:
+                if(collisionGauche()){
+                    x-=vitesse;
+                }   break;
+            case Haut:
+                if(collisionHaut()){
+                    y-=vitesse;
+                }   break;
+            case Droite:
+                if(collisionDroite()){
+                    x+=vitesse;
+                }   break;
+            case Bas:
+                if(collisionBas()){
+                    y+=vitesse;
+                }   break;
+            default:
+                break;
         }
         
-        if(x < 1){
-            x = 27;
-        } else if(x > 27){
-            x = 1;
+        if(x <= -2){
+            x = Singleton.getInstance().getMap().getMapWidth() + 1;
+        } else if(x >= Singleton.getInstance().getMap().getMapWidth() + 2){
+            x = -1;
         }
     }
     

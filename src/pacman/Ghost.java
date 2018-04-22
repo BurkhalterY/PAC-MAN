@@ -47,6 +47,11 @@ public class Ghost extends Entity{
     
     public void avancer(){
         setDirection();
+        if(Singleton.getInstance().getMap().effet(getX(), getY()) == 1){
+            vitesse = 0.0625f;
+        } else {
+            vitesse = 0.125f;
+        }
         super.avancer();
     }
     
@@ -107,22 +112,23 @@ public class Ghost extends Entity{
         
         Direction directionsPossibles[] = new Direction[4];
         int i = 0;
-        if(collisionGauche() && directionCourente != Direction.Droite){
-            directionsPossibles[i] = Direction.Gauche;
-            i++;
-        }
-        if(collisionHaut() && directionCourente != Direction.Bas){
+        if(collisionHaut() && directionCourente != Direction.Bas && Singleton.getInstance().getMap().effet(getX(), getY()) != 2){
             directionsPossibles[i] = Direction.Haut;
             i++;
         }
-        if(collisionDroite() && directionCourente != Direction.Gauche){
-            directionsPossibles[i] = Direction.Droite;
+        if(collisionGauche() && directionCourente != Direction.Droite){
+            directionsPossibles[i] = Direction.Gauche;
             i++;
         }
         if(collisionBas() && directionCourente != Direction.Haut){
             directionsPossibles[i] = Direction.Bas;
             i++;
         }
+        if(collisionDroite() && directionCourente != Direction.Gauche){
+            directionsPossibles[i] = Direction.Droite;
+            i++;
+        }
+        
         return directionsPossibles;
     }
     
@@ -130,10 +136,10 @@ public class Ghost extends Entity{
         cible = new Tile(xScatter, yScatter, 0);
     }
     
-    public boolean touherPacman(float xPacman, float yPacman){
+    public boolean touherPacman(int xPacman, int yPacman){
         boolean touche = false;
         
-        if((int)(x + 0.5f) == (int)(xPacman + 0.5f) && (int)(y + 0.5f) == (int)(yPacman + 0.5f)){
+        if(getX() == xPacman && getY() == yPacman){
             touche = true;
         }
         

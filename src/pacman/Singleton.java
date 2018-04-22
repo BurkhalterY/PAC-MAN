@@ -14,7 +14,7 @@ public class Singleton {
     private Map map;
 
     private Singleton(){
-        map = new Map("res/map.txt");
+        map = new Map("res/map");
     }
 
     public static Singleton getInstance(){

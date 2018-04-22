@@ -18,4 +18,8 @@ public class Player extends Entity{
     public void setDirection(Direction direction){
         directionSuivante = direction;
     }
+    
+    public void avancer(){
+        super.avancer();
+    }
 }
