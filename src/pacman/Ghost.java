@@ -28,7 +28,6 @@ public class Ghost extends Entity{
     }
     protected Tile cible;
     protected Etat etat;
-    protected BufferedImage img;
     protected int xScatter, yScatter;
     protected boolean basAttente, enTrainDeSortir;
     private static boolean scatter = true, peur;
@@ -43,10 +42,23 @@ public class Ghost extends Entity{
         this.yScatter = yScatter;
         etat = Etat.Attente;
         
+        BufferedImage[] prov = sprites;
+        sprites = new BufferedImage[rows * columns * 2];
+        
+        for(int i = 0; i < prov.length; i++){
+            sprites[i] = prov[i];
+        }
+        
         try {
-            img = ImageIO.read(new File("res/peur.png"));
+            spriteSheet = ImageIO.read(new File("res/peur.png"));
         } catch (IOException ex) {
-            Logger.getLogger(Pacman.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        for(int i = 0; i < columns; i++) {
+            for(int j = 0; j < rows; j++) {
+                sprites[(j * columns) + i + prov.length] = spriteSheet.getSubimage(i * 16, j * 16, 16, 16);
+            }
         }
     }
     
@@ -58,14 +70,18 @@ public class Ghost extends Entity{
                 pausePrevu = 0;
             }
         } else {
-            if(Frame.getMs() - start - pauseDuree >= phases[phase]*1000){
-                scatter = !scatter;
-                for(int i = 0; i < Panel.getGhostsTab().length; i++){
-                    Panel.getGhostsTab()[i].inverserDirection();
+            if(phase >= phases.length){
+                scatter = false;
+            } else {
+                if(Frame.getMs() - start - pauseDuree >= phases[phase]*1000){
+                    scatter = !scatter;
+                    for(int i = 0; i < Panel.getGhostsTab().length; i++){
+                        Panel.getGhostsTab()[i].inverserDirection();
+                    }
+                    phase++;
+                    start = Frame.getMs();
+                    pauseDuree = 0;
                 }
-                phase++;
-                start = Frame.getMs();
-                pauseDuree = 0;
             }
         }
     }
@@ -118,10 +134,14 @@ public class Ghost extends Entity{
                 }
             }
         } else {
-            if(scatter){
+            if(etat == Etat.Scatter){
                 cible = new Tile(xScatter, yScatter, 0);
-            } else {
+            } else if(etat == Etat.Peur){
+                cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY(), 0);
+            } else if(etat == Etat.Normal){
                 setCible();
+            } else if(etat == Etat.Retour){
+                cible = cage;
             }
             setDirection();
             if(Panel.getMap().effet(getX(), getY()) == 1){
@@ -129,12 +149,14 @@ public class Ghost extends Entity{
             } else {
                 vitesse = vitesseDefaut;
             }
+            if(etat == Etat.Peur){
+                vitesse = vitesseDefaut / 2;
+            }
             super.avancer();
         }
     }
     
-    public void setDirection(){
-        Direction directionsPossibles[] = setDirectionsPossibles();
+    public Direction[] setDirectionsPreferees(){
         Direction directionsPreferees[] = new Direction[4];
         
         if (Math.abs(x - cible.getX()) < Math.abs(y - cible.getY())) {
@@ -179,6 +201,13 @@ public class Ghost extends Entity{
             }
         }
         
+        return directionsPreferees;
+    }
+    
+    public void setDirection(){
+        Direction directionsPossibles[] = setDirectionsPossibles();
+        Direction directionsPreferees[] = setDirectionsPreferees();
+        
         Direction newDirection = null;
         
         int i=0;
@@ -191,12 +220,23 @@ public class Ghost extends Entity{
             i++;
         }
         
+        if(newDirection == null){
+            Direction directionRestante = setDirectionRestante();
+            int j=0;
+            while(newDirection == null && j < directionsPreferees.length){
+                if(directionsPreferees[j] == directionRestante){
+                    newDirection = directionRestante;
+                }
+                j++;
+            }
+        }
+        
         directionSuivante = newDirection;
     }
     
     public Direction[] setDirectionsPossibles(){
-        
         Direction directionsPossibles[] = new Direction[4];
+        
         int i = 0;
         if(collisionHaut() && directionCourente != Direction.Bas && Panel.getMap().effet(getX(), getY()) != 2){
             directionsPossibles[i] = Direction.Haut;
@@ -218,6 +258,29 @@ public class Ghost extends Entity{
         return directionsPossibles;
     }
     
+    public Direction setDirectionRestante(){
+        Direction directionRestante = null;
+        
+        switch (directionCourente) {
+            case Gauche:
+                directionRestante = Direction.Droite;
+                break;
+            case Droite:
+                directionRestante = Direction.Gauche;
+                break;
+            case Haut:
+                directionRestante = Direction.Bas;
+                break;
+            case Bas:
+                directionRestante = Direction.Haut;
+                break;
+            default:
+                break;
+        }
+        
+        return directionRestante;
+    }
+    
     public void setCible(){
         cible = new Tile(0, 0, 0);
     }
@@ -226,10 +289,10 @@ public class Ghost extends Entity{
         cible = new Tile(xPacman, yPacman, 0);
     }
     
-    public boolean touherPacman(int xPacman, int yPacman){
+    public boolean touherPacman(){
         boolean touche = false;
         
-        if(getX() == xPacman && getY() == yPacman){
+        if(getX() == Panel.getPlayersTab()[0].getX() && getY() == Panel.getPlayersTab()[0].getY()){
             touche = true;
         }
         
@@ -237,7 +300,29 @@ public class Ghost extends Entity{
     }
     
     public void setIdSprite(){
-        idSprite = 0;
+        if(etat == Etat.Peur || etat == Etat.AttenteBleu){
+            idSprite = 8;
+        } else {
+            switch (directionCourente) {
+                case Gauche:
+                    idSprite = 2;
+                    break;
+                case Droite:
+                    idSprite = 0;
+                    break;
+                case Haut:
+                    idSprite = 4;
+                    break;
+                case Bas:
+                    idSprite = 6;
+                    break;
+                default:
+                    break;
+            }
+        }
+        if(Frame.getMs() % (16/vitesse) >= 8/vitesse){
+            idSprite++;
+        }
     }
 
     /**
@@ -277,14 +362,14 @@ public class Ghost extends Entity{
             enTrainDeSortir = false;
             if(peur){
                 etat = Etat.Peur;
-                vitesse = vitesseDefaut/2;
+                setVitesse(getVitesseDefaut()/2);
             } else {
                 if(scatter){
                     etat = Etat.Scatter;
-                    vitesse = vitesseDefaut;
+                    setVitesse(getVitesseDefaut());
                 } else {
                     etat = Etat.Normal;
-                    vitesse = vitesseDefaut;
+                    setVitesse(getVitesseDefaut());
                 }
             }
         }

@@ -30,12 +30,14 @@ public class Entity {
     }
     protected float x;
     protected float y;
-    protected float vitesse, vitesseDefaut;
+    protected float vitesse;
+    protected float vitesseDefaut;
     protected Direction directionCourente;
     protected Direction directionSuivante;
     protected int idSprite = 0;
     protected BufferedImage spriteSheet;
     protected BufferedImage[] sprites;
+    protected boolean stop;
     
     public Entity(float x, float y, float vitesse, String pictureFile, int rows, int columns){
         this.x = x;
@@ -153,21 +155,33 @@ public class Entity {
             case Gauche:
                 if(collisionGauche()){
                     x-=vitesse;
+                    stop = false;
+                } else {
+                    stop = true;
                 }
                 break;
             case Haut:
                 if(collisionHaut()){
                     y-=vitesse;
+                    stop = false;
+                } else {
+                    stop = true;
                 }
                 break;
             case Droite:
                 if(collisionDroite()){
                     x+=vitesse;
+                    stop = false;
+                } else {
+                    stop = true;
                 }
                 break;
             case Bas:
                 if(collisionBas()){
                     y+=vitesse;
+                    stop = false;
+                } else {
+                    stop = true;
                 }
                 break;
             default:
@@ -213,6 +227,15 @@ public class Entity {
      */
     public void setVitesse(float vitesse) {
         this.vitesse = vitesse;
+        x = vitesseDefaut * ((x+vitesseDefaut/2)/vitesseDefaut);
+        y = vitesseDefaut * ((y+vitesseDefaut/2)/vitesseDefaut);
+    }
+    
+    /**
+     * @return the vitesseDefaut
+     */
+    public float getVitesseDefaut() {
+        return vitesseDefaut;
     }
     
     public void afficher(Graphics g, int width, int height){
@@ -239,4 +262,5 @@ public class Entity {
     public void setIdSprite(){
         idSprite = 0;
     }
+    
 }
