@@ -5,9 +5,6 @@
  */
 package pacman;
 
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,13 +31,14 @@ public class Ghost extends Entity{
     protected BufferedImage img;
     protected int xScatter, yScatter;
     protected boolean basAttente, enTrainDeSortir;
-    private static boolean scatter;
+    private static boolean scatter = true, peur;
     private static int phase;
     private static int phases[] = {7, 20, 7, 20, 5, 20, 5};
-    private static long start, pauseStart, pauseDuree;
-    
-    public Ghost(float x, float y, float vitesse, int xScatter, int yScatter) {
-        super(x, y, vitesse);
+    private static long start = 0, pauseStart = 0, pauseDuree = 0, pausePrevu = 0;
+    private static Tile cage = new Tile(13, 14, 0);
+
+    public Ghost(float x, float y, float vitesse, int xScatter, int yScatter, String pictureFile, int rows, int columns) {
+        super(x, y, vitesse, pictureFile, rows, columns);
         this.xScatter = xScatter;
         this.yScatter = yScatter;
         etat = Etat.Attente;
@@ -52,92 +50,86 @@ public class Ghost extends Entity{
         }
     }
     
+    public static void calculEtatGlobal(){
+        if(peur){
+            if(Frame.getMs() - pauseStart >= pausePrevu){
+                peur = false;
+                pauseDuree = Frame.getMs()-pauseStart;
+                pausePrevu = 0;
+            }
+        } else {
+            if(Frame.getMs() - start - pauseDuree >= phases[phase]*1000){
+                scatter = !scatter;
+                for(int i = 0; i < Panel.getGhostsTab().length; i++){
+                    Panel.getGhostsTab()[i].inverserDirection();
+                }
+                phase++;
+                start = Frame.getMs();
+                pauseDuree = 0;
+            }
+        }
+    }
+    
     public void avancer(){
-            
-        switch (etat) {
-            case Attente:
-                if((peutSortir() && y == 17) || enTrainDeSortir){
-                    if(x > 13.5f){
-                        x-=vitesse;
-                    } else if(x < 13.5f){
-                        x+=vitesse;
-                    } else {
-                        sortir();
+        if(peur){
+            if(etat == Etat.Attente || etat == Etat.AttenteBleu){
+                etat = Etat.AttenteBleu;
+            } else if(etat == Etat.Normal || etat == Etat.Scatter){
+                etat = Etat.Peur;
+            }
+        } else {
+            if(scatter){
+                if(etat == Etat.Normal || etat == Etat.Peur){
+                    etat = Etat.Scatter;
+                } else if(etat == Etat.AttenteBleu){
+                    etat = Etat.Attente;
+                }
+            } else {
+                if(etat == Etat.Scatter || etat == Etat.Peur){
+                    etat = Etat.Normal;
+                } else if(etat == Etat.AttenteBleu){
+                    etat = Etat.Attente;
+                }
+            }
+        }
+        
+        if(etat == Etat.Attente || etat == Etat.AttenteBleu){
+            if((peutSortir() && y == cage.getY()+3) || enTrainDeSortir){
+                vitesse = vitesseDefaut/2;
+                if(x > cage.getX()+0.5f){
+                    x-=vitesse;
+                } else if(x < cage.getX()+0.5f){
+                    x+=vitesse;
+                } else {
+                    enTrainDeSortir = true;
+                    sortir();
+                }
+            } else {
+                if(basAttente){
+                    y+=vitesse;
+                    if(y >= cage.getY()+3.5f){
+                        basAttente = false;
                     }
                 } else {
-                    if(basAttente){
-                        y+=vitesse;
-                        if(y >= 18){
-                            basAttente = false;
-                        }
-                    } else {
-                        y-=vitesse;
-                        if(y <= 16){
-                            basAttente = true;
-                        }
+                    y-=vitesse;
+                    if(y <= cage.getY()+2.5f){
+                        basAttente = true;
                     }
                 }
-                break;
-            case Normal:
-                setCible();
-                setDirection();
-                if(Panel.getMap().effet(getX(), getY()) == 1){
-                    vitesse = 0.0625f;
-                } else {
-                    vitesse = 0.125f;
-                }
-                super.avancer();
-                break;
-            case Scatter:
+            }
+        } else {
+            if(scatter){
                 cible = new Tile(xScatter, yScatter, 0);
-                setDirection();
-                if(Panel.getMap().effet(getX(), getY()) == 1){
-                    vitesse = 0.0625f;
-                } else {
-                    vitesse = 0.125f;
-                }
-                super.avancer();
-                break;
-            case Peur:
-                setDirection();
-                if(Panel.getMap().effet(getX(), getY()) == 1){
-                    vitesse = 0.0625f;
-                } else {
-                    vitesse = 0.125f;
-                }
-                super.avancer();
-                break;
-            case Retour:
-                cible = new Tile(13, 14, 0);
-                setDirection();
-                vitesse = 0.25f;
-                super.avancer();
-                break;
-            case AttenteBleu:
-                if((peutSortir() && y == 17) || enTrainDeSortir){
-                    if(x > 13.5f){
-                        x-=vitesse;
-                    } else if(x < 13.5f){
-                        x+=vitesse;
-                    } else {
-                        sortir();
-                    }
-                } else {
-                    if(basAttente){
-                        y+=vitesse;
-                        if(y == 18){
-                            basAttente = false;
-                        }
-                    } else {
-                        y-=vitesse;
-                        if(y == 16){
-                            basAttente = true;
-                        }
-                    }
-                }
-                break;
-            default:
-                break;
+            } else {
+                setCible();
+            }
+            setDirection();
+            if(Panel.getMap().effet(getX(), getY()) == 1){
+                vitesse = vitesseDefaut/2;
+            } else {
+                vitesse = vitesseDefaut;
+            }
+            super.avancer();
         }
     }
     
@@ -244,23 +236,8 @@ public class Ghost extends Entity{
         return touche;
     }
     
-    public void afficher(Graphics g, int width, int height){
-        double size;
-        int mapWidth = Panel.getMap().getMapWidth();
-        int mapHeight = Panel.getMap().getMapHeight();
-        
-        if(width/mapWidth > height/mapHeight){
-            size = height/mapHeight;
-        } else {
-            size = width/mapWidth;
-        }
-        
-        Graphics2D g2d = (Graphics2D)g;
-        AffineTransform rotation = new AffineTransform();
-        
-        rotation.translate((x-0.5)*size, (y-0.5)*size);
-        rotation.scale(size/8, size/8);
-        g2d.drawImage(img, rotation, null);
+    public void setIdSprite(){
+        idSprite = 0;
     }
 
     /**
@@ -277,18 +254,58 @@ public class Ghost extends Entity{
         this.etat = etat;
     }
     
+    /**
+     * @param aPeur the peur to set
+     */
+    public static void setPeurTrue() {
+        peur = true;
+        for(int i = 0; i < Panel.getGhostsTab().length; i++){
+            Panel.getGhostsTab()[i].inverserDirection();
+        }
+        pausePrevu += 6000;
+        pauseStart = Frame.getMs();
+    }
+    
     public boolean peutSortir(){
         return false;
     }
     
     public void sortir(){
-        enTrainDeSortir = true;
-        if(y > 14){
+        if(y > cage.getY()){
             y-=vitesse;
-        } else if(y == 14){
-            etat = Etat.Scatter;
+        } else if(y == cage.getY()){
             enTrainDeSortir = false;
-            vitesse = 0.125f;
+            if(peur){
+                etat = Etat.Peur;
+                vitesse = vitesseDefaut/2;
+            } else {
+                if(scatter){
+                    etat = Etat.Scatter;
+                    vitesse = vitesseDefaut;
+                } else {
+                    etat = Etat.Normal;
+                    vitesse = vitesseDefaut;
+                }
+            }
+        }
+    }
+
+    public void inverserDirection(){
+        switch (directionCourente) {
+            case Gauche:
+                directionCourente = Direction.Droite;
+                break;
+            case Haut:
+                directionCourente = Direction.Bas;
+                break;
+            case Droite:
+                directionCourente = Direction.Gauche;
+                break;
+            case Bas:
+                directionCourente = Direction.Haut;
+                break;
+            default:
+                break;
         }
     }
 }

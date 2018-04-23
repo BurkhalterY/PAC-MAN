@@ -30,21 +30,31 @@ public class Entity {
     }
     protected float x;
     protected float y;
-    protected float vitesse;
+    protected float vitesse, vitesseDefaut;
     protected Direction directionCourente;
     protected Direction directionSuivante;
-    protected BufferedImage img;
+    protected int idSprite = 0;
+    protected BufferedImage spriteSheet;
+    protected BufferedImage[] sprites;
     
-    public Entity(float x, float y, float vitesse){
+    public Entity(float x, float y, float vitesse, String pictureFile, int rows, int columns){
         this.x = x;
         this.y = y;
         this.vitesse = vitesse;
+        this.vitesseDefaut = vitesse;
         directionCourente = Direction.Gauche;
         directionSuivante = Direction.Gauche;
+        sprites = new BufferedImage[rows * columns];
         try {
-            img = ImageIO.read(new File("res/peur.png"));
+            spriteSheet = ImageIO.read(new File("res/"+pictureFile+".png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        for(int i = 0; i < columns; i++) {
+            for(int j = 0; j < rows; j++) {
+                sprites[(j * columns) + i] = spriteSheet.getSubimage(i * 16, j * 16, 16, 16);
+            }
         }
     }
     
@@ -143,19 +153,23 @@ public class Entity {
             case Gauche:
                 if(collisionGauche()){
                     x-=vitesse;
-                }   break;
+                }
+                break;
             case Haut:
                 if(collisionHaut()){
                     y-=vitesse;
-                }   break;
+                }
+                break;
             case Droite:
                 if(collisionDroite()){
                     x+=vitesse;
-                }   break;
+                }
+                break;
             case Bas:
                 if(collisionBas()){
                     y+=vitesse;
-                }   break;
+                }
+                break;
             default:
                 break;
         }
@@ -168,22 +182,29 @@ public class Entity {
     }
     
     public void verifDirection(){
-        if(directionSuivante == Direction.Gauche){
-            if(collisionGauche()){
-                directionCourente = directionSuivante;
-            }
-        } else  if(directionSuivante == Direction.Haut){
-            if(collisionHaut()){
-                directionCourente = directionSuivante;
-            }
-        } else  if(directionSuivante == Direction.Droite){
-            if(collisionDroite()){
-                directionCourente = directionSuivante;
-            }
-        } else  if(directionSuivante == Direction.Bas){
-            if(collisionBas()){
-                directionCourente = directionSuivante;
-            }
+        switch (directionSuivante) {
+            case Gauche:
+                if(collisionGauche()){
+                    directionCourente = directionSuivante;
+                }
+                break;
+            case Haut:
+                if(collisionHaut()){
+                    directionCourente = directionSuivante;
+                }
+                break;
+            case Droite:
+                if(collisionDroite()){
+                    directionCourente = directionSuivante;
+                }
+                break;
+            case Bas:
+                if(collisionBas()){
+                    directionCourente = directionSuivante;
+                }
+                break;
+            default:
+                break;
         }
     }
     
@@ -195,6 +216,8 @@ public class Entity {
     }
     
     public void afficher(Graphics g, int width, int height){
+        setIdSprite();
+        
         double size;
         int mapWidth = Panel.getMap().getMapWidth();
         int mapHeight = Panel.getMap().getMapHeight();
@@ -210,6 +233,10 @@ public class Entity {
         
         rotation.translate((x-0.5)*size, (y-0.5)*size);
         rotation.scale(size/8, size/8);
-        g2d.drawImage(img, rotation, null);
+        g2d.drawImage(sprites[idSprite], rotation, null);
+    }
+    
+    public void setIdSprite(){
+        idSprite = 0;
     }
 }

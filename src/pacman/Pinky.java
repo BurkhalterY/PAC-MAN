@@ -5,12 +5,6 @@
  */
 package pacman;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-
 /**
  *
  * @author BuYa
@@ -18,15 +12,8 @@ import javax.imageio.ImageIO;
 public class Pinky extends Ghost{
     
     public Pinky(float x, float y, float vitesse, int xScatter, int yScatter) {
-        super(x, y, vitesse, xScatter, yScatter);
+        super(x, y, vitesse, xScatter, yScatter, "pinky", 1, 8);
         basAttente = true;
-        
-        try {
-            img = ImageIO.read(new File("res/pinky.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Pinky.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
     }
     
     public void setCible(){

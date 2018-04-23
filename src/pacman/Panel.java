@@ -7,8 +7,6 @@ package pacman;
 
 import java.awt.Graphics;
 import javax.swing.JPanel;
-import pacman.Entity.Direction;
-import pacman.Ghost.Etat;
 
 /**
  *
@@ -16,14 +14,14 @@ import pacman.Ghost.Etat;
  */
 public class Panel extends JPanel{
     private static Map map = new Map("res/map");
-    private static Player playersTab[] = {new Pacman(13.5f, 26, 0.125f)};
+    private static Player playersTab[] = {new Pacman(13.5f, 26, 1/8f)};
     private static Ghost ghostsTab[] = {
-        new Blinky(13.5f, 14, 0.09375f, map.getMapWidth()-3, 0),
-        new Pinky(13.5f, 17, 0.09375f, 2, 0),
-        new Inky(11.5f, 17, 0.09375f, map.getMapWidth(), map.getMapHeight()),
-        new Clyde(15.5f, 17, 0.09375f, 0, map.getMapHeight())
+        new Blinky(13.5f, 14, 1/8f, map.getMapWidth()-3, 0),
+        new Pinky(13.5f, 17, 1/8f, 2, 0),
+        new Inky(11.5f, 17, 1/8f, map.getMapWidth(), map.getMapHeight()),
+        new Clyde(15.5f, 17, 1/8f, 0, map.getMapHeight())
     };
-    private boolean run;
+    private boolean run = true;
     
     private long start, pauseStart, pauseDuree;
     
@@ -42,14 +40,13 @@ public class Panel extends JPanel{
     }
     
     public void go(){
+        Ghost.calculEtatGlobal();
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].avancer();
         }
         for(int i = 0; i < playersTab.length; i++){
             playersTab[i].avancer();
         }
-
-        repaint();
     }
     
     public void paintComponent(Graphics g){

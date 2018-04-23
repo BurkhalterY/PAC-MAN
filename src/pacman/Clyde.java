@@ -5,12 +5,6 @@
  */
 package pacman;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-
 /**
  *
  * @author BuYa
@@ -18,14 +12,7 @@ import javax.imageio.ImageIO;
 public class Clyde extends Ghost{
     
     public Clyde(float x, float y, float vitesse, int xScatter, int yScatter) {
-        super(x, y, vitesse, xScatter, yScatter);
-        
-        try {
-            img = ImageIO.read(new File("res/clyde.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Clyde.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
+        super(x, y, vitesse, xScatter, yScatter, "clyde", 1, 8);
     }
     
     public void setCible(){

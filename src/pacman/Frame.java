@@ -5,8 +5,6 @@
  */
 package pacman;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 
@@ -16,8 +14,7 @@ import javax.swing.JFrame;
  */
 public class Frame extends JFrame{
     private Panel pan = new Panel();
-    private long tempsDebut, tempsFin, dureeBoucle;
-    private int fps = 10;
+    private static long ms = 0;
 
     public Frame(){
         this.setTitle("PAC-MAN");
@@ -30,22 +27,50 @@ public class Frame extends JFrame{
         Clavier clav = new Clavier(); 
         addKeyListener(clav);
         
-        while(pan.isRun()){
-            tempsDebut = System.currentTimeMillis();
-            
-            pan.go();
-            
-            tempsFin = System.currentTimeMillis();
-            dureeBoucle = tempsFin-tempsDebut;
+        long startTime = System.currentTimeMillis();
+        long initialTime = System.nanoTime();
+        int UPS = 60;
+        final double timeU = 1000000000 / UPS;
+        int FPS = 60;
+        final double timeF = 1000000000 / FPS;
+        double deltaU = 0, deltaF = 0;
+        int frames = 0, ticks = 0;
+        long timer = System.currentTimeMillis();
 
-            if(fps-dureeBoucle > 0){
-                try {
-                    Thread.sleep(fps-dureeBoucle);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(Frame.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        while (pan.isRun()) {
+
+            long currentTime = System.nanoTime();
+            deltaU += (currentTime - initialTime) / timeU;
+            deltaF += (currentTime - initialTime) / timeF;
+            initialTime = currentTime;
+
+            if (deltaU >= 1) {
+                pan.go();
+                ticks++;
+                deltaU--;
             }
+
+            if (deltaF >= 1) {
+                pan.repaint();
+                frames++;
+                deltaF--;
+            }
+
+            if (System.currentTimeMillis() - timer > 1000) {
+                frames = 0;
+                ticks = 0;
+                timer += 1000;
+            }
+            
+            ms = System.currentTimeMillis() - startTime;
         }
-        
     }
+
+    /**
+     * @return the ms
+     */
+    public static long getMs() {
+        return ms;
+    }
+    
 }
