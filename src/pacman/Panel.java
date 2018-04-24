@@ -54,10 +54,10 @@ public class Panel extends JPanel{
         for(int i = 0; i < playersTab.length; i++){
             playersTab[i].afficher(g, this.getWidth(), this.getHeight());
         }
-        /*for(int i = 0; i < ghostsTab.length; i++){
+        for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
-        }*/
-        System.out.println(Panel.getPlayersTab()[0].x + "\t"+ Panel.getPlayersTab()[0].y);
+        }
+        System.out.println("x = " + Panel.getGhostsTab()[1].x + "\ty = " + Panel.getGhostsTab()[1].y);
     }
 
     /**

@@ -69,13 +69,7 @@ public class Entity {
             case Gauche:
                 xa = (int) Math.ceil(x);
                 break;
-            case Haut:
-                xa = (int) x;
-                break;
-            case Droite:
-                xa = (int) x;
-                break;
-            case Bas:
+            case Haut: case Droite: case Bas:
                 xa = (int) x;
                 break;
             default:
@@ -90,16 +84,10 @@ public class Entity {
     public int getY() {
         int ya = 0;
         switch (directionCourente) {
-            case Gauche:
-                ya = (int) y;
-                break;
             case Haut:
                 ya = (int) Math.ceil(y);
                 break;
-            case Droite:
-                ya = (int) y;
-                break;
-            case Bas:
+            case Droite: case Gauche: case Bas:
                 ya = (int) y;
                 break;
             default:
@@ -115,117 +103,75 @@ public class Entity {
         return directionCourente;
     }
     
-    public boolean collisionDroite(boolean arrondi){
+    public boolean collision(Direction direction){
         float xa, ya;
-        if(arrondi){
+        xa = ya = -1;
+        /*if(arrondi){
             xa = getX();
             ya = getY();
-        } else {
+        } else {*/
             xa = x;
             ya = y;
+        //}*/
+        int xb, yb;
+        xb = yb = -1;
+        switch (direction) {
+            case Gauche:
+                xb = (int)Math.ceil(xa-vitesse-1);
+                yb = (int)y;
+                break;
+            case Haut:
+                xb = (int)xa;
+                yb = (int)Math.ceil(ya-vitesse-1);
+                break;
+            case Droite:
+                xb = (int)(xa+vitesse+1);
+                yb = (int)y;
+                break;
+            case Bas:
+                xb = (int)xa;
+                yb = (int)(ya+vitesse+1);
+                break;
+            default:
+                break;
         }
         
         boolean libre = false;
-        if(Panel.getMap().libreA((int)(xa+vitesse+1), (int) ya)){
+        if(Panel.getMap().libreA(xb, yb)){
             libre = true;
         } else {
             for(float i = 0; i <= vitesse; i += 0.1f){
-                if(Panel.getMap().libreA((int)(xa+i+1), (int) ya)){
+                switch (direction) {
+                    case Gauche:
+                        xb = (int)Math.ceil(xa-i-1);
+                        break;
+                    case Haut:
+                        yb = (int)Math.ceil(ya-i-1);
+                        break;
+                    case Droite:
+                        xb = (int)(xa+i+1);
+                        break;
+                    case Bas:
+                        yb = (int)(ya+i+1);
+                        break;
+                    default:
+                        break;
+                }
+                if(Panel.getMap().libreA(xb, yb)){
                     libre = true;
                 }
             }
         }
-        if(!libre){
-            x = getX();
-        }
         return libre;
     }
     
-    public boolean collisionGauche(boolean arrondi){
-        float xa, ya;
-        if(arrondi){
-            xa = getX();
-            ya = getY();
-        } else {
-            xa = x;
-            ya = y;
-        }
-        
-        boolean libre = false;
-        if(Panel.getMap().libreA((int)Math.ceil(xa-vitesse-1), (int) ya)){
-            libre = true;
-        } else {
-            for(float i = 0; i <= vitesse; i += 0.1f){
-                if(Panel.getMap().libreA((int)Math.ceil(xa-i-1), (int) ya)){
-                    libre = true;
-                }
-            }
-        }
-        if(!libre){
-            x = getX();
-        }
-        return libre;
-    }
-    
-    public boolean collisionHaut(boolean arrondi){
-        float xa, ya;
-        if(arrondi){
-            xa = getX();
-            ya = getY();
-        } else {
-            xa = x;
-            ya = y;
-        }
-        
-        boolean libre = false;
-        if(Panel.getMap().libreA((int) xa, (int)Math.ceil(ya-vitesse-1))){
-            libre = true;
-        } else {
-            for(float i = 0; i <= vitesse; i += 0.1f){
-                if(Panel.getMap().libreA((int) xa, (int)Math.ceil(ya-i-1))){
-                    libre = true;
-                }
-            }
-        }
-        if(!libre){
-            y = getY();
-        }
-        return libre;
-    }
-    
-    public boolean collisionBas(boolean arrondi){
-        float xa, ya;
-        if(arrondi){
-            xa = getX();
-            ya = getY();
-        } else {
-            xa = x;
-            ya = y;
-        }
-        
-        boolean libre = false;
-        if(Panel.getMap().libreA((int) xa, (int)(ya+vitesse+1))){
-            libre = true;
-        } else {
-            for(float i = 0; i <= vitesse; i += 0.1f){
-                if(Panel.getMap().libreA((int) xa, (int)(ya+i+1))){
-                    libre = true;
-                }
-            }
-        }
-        if(!libre){
-            y = getY();
-        }
-        return libre;
-    }
-    
-    public void avancer(){
+    public void avancer(){   
         if(x > 0 && x < Panel.getMap().getMapWidth()){    
             verifDirection();
         }
         switch (directionCourente) {
             case Gauche:
-                if(collisionGauche(false) && y == (int)y){
+                if(collision(Direction.Gauche) && y == (int)y){
                     x-=vitesse;
                     stop = false;
                 } else {
@@ -233,7 +179,7 @@ public class Entity {
                 }
                 break;
             case Haut:
-                if(collisionHaut(false) && x == (int)x){
+                if(collision(Direction.Haut) && x == (int)x){
                     y-=vitesse;
                     stop = false;
                 } else {
@@ -241,7 +187,7 @@ public class Entity {
                 }
                 break;
             case Droite:
-                if(collisionDroite(false) && y == (int)y){
+                if(collision(Direction.Droite) && y == (int)y){
                     x+=vitesse;
                     stop = false;
                 } else {
@@ -249,7 +195,7 @@ public class Entity {
                 }
                 break;
             case Bas:
-                if(collisionBas(false) && x == (int)x){
+                if(collision(Direction.Bas) && x == (int)x){
                     y+=vitesse;
                     stop = false;
                 } else {
@@ -270,25 +216,25 @@ public class Entity {
     public void verifDirection(){
         switch (directionSuivante) {
             case Gauche:
-                if(collisionGauche(true)){
+                if(collision(Direction.Gauche)){
                     y = getY();
                     directionCourente = directionSuivante;
                 }
                 break;
             case Haut:
-                if(collisionHaut(true)){
+                if(collision(Direction.Haut)){
                     x = getX();
                     directionCourente = directionSuivante;
                 }
                 break;
             case Droite:
-                if(collisionDroite(true)){
+                if(collision(Direction.Droite)){
                     y = getY();
                     directionCourente = directionSuivante;
                 }
                 break;
             case Bas:
-                if(collisionBas(true)){
+                if(collision(Direction.Bas)){
                     x = getX();
                     directionCourente = directionSuivante;
                 }

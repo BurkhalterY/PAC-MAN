@@ -32,6 +32,8 @@ public class Map {
     private int mapHeight = 36;
     private int nbBulletTotal = 0;
     private int nbBulletRestantes = 0;
+    int width;
+    int height;
     
     public Map(String path){
         map = new Tile[mapWidth][mapHeight];
@@ -113,15 +115,17 @@ public class Map {
         }
         
         try {
-            tileset = ImageIO.read(new File("res/tileset1.png"));
+            tileset = ImageIO.read(new File("res/tileset-3.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        width = tileset.getWidth()/9;
+        height = tileset.getHeight()/6;
+
         for(int y = 0; y < 6; y++){
             for(int x = 0; x < 9; x++){
-                tiles[tilesID] = new BufferedImage(8, 8, BufferedImage.TYPE_INT_RGB);
-                tiles[tilesID].getGraphics().drawImage(tileset, 0, 0, 8, 8, x*9, y*9, (x*9)+8, (y*9)+8, null);
+                tiles[tilesID] = tileset.getSubimage(x * width, y * height, width, height);
                 tilesID++;
             }
         }
@@ -181,7 +185,7 @@ public class Map {
             for(int x=0; x < 28; x++){
                 AffineTransform rotation = new AffineTransform();
                 rotation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
-                rotation.scale(size/8, size/8);
+                rotation.scale(size/this.width, size/this.height);
                 g2d.drawImage(tiles[map[x][y].getType()], rotation, null);
             }
         }
