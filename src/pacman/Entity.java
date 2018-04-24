@@ -42,8 +42,8 @@ public class Entity {
     public Entity(float x, float y, float vitesse, String pictureFile, int rows, int columns){
         this.x = x;
         this.y = y;
-        this.vitesse = vitesse;
-        this.vitesseDefaut = vitesse;
+        this.vitesse = vitesse*0.125f;
+        this.vitesseDefaut = vitesse*0.125f;
         directionCourente = Direction.Gauche;
         directionSuivante = Direction.Gauche;
         sprites = new BufferedImage[rows * columns];
@@ -115,34 +115,106 @@ public class Entity {
         return directionCourente;
     }
     
-    public boolean collisionDroite(){
+    public boolean collisionDroite(boolean arrondi){
+        float xa, ya;
+        if(arrondi){
+            xa = getX();
+            ya = getY();
+        } else {
+            xa = x;
+            ya = y;
+        }
+        
         boolean libre = false;
-        if(Panel.getMap().libreA((int) x, (int) y, Direction.Droite) && y == (int)y){
+        if(Panel.getMap().libreA((int)(xa+vitesse+1), (int) ya)){
             libre = true;
+        } else {
+            for(float i = 0; i <= vitesse; i += 0.1f){
+                if(Panel.getMap().libreA((int)(xa+i+1), (int) ya)){
+                    libre = true;
+                }
+            }
+        }
+        if(!libre){
+            x = getX();
         }
         return libre;
     }
     
-    public boolean collisionGauche(){
+    public boolean collisionGauche(boolean arrondi){
+        float xa, ya;
+        if(arrondi){
+            xa = getX();
+            ya = getY();
+        } else {
+            xa = x;
+            ya = y;
+        }
+        
         boolean libre = false;
-        if(Panel.getMap().libreA((int) Math.ceil(x), (int) y, Direction.Gauche) && y == (int)y){
+        if(Panel.getMap().libreA((int)Math.ceil(xa-vitesse-1), (int) ya)){
             libre = true;
+        } else {
+            for(float i = 0; i <= vitesse; i += 0.1f){
+                if(Panel.getMap().libreA((int)Math.ceil(xa-i-1), (int) ya)){
+                    libre = true;
+                }
+            }
+        }
+        if(!libre){
+            x = getX();
         }
         return libre;
     }
     
-    public boolean collisionHaut(){
+    public boolean collisionHaut(boolean arrondi){
+        float xa, ya;
+        if(arrondi){
+            xa = getX();
+            ya = getY();
+        } else {
+            xa = x;
+            ya = y;
+        }
+        
         boolean libre = false;
-        if(Panel.getMap().libreA((int) x, (int) Math.ceil(y), Direction.Haut) && x == (int)x){
+        if(Panel.getMap().libreA((int) xa, (int)Math.ceil(ya-vitesse-1))){
             libre = true;
+        } else {
+            for(float i = 0; i <= vitesse; i += 0.1f){
+                if(Panel.getMap().libreA((int) xa, (int)Math.ceil(ya-i-1))){
+                    libre = true;
+                }
+            }
+        }
+        if(!libre){
+            y = getY();
         }
         return libre;
     }
     
-    public boolean collisionBas(){
+    public boolean collisionBas(boolean arrondi){
+        float xa, ya;
+        if(arrondi){
+            xa = getX();
+            ya = getY();
+        } else {
+            xa = x;
+            ya = y;
+        }
+        
         boolean libre = false;
-        if(Panel.getMap().libreA((int) x, (int) y, Direction.Bas) && x == (int)x){
+        if(Panel.getMap().libreA((int) xa, (int)(ya+vitesse+1))){
             libre = true;
+        } else {
+            for(float i = 0; i <= vitesse; i += 0.1f){
+                if(Panel.getMap().libreA((int) xa, (int)(ya+i+1))){
+                    libre = true;
+                }
+            }
+        }
+        if(!libre){
+            y = getY();
         }
         return libre;
     }
@@ -153,7 +225,7 @@ public class Entity {
         }
         switch (directionCourente) {
             case Gauche:
-                if(collisionGauche()){
+                if(collisionGauche(false) && y == (int)y){
                     x-=vitesse;
                     stop = false;
                 } else {
@@ -161,7 +233,7 @@ public class Entity {
                 }
                 break;
             case Haut:
-                if(collisionHaut()){
+                if(collisionHaut(false) && x == (int)x){
                     y-=vitesse;
                     stop = false;
                 } else {
@@ -169,7 +241,7 @@ public class Entity {
                 }
                 break;
             case Droite:
-                if(collisionDroite()){
+                if(collisionDroite(false) && y == (int)y){
                     x+=vitesse;
                     stop = false;
                 } else {
@@ -177,7 +249,7 @@ public class Entity {
                 }
                 break;
             case Bas:
-                if(collisionBas()){
+                if(collisionBas(false) && x == (int)x){
                     y+=vitesse;
                     stop = false;
                 } else {
@@ -198,22 +270,26 @@ public class Entity {
     public void verifDirection(){
         switch (directionSuivante) {
             case Gauche:
-                if(collisionGauche()){
+                if(collisionGauche(true)){
+                    y = getY();
                     directionCourente = directionSuivante;
                 }
                 break;
             case Haut:
-                if(collisionHaut()){
+                if(collisionHaut(true)){
+                    x = getX();
                     directionCourente = directionSuivante;
                 }
                 break;
             case Droite:
-                if(collisionDroite()){
+                if(collisionDroite(true)){
+                    y = getY();
                     directionCourente = directionSuivante;
                 }
                 break;
             case Bas:
-                if(collisionBas()){
+                if(collisionBas(true)){
+                    x = getX();
                     directionCourente = directionSuivante;
                 }
                 break;
@@ -227,8 +303,8 @@ public class Entity {
      */
     public void setVitesse(float vitesse) {
         this.vitesse = vitesse;
-        x = vitesseDefaut * ((x+vitesseDefaut/2)/vitesseDefaut);
-        y = vitesseDefaut * ((y+vitesseDefaut/2)/vitesseDefaut);
+        //x = vitesseDefaut * ((x+vitesseDefaut/2)/vitesseDefaut);
+        //y = vitesseDefaut * ((y+vitesseDefaut/2)/vitesseDefaut);
     }
     
     /**

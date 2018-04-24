@@ -14,12 +14,12 @@ import javax.swing.JPanel;
  */
 public class Panel extends JPanel{
     private static Map map = new Map("res/map");
-    private static Player playersTab[] = {new Pacman(13.5f, 26, 1/8f)};
+    private static Player playersTab[] = {new Pacman(13.5f, 26, 0.8f)};
     private static Ghost ghostsTab[] = {
-        new Blinky(13.5f, 14, 1/8f, map.getMapWidth()-3, 0),
-        new Pinky(13.5f, 17, 1/8f, 2, 0),
-        new Inky(11.5f, 17, 1/8f, map.getMapWidth(), map.getMapHeight()),
-        new Clyde(15.5f, 17, 1/8f, 0, map.getMapHeight())
+        new Blinky(13.5f, 14, 0.75f, map.getMapWidth()-3, 0),
+        new Pinky(13.5f, 17, 0.75f, 2, 0),
+        new Inky(11.5f, 17, 0.75f, map.getMapWidth(), map.getMapHeight()),
+        new Clyde(15.5f, 17, 0.75f, 0, map.getMapHeight())
     };
     private boolean run = true;
     
@@ -54,9 +54,10 @@ public class Panel extends JPanel{
         for(int i = 0; i < playersTab.length; i++){
             playersTab[i].afficher(g, this.getWidth(), this.getHeight());
         }
-        for(int i = 0; i < ghostsTab.length; i++){
+        /*for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
-        }
+        }*/
+        System.out.println(Panel.getPlayersTab()[0].x + "\t"+ Panel.getPlayersTab()[0].y);
     }
 
     /**

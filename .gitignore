@@ -25,3 +25,4 @@ hs_err_pid*
 *.class
 *.class
 build/classes/pacman/Entity$1.class
+/dist/

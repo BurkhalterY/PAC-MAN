@@ -13,8 +13,10 @@ import javax.swing.JFrame;
  * @author BuYa
  */
 public class Frame extends JFrame{
+    
     private Panel pan = new Panel();
     private static long ms = 0;
+    private static int ticksTotal = 0;
 
     public Frame(){
         this.setTitle("PAC-MAN");
@@ -47,6 +49,7 @@ public class Frame extends JFrame{
             if (deltaU >= 1) {
                 pan.go();
                 ticks++;
+                ticksTotal++;
                 deltaU--;
             }
 
@@ -59,7 +62,7 @@ public class Frame extends JFrame{
             if (System.currentTimeMillis() - timer > 1000) {
                 frames = 0;
                 ticks = 0;
-                timer += 1000;
+                timer = System.currentTimeMillis();
             }
             
             ms = System.currentTimeMillis() - startTime;
@@ -73,4 +76,10 @@ public class Frame extends JFrame{
         return ms;
     }
     
+    /**
+     * @return the ticksTotal
+     */
+    public static int getTicksTotal() {
+        return ticksTotal;
+    }
 }

@@ -238,21 +238,20 @@ public class Ghost extends Entity{
         Direction directionsPossibles[] = new Direction[4];
         
         int i = 0;
-        if(collisionHaut() && directionCourente != Direction.Bas && Panel.getMap().effet(getX(), getY()) != 2){
+        if(collisionHaut(false) && x == (int) x && directionCourente != Direction.Bas && Panel.getMap().effet(getX(), getY()) != 2){
             directionsPossibles[i] = Direction.Haut;
             i++;
         }
-        if(collisionGauche() && directionCourente != Direction.Droite){
+        if(collisionGauche(false) && y == (int) y && directionCourente != Direction.Droite){
             directionsPossibles[i] = Direction.Gauche;
             i++;
         }
-        if(collisionBas() && directionCourente != Direction.Haut){
+        if(collisionBas(false) && x == (int) x && directionCourente != Direction.Haut){
             directionsPossibles[i] = Direction.Bas;
             i++;
         }
-        if(collisionDroite() && directionCourente != Direction.Gauche){
+        if(collisionDroite(false) && y == (int) y && directionCourente != Direction.Gauche){
             directionsPossibles[i] = Direction.Droite;
-            i++;
         }
         
         return directionsPossibles;

@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import pacman.Entity.Direction;
 
 /**
  *
@@ -128,35 +127,11 @@ public class Map {
         }
     }
     
-    public boolean libreA(int x, int y, Direction direction){
+    public boolean libreA(int x, int y){
         boolean libre = true;
         
-        int xa = -1;
-        int ya = -1;
-        
-        switch (direction) {
-            case Gauche:
-                xa = x-1;
-                ya = y;
-                break;
-            case Droite:
-                xa = x+1;
-                ya = y;
-                break;
-            case Haut:
-                xa = x;
-                ya = y-1;
-                break;
-            case Bas:
-                xa = x;
-                ya = y+1;
-                break;
-            default:
-                break;
-        }
-        
-        if(xa >= 0 && xa < mapWidth && ya >= 0 && ya < mapHeight){
-            if(map[xa][ya].isSolide()){
+        if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
+            if(map[x][y].isSolide()){
                 libre = false;
             }
         }
