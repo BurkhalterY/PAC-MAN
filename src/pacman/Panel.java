@@ -41,11 +41,11 @@ public class Panel extends JPanel{
     
     public void go(){
         Ghost.calculEtatGlobal();
-        for(int i = 0; i < ghostsTab.length; i++){
-            ghostsTab[i].avancer();
-        }
         for(int i = 0; i < playersTab.length; i++){
             playersTab[i].avancer();
+        }
+        for(int i = 0; i < ghostsTab.length; i++){
+            ghostsTab[i].avancer();
         }
     }
     
@@ -57,7 +57,6 @@ public class Panel extends JPanel{
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
         }
-        System.out.println("x = " + Panel.getGhostsTab()[1].x + "\ty = " + Panel.getGhostsTab()[1].y);
     }
 
     /**

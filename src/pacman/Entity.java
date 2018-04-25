@@ -38,12 +38,13 @@ public class Entity {
     protected BufferedImage spriteSheet;
     protected BufferedImage[] sprites;
     protected boolean stop;
+    protected static float facteurVitesse = 0.125f;
     
     public Entity(float x, float y, float vitesse, String pictureFile, int rows, int columns){
         this.x = x;
         this.y = y;
-        this.vitesse = vitesse*0.125f;
-        this.vitesseDefaut = vitesse*0.125f;
+        this.vitesse = vitesse*facteurVitesse;
+        this.vitesseDefaut = vitesse;
         directionCourente = Direction.Gauche;
         directionSuivante = Direction.Gauche;
         sprites = new BufferedImage[rows * columns];
@@ -70,7 +71,7 @@ public class Entity {
                 xa = (int) Math.ceil(x);
                 break;
             case Haut: case Droite: case Bas:
-                xa = (int) x;
+                xa = (int) Math.floor(x);
                 break;
             default:
                 break;
@@ -88,7 +89,7 @@ public class Entity {
                 ya = (int) Math.ceil(y);
                 break;
             case Droite: case Gauche: case Bas:
-                ya = (int) y;
+                ya = (int) Math.floor(y);
                 break;
             default:
                 break;
@@ -103,100 +104,119 @@ public class Entity {
         return directionCourente;
     }
     
-    public boolean collision(Direction direction){
+    public float collision(Direction direction){
         float xa, ya;
-        xa = ya = -1;
-        /*if(arrondi){
-            xa = getX();
-            ya = getY();
-        } else {*/
+        if(direction == directionCourente){
             xa = x;
             ya = y;
-        //}*/
+        } else {
+            xa = getX();
+            ya = getY();
+        }
         int xb, yb;
-        xb = yb = -1;
         switch (direction) {
             case Gauche:
-                xb = (int)Math.ceil(xa-vitesse-1);
-                yb = (int)y;
+                xb = (int)Math.floor(xa-vitesse);
+                yb = (int)ya;
                 break;
             case Haut:
                 xb = (int)xa;
-                yb = (int)Math.ceil(ya-vitesse-1);
+                yb = (int)Math.floor(ya-vitesse);
                 break;
             case Droite:
-                xb = (int)(xa+vitesse+1);
-                yb = (int)y;
+                xb = (int)Math.ceil(xa+vitesse);
+                yb = (int)ya;
                 break;
             case Bas:
                 xb = (int)xa;
-                yb = (int)(ya+vitesse+1);
+                yb = (int)Math.ceil(ya+vitesse);
                 break;
             default:
+                xb = -1;
+                yb = -1;
                 break;
         }
         
-        boolean libre = false;
+        float distance = 0;
         if(Panel.getMap().libreA(xb, yb)){
-            libre = true;
+            distance = vitesse;
         } else {
-            for(float i = 0; i <= vitesse; i += 0.1f){
+            for(float i = 0; i < vitesse; i += 0.1f){
                 switch (direction) {
                     case Gauche:
-                        xb = (int)Math.ceil(xa-i-1);
+                        xb = (int)Math.floor(xa-i);
                         break;
                     case Haut:
-                        yb = (int)Math.ceil(ya-i-1);
+                        yb = (int)Math.floor(ya-i);
                         break;
                     case Droite:
-                        xb = (int)(xa+i+1);
+                        xb = (int)Math.ceil(xa+i);
                         break;
                     case Bas:
-                        yb = (int)(ya+i+1);
+                        yb = (int)Math.ceil(ya+i);
                         break;
                     default:
                         break;
                 }
                 if(Panel.getMap().libreA(xb, yb)){
-                    libre = true;
+                    distance = i;
+                }
+            }
+            if(distance == 0 && direction == directionCourente){
+                switch (direction) {
+                    case Gauche:
+                        x = (float)Math.floor(x);
+                        break;
+                    case Haut:
+                        y = (float)Math.floor(y);
+                        break;
+                    case Droite:
+                        x = (float)Math.ceil(x);
+                        break;
+                    case Bas:
+                        y = (float)Math.ceil(y);
+                        break;
+                    default:
+                        break;
                 }
             }
         }
-        return libre;
+        return distance;
     }
     
-    public void avancer(){   
-        if(x > 0 && x < Panel.getMap().getMapWidth()){    
-            verifDirection();
+    public void avancer(){
+        if(verifDirection(directionSuivante)){
+            setNewDirection(directionSuivante);
         }
+        float distance = collision(directionCourente);
         switch (directionCourente) {
             case Gauche:
-                if(collision(Direction.Gauche) && y == (int)y){
-                    x-=vitesse;
+                if(distance > 0 && y == (int)y){
+                    x -= distance;
                     stop = false;
                 } else {
                     stop = true;
                 }
                 break;
             case Haut:
-                if(collision(Direction.Haut) && x == (int)x){
-                    y-=vitesse;
+                if(distance > 0 && x == (int)x){
+                    y -= distance;
                     stop = false;
                 } else {
                     stop = true;
                 }
                 break;
             case Droite:
-                if(collision(Direction.Droite) && y == (int)y){
-                    x+=vitesse;
+                if(distance > 0 && y == (int)y){
+                    x += distance;
                     stop = false;
                 } else {
                     stop = true;
                 }
                 break;
             case Bas:
-                if(collision(Direction.Bas) && x == (int)x){
-                    y+=vitesse;
+                if(distance > 0 && x == (int)x){
+                    y += distance;
                     stop = false;
                 } else {
                     stop = true;
@@ -205,7 +225,6 @@ public class Entity {
             default:
                 break;
         }
-        
         if(x <= -2){
             x = Panel.getMap().getMapWidth() + 1;
         } else if(x >= Panel.getMap().getMapWidth() + 2){
@@ -213,31 +232,86 @@ public class Entity {
         }
     }
     
-    public void verifDirection(){
-        switch (directionSuivante) {
+    public boolean verifDirection(Direction directionAVerifier){
+        boolean peutTourner = false;
+        
+        switch (directionAVerifier) {
             case Gauche:
-                if(collision(Direction.Gauche)){
-                    y = getY();
-                    directionCourente = directionSuivante;
+                if(collision(Direction.Gauche) > 0){
+                    if(directionCourente == Direction.Haut){
+                        if(y % 1 >= 1-facteurVitesse || (int)y == y){
+                            peutTourner = true;
+                        }
+                    } else if(directionCourente == Direction.Bas){
+                        if(y % 1 < facteurVitesse){
+                            peutTourner = true;
+                        }
+                    } else {
+                        peutTourner = true;
+                    }
                 }
                 break;
             case Haut:
-                if(collision(Direction.Haut)){
-                    x = getX();
-                    directionCourente = directionSuivante;
+                if(collision(Direction.Haut) > 0){
+                    if(directionCourente == Direction.Gauche){
+                        if(x % 1 >= 1-facteurVitesse || (int)x == x){
+                            peutTourner = true;
+                        }
+                    } else if(directionCourente == Direction.Droite){
+                        if(x % 1 < facteurVitesse){
+                            peutTourner = true;
+                        }
+                    } else {
+                        peutTourner = true;
+                    }
                 }
                 break;
             case Droite:
-                if(collision(Direction.Droite)){
-                    y = getY();
-                    directionCourente = directionSuivante;
+                if(collision(Direction.Droite) > 0){
+                    if(directionCourente == Direction.Haut){
+                        if(y % 1 >= -1 || (int)y == y){
+                            peutTourner = true;
+                        }
+                    } else if(directionCourente == Direction.Bas){
+                        if(y % 1 < facteurVitesse){
+                            peutTourner = true;
+                        }
+                    } else {
+                        peutTourner = true;
+                    }
                 }
                 break;
             case Bas:
-                if(collision(Direction.Bas)){
-                    x = getX();
-                    directionCourente = directionSuivante;
+                if(collision(Direction.Bas) > 0){
+                    if(directionCourente == Direction.Gauche){
+                        if(x % 1 >= 1-facteurVitesse || (int)x == x){
+                            peutTourner = true;
+                        }
+                    } else if(directionCourente == Direction.Droite){
+                        if(x % 1 < facteurVitesse){
+                            peutTourner = true;
+                        }
+                    } else {
+                        peutTourner = true;
+                    }
                 }
+                break;
+            default:
+                break;
+        }
+        return peutTourner;
+    }
+    
+    public void setNewDirection(Direction direction){
+        if(direction != null && x >= 0 && x < Panel.getMap().getMapWidth()-1)
+        switch (direction) {
+            case Gauche: case Droite:
+                y = getY();
+                directionCourente = directionSuivante;
+                break;
+            case Haut: case Bas:
+                x = getX();
+                directionCourente = directionSuivante;
                 break;
             default:
                 break;
@@ -248,9 +322,7 @@ public class Entity {
      * @param vitesse the vitesse to set
      */
     public void setVitesse(float vitesse) {
-        this.vitesse = vitesse;
-        //x = vitesseDefaut * ((x+vitesseDefaut/2)/vitesseDefaut);
-        //y = vitesseDefaut * ((y+vitesseDefaut/2)/vitesseDefaut);
+        this.vitesse = vitesse * facteurVitesse;
     }
     
     /**

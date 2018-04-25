@@ -75,6 +75,7 @@ public class Ghost extends Entity{
             } else {
                 if(Frame.getMs() - start - pauseDuree >= phases[phase]*1000){
                     scatter = !scatter;
+                    System.out.println(scatter);
                     for(int i = 0; i < Panel.getGhostsTab().length; i++){
                         Panel.getGhostsTab()[i].inverserDirection();
                     }
@@ -111,10 +112,10 @@ public class Ghost extends Entity{
         
         if(etat == Etat.Attente || etat == Etat.AttenteBleu){
             if((peutSortir() && y == cage.getY()+3) || enTrainDeSortir){
-                vitesse = vitesseDefaut/2;
-                if(x > cage.getX()+0.5f){
+                setVitesse(vitesseDefaut/2);
+                if(x > cage.getX()+0.6f){
                     x-=vitesse;
-                } else if(x < cage.getX()+0.5f){
+                } else if(x < cage.getX()+0.4f){
                     x+=vitesse;
                 } else {
                     enTrainDeSortir = true;
@@ -143,15 +144,16 @@ public class Ghost extends Entity{
             } else if(etat == Etat.Retour){
                 cible = cage;
             }
-            setDirection();
             if(Panel.getMap().effet(getX(), getY()) == 1){
-                vitesse = vitesseDefaut/2;
+                setVitesse(vitesseDefaut/2);
             } else {
-                vitesse = vitesseDefaut;
+                setVitesse(vitesseDefaut);
             }
             if(etat == Etat.Peur){
-                vitesse = vitesseDefaut / 2;
+                setVitesse(vitesseDefaut/2);
             }
+            setDirection();
+            
             super.avancer();
         }
     }
@@ -220,7 +222,7 @@ public class Ghost extends Entity{
             i++;
         }
         
-        if(newDirection == null){
+        /*if(newDirection == null){
             Direction directionRestante = setDirectionRestante();
             int j=0;
             while(newDirection == null && j < directionsPreferees.length){
@@ -229,7 +231,11 @@ public class Ghost extends Entity{
                 }
                 j++;
             }
-        }
+        }*/
+        System.out.println(x + "\t"+ y);
+        System.out.println(directionsPossibles[0] + "\t" + directionsPossibles[1] + "\t" + directionsPossibles[2] + "\t" + directionsPossibles[3]);
+        System.out.println(directionsPreferees[0] + "\t" + directionsPreferees[1] + "\t" + directionsPreferees[2] + "\t" + directionsPreferees[3]);
+        
         
         directionSuivante = newDirection;
     }
@@ -238,19 +244,19 @@ public class Ghost extends Entity{
         Direction directionsPossibles[] = new Direction[4];
         
         int i = 0;
-        if(collision(Direction.Haut) && x == (int) x && directionCourente != Direction.Bas && Panel.getMap().effet(getX(), getY()) != 2){
+        if(verifDirection(Direction.Haut) && directionCourente != Direction.Bas && Panel.getMap().effet(getX(), getY()) != 2){
             directionsPossibles[i] = Direction.Haut;
             i++;
         }
-        if(collision(Direction.Gauche) && y == (int) y && directionCourente != Direction.Droite){
+        if(verifDirection(Direction.Gauche) && directionCourente != Direction.Droite){
             directionsPossibles[i] = Direction.Gauche;
             i++;
         }
-        if(collision(Direction.Bas) && x == (int) x && directionCourente != Direction.Haut){
+        if(verifDirection(Direction.Bas) && directionCourente != Direction.Haut){
             directionsPossibles[i] = Direction.Bas;
             i++;
         }
-        if(collision(Direction.Droite) && y == (int) y && directionCourente != Direction.Gauche){
+        if(verifDirection(Direction.Droite) && directionCourente != Direction.Gauche){
             directionsPossibles[i] = Direction.Droite;
         }
         
