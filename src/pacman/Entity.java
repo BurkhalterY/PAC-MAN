@@ -239,11 +239,11 @@ public class Entity {
             case Gauche:
                 if(collision(Direction.Gauche) > 0){
                     if(directionCourente == Direction.Haut){
-                        if(y % 1 >= 1-facteurVitesse || (int)y == y){
+                        if(y % 1 >= 1-facteurVitesse/8 || (int)y == y){
                             peutTourner = true;
                         }
                     } else if(directionCourente == Direction.Bas){
-                        if(y % 1 < facteurVitesse){
+                        if(y % 1 < facteurVitesse/8){
                             peutTourner = true;
                         }
                     } else {
@@ -254,11 +254,11 @@ public class Entity {
             case Haut:
                 if(collision(Direction.Haut) > 0){
                     if(directionCourente == Direction.Gauche){
-                        if(x % 1 >= 1-facteurVitesse || (int)x == x){
+                        if(x % 1 >= 1-facteurVitesse/8 || (int)x == x){
                             peutTourner = true;
                         }
                     } else if(directionCourente == Direction.Droite){
-                        if(x % 1 < facteurVitesse){
+                        if(x % 1 < facteurVitesse/8){
                             peutTourner = true;
                         }
                     } else {
@@ -269,11 +269,11 @@ public class Entity {
             case Droite:
                 if(collision(Direction.Droite) > 0){
                     if(directionCourente == Direction.Haut){
-                        if(y % 1 >= -1 || (int)y == y){
+                        if(y % 1 >= 1-facteurVitesse/8 || (int)y == y){
                             peutTourner = true;
                         }
                     } else if(directionCourente == Direction.Bas){
-                        if(y % 1 < facteurVitesse){
+                        if(y % 1 < facteurVitesse/8){
                             peutTourner = true;
                         }
                     } else {
@@ -284,11 +284,11 @@ public class Entity {
             case Bas:
                 if(collision(Direction.Bas) > 0){
                     if(directionCourente == Direction.Gauche){
-                        if(x % 1 >= 1-facteurVitesse || (int)x == x){
+                        if(x % 1 >= 1-facteurVitesse/8 || (int)x == x){
                             peutTourner = true;
                         }
                     } else if(directionCourente == Direction.Droite){
-                        if(x % 1 < facteurVitesse){
+                        if(x % 1 < facteurVitesse/8){
                             peutTourner = true;
                         }
                     } else {
