@@ -61,7 +61,7 @@ public class Entity {
      * @return the x
      */
     public int getX() {
-        int xa = 0;
+        /*int xa = 0;
         switch (directionCourente) {
             case Gauche:
                 xa = (int) Math.ceil(x);
@@ -71,15 +71,15 @@ public class Entity {
                 break;
             default:
                 break;
-        }
-        return xa;
+        }*/
+        return Math.round(x);
     }
 
     /**
      * @return the y
      */
     public int getY() {
-        int ya = 0;
+        /*int ya = 0;
         switch (directionCourente) {
             case Haut:
                 ya = (int) Math.ceil(y);
@@ -89,8 +89,8 @@ public class Entity {
                 break;
             default:
                 break;
-        }
-        return ya;
+        }*/
+        return Math.round(y);
     }
     
     /**
@@ -102,80 +102,33 @@ public class Entity {
     
     public boolean collision(Direction direction){
         boolean peutTourner = false;
-        float xaMin, xaMax, yaMin, yaMax;
-        xaMin = xaMax = x;
-        yaMin = yaMax = y;
-        int xbMin, xbMax, ybMin, ybMax;
-        xbMin = xbMax = ybMin = ybMax = -1;
+        int xb, yb;
+        xb = yb = -1;
+        
         switch (direction) {
             case Gauche:
-                xaMin = xaMin-vitesse;
-                xaMax = xaMax-vitesse-(1-facteurVitesse);
-                switch (directionCourente) {
-                    case Gauche:
-                        
-                        break;
-                    case Haut:
-                        
-                        break;
-                    case Droite:
-                        
-                        break;
-                    case Bas:
-                        ybMin = ybMax = (int)y;
-                        break;
-                    default:
-                        break;
-                }
+                xb = (int)(x-vitesse);
+                yb = Math.round(y);
                 break;
             case Haut:
-                yaMin = yaMin-vitesse;
-                yaMax = yaMax-vitesse-(1-facteurVitesse);
-                xbMin = xbMax = (int)x;
+                xb = Math.round(x);
+                yb = (int)(y-vitesse);
                 break;
             case Droite:
-                xaMin = xaMin+vitesse;
-                xaMax = xaMax+vitesse+(1-facteurVitesse);
-                ybMin = ybMax = (int)y;
+                xb = (int)(x+1+vitesse);
+                yb = Math.round(y);
                 break;
             case Bas:
-                yaMin = yaMin+vitesse;
-                yaMax = yaMax+vitesse+(1-facteurVitesse);
-                xbMin = xbMax = (int)x;
+                xb = Math.round(x);
+                yb = (int)(y+1+vitesse);
                 break;
             default:
                 break;
         }
         
-        switch (directionCourente) {
-            case Gauche:
-                xbMin = (int) Math.ceil(xaMin);
-                xbMax = (int) Math.ceil(xaMax);
-                break;
-            case Haut: case Droite: case Bas:
-                xbMin = (int) Math.floor(xaMin);
-                xbMax = (int) Math.floor(xaMax);
-                break;
-            default:
-                break;
-        }
-        switch (directionCourente) {
-            case Haut:
-                ybMin = (int) Math.ceil(yaMin);
-                ybMax = (int) Math.ceil(yaMax);
-                break;
-            case Droite: case Gauche: case Bas:
-                ybMin = (int) Math.floor(yaMin);
-                ybMax = (int) Math.floor(yaMax);
-                break;
-            default:
-                break;
-        }
-        
-        if(Panel.getMap().libreA(xbMin, ybMin) && Panel.getMap().libreA(xbMax, ybMax)){
+        if(Panel.getMap().libreA(xb, yb)){
             peutTourner = true;
         }
-        //System.out.println(xbMin + "\t" + xbMax + "\t" + ybMin + "\t" + ybMax);
        
         return peutTourner;
     }
@@ -210,7 +163,7 @@ public class Entity {
                 }
                 break;
             case Bas:
-                if(collision(Direction.Droite)){
+                if(collision(Direction.Bas)){
                     y += vitesse;
                     stop = false;
                 } else {
@@ -228,18 +181,31 @@ public class Entity {
     }
     
     public void setNewDirection(Direction direction){
-        if(direction != null && x >= 0 && x < Panel.getMap().getMapWidth()-1)
-        switch (direction) {
-            case Gauche: case Droite:
-                y = getY();
-                directionCourente = directionSuivante;
-                break;
+        boolean entreBorne = false;
+        switch (direction){
             case Haut: case Bas:
-                x = getX();
-                directionCourente = directionSuivante;
+                entreBorne = ((x - vitesse) % 1 > vitesse)||((x + vitesse) % 1 < vitesse);
+                break;
+            case Droite: case Gauche:
+                entreBorne = ((y - vitesse) % 1 > vitesse)||((y + vitesse) % 1 < vitesse);
                 break;
             default:
                 break;
+        }
+        
+        if(entreBorne && direction != null && x >= 0 && x < Panel.getMap().getMapWidth()-1){
+            switch (direction) {
+                case Gauche: case Droite:
+                    y = Math.round(y);
+                    directionCourente = directionSuivante;
+                    break;
+                case Haut: case Bas:
+                    x = Math.round(x);
+                    directionCourente = directionSuivante;
+                    break;
+                default:
+                    break;
+            }
         }
     }
     
