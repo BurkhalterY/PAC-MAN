@@ -115,7 +115,7 @@ public class Map {
         }
         
         try {
-            tileset = ImageIO.read(new File("res/tileset6.png"));
+            tileset = ImageIO.read(new File("res/tileset4.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }

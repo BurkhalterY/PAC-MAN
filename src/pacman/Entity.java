@@ -28,17 +28,17 @@ public class Entity {
         Bas,
         Gauche;
     }
-    protected float x, y, vitesse, vitesseDefaut, xDernierVirage, yDernierVirage;
+    protected float x, y, vitesse, vitesseDefaut;
     protected Direction directionCourente, directionSuivante;
-    protected int idSprite = 0, nombreAvancementDepuisDernierVirage = 0;
+    protected int idSprite = 0;
     protected BufferedImage spriteSheet;
     protected BufferedImage[] sprites;
     protected boolean stop;
     protected static float facteurVitesse = 0.125f;
     
     public Entity(float x, float y, float vitesse, String pictureFile, int rows, int columns){
-        this.x = xDernierVirage = x;
-        this.y = yDernierVirage = y;
+        this.x = x;
+        this.y = y;
         this.vitesse = vitesse*facteurVitesse;
         this.vitesseDefaut = vitesse;
         directionCourente = Direction.Gauche;
@@ -102,65 +102,80 @@ public class Entity {
     
     public boolean collision(Direction direction){
         boolean peutTourner = false;
-        float xa, ya;
-        xa = x;
-        ya = y;
+        float xaMin, xaMax, yaMin, yaMax;
+        xaMin = xaMax = x;
+        yaMin = yaMax = y;
+        int xbMin, xbMax, ybMin, ybMax;
+        xbMin = xbMax = ybMin = ybMax = -1;
         switch (direction) {
             case Gauche:
-                xa = xa-vitesse;
+                xaMin = xaMin-vitesse;
+                xaMax = xaMax-vitesse-(1-facteurVitesse);
+                switch (directionCourente) {
+                    case Gauche:
+                        
+                        break;
+                    case Haut:
+                        
+                        break;
+                    case Droite:
+                        
+                        break;
+                    case Bas:
+                        ybMin = ybMax = (int)y;
+                        break;
+                    default:
+                        break;
+                }
                 break;
             case Haut:
-                ya = ya-vitesse;
+                yaMin = yaMin-vitesse;
+                yaMax = yaMax-vitesse-(1-facteurVitesse);
+                xbMin = xbMax = (int)x;
                 break;
             case Droite:
-                xa = xa+vitesse;
+                xaMin = xaMin+vitesse;
+                xaMax = xaMax+vitesse+(1-facteurVitesse);
+                ybMin = ybMax = (int)y;
                 break;
             case Bas:
-                ya = ya+vitesse;
+                yaMin = yaMin+vitesse;
+                yaMax = yaMax+vitesse+(1-facteurVitesse);
+                xbMin = xbMax = (int)x;
                 break;
             default:
                 break;
         }
-        int xb, yb;
-        xb = (int)xa;
-        yb = (int)ya;
+        
         switch (directionCourente) {
             case Gauche:
-                xb = (int) Math.floor(xa);
+                xbMin = (int) Math.ceil(xaMin);
+                xbMax = (int) Math.ceil(xaMax);
                 break;
-            case Droite:
-                xb = (int) Math.ceil(xa);
+            case Haut: case Droite: case Bas:
+                xbMin = (int) Math.floor(xaMin);
+                xbMax = (int) Math.floor(xaMax);
                 break;
             default:
-                xb = (int) Math.floor(xa);
                 break;
         }
         switch (directionCourente) {
             case Haut:
-                yb = (int) Math.floor(ya);
+                ybMin = (int) Math.ceil(yaMin);
+                ybMax = (int) Math.ceil(yaMax);
                 break;
-            case Bas:
-                yb = (int) Math.ceil(ya);
+            case Droite: case Gauche: case Bas:
+                ybMin = (int) Math.floor(yaMin);
+                ybMax = (int) Math.floor(yaMax);
                 break;
             default:
-                yb = (int) Math.ceil(ya);
                 break;
         }
-        if(Panel.getMap().libreA(xb, yb)){
-            /*float min, max, c;
-            if(direction == Direction.Gauche || direction == Direction.Droite){
-                min = x-vitesse;
-                max = x+vitesse;
-                c = xDernierVirage+(x - xDernierVirage)*vitesse;
-            } else {
-                min = y-vitesse;
-                max = y+vitesse;
-                c = yDernierVirage+(y - yDernierVirage)*vitesse;
-            }
-            if(c >= min && c <= max){*/
-                peutTourner = true;
-            //}System.out.println(min +"\t" +c+"\t" + max  );
+        
+        if(Panel.getMap().libreA(xbMin, ybMin) && Panel.getMap().libreA(xbMax, ybMax)){
+            peutTourner = true;
         }
+        //System.out.println(xbMin + "\t" + xbMax + "\t" + ybMin + "\t" + ybMax);
        
         return peutTourner;
     }
@@ -217,14 +232,10 @@ public class Entity {
         switch (direction) {
             case Gauche: case Droite:
                 y = getY();
-                xDernierVirage = x;
-                yDernierVirage = y;
                 directionCourente = directionSuivante;
                 break;
             case Haut: case Bas:
                 x = getX();
-                xDernierVirage = x;
-                yDernierVirage = y;
                 directionCourente = directionSuivante;
                 break;
             default:
