@@ -12,7 +12,7 @@ package pacman;
 public class Inky extends Ghost{
     
     public Inky(float x, float y, float vitesse, int xScatter, int yScatter) {
-        super(x, y, vitesse, xScatter, yScatter, "inky", 1, 8);
+        super(x, y, vitesse, xScatter, yScatter, "inky", 1, 8, 2);
     }
     
     public void setCible(){

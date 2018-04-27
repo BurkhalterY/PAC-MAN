@@ -125,12 +125,34 @@ public class Entity {
             default:
                 break;
         }
-        
         if(Panel.getMap().libreA(xb, yb)){
             peutTourner = true;
         }
-       
-        return peutTourner;
+        
+        byte d1 = 0;
+        byte d2 = 0;
+        
+        if(direction == Direction.Gauche || direction == Direction.Droite){
+            d1 = 1;
+        } else if(direction == Direction.Haut || direction == Direction.Bas){
+            d1 = 2;
+        }
+        if(directionCourente == Direction.Gauche || directionCourente == Direction.Droite){
+            d2 = 1;
+        } else if(directionCourente == Direction.Haut || directionCourente == Direction.Bas){
+            d2 = 2;
+        }
+        boolean entreBorne = false;
+        
+        if(d1 == d2){
+            entreBorne = true;
+        } else if(d1 == 1 && d2 == 2){
+            entreBorne = ((y + vitesse) % 1 < vitesse)||((y - vitesse) % 1 > (1-vitesse))||(int)y == y;
+        } else if(d1 == 2 && d2 == 1){
+            entreBorne = ((x + vitesse) % 1 < vitesse)||((x - vitesse) % 1 > (1-vitesse))||(int)x == x;
+        }
+        
+        return peutTourner && entreBorne;
     }
     
     public void avancer(){
@@ -181,19 +203,7 @@ public class Entity {
     }
     
     public void setNewDirection(Direction direction){
-        boolean entreBorne = false;
-        switch (direction){
-            case Haut: case Bas:
-                entreBorne = ((x - vitesse) % 1 > vitesse)||((x + vitesse) % 1 < vitesse);
-                break;
-            case Droite: case Gauche:
-                entreBorne = ((y - vitesse) % 1 > vitesse)||((y + vitesse) % 1 < vitesse);
-                break;
-            default:
-                break;
-        }
-        
-        if(entreBorne && direction != null && x >= 0 && x < Panel.getMap().getMapWidth()-1){
+        if(direction != null && x >= 0 && x < Panel.getMap().getMapWidth()-1){
             switch (direction) {
                 case Gauche: case Droite:
                     y = Math.round(y);

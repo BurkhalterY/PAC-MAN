@@ -5,6 +5,9 @@
  */
 package pacman;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -26,17 +29,18 @@ public class Ghost extends Entity{
         Retour,
         AttenteBleu;
     }
-    protected Tile cible;
+    protected Tile cible = new Tile(0, 0, 0);
     protected Etat etat;
     protected int xScatter, yScatter;
     protected boolean basAttente, enTrainDeSortir;
+    protected BufferedImage cibles, cibleImg;
     private static boolean scatter = true, peur;
     private static int phase;
     private static int phases[] = {7, 20, 7, 20, 5, 20, 5};
     private static long start = 0, pauseStart = 0, pauseDuree = 0, pausePrevu = 0;
     private static Tile cage = new Tile(13, 14, 0);
 
-    public Ghost(float x, float y, float vitesse, int xScatter, int yScatter, String pictureFile, int rows, int columns) {
+    public Ghost(float x, float y, float vitesse, int xScatter, int yScatter, String pictureFile, int rows, int columns, int numero) {
         super(x, y, vitesse, pictureFile, rows, columns);
         this.xScatter = xScatter;
         this.yScatter = yScatter;
@@ -60,6 +64,13 @@ public class Ghost extends Entity{
                 sprites[(j * columns) + i + prov.length] = spriteSheet.getSubimage(i * 16, j * 16, 16, 16);
             }
         }
+        
+        try {
+            cibles = ImageIO.read(new File("res/cibles3.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        cibleImg = cibles.getSubimage(numero*8, 0, 8, 8);
     }
     
     public static void calculEtatGlobal(){
@@ -397,5 +408,24 @@ public class Ghost extends Entity{
             default:
                 break;
         }
+    }
+    
+    public void afficherTuile(Graphics g, int width, int height){
+        double size;
+        int mapWidth = Panel.getMap().getMapWidth();
+        int mapHeight = Panel.getMap().getMapHeight();
+        
+        if(width/mapWidth > height/mapHeight){
+            size = height/mapHeight;
+        } else {
+            size = width/mapWidth;
+        }
+        
+        Graphics2D g2d = (Graphics2D)g;
+        AffineTransform rotation = new AffineTransform();
+        
+        rotation.translate(cible.getX()*size, cible.getY()*size);
+        rotation.scale(size/8, size/8);
+        g2d.drawImage(cibleImg, rotation, null);
     }
 }
