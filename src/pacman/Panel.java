@@ -18,8 +18,8 @@ public class Panel extends JPanel{
     private static Ghost ghostsTab[] = {
         new Blinky(13.5f, 14, 0.75f, map.getMapWidth()-3, 0),
         new Pinky(13.5f, 17, 0.75f, 2, 0),
-        new Inky(11.5f, 17, 0.75f, map.getMapWidth()-1, map.getMapHeight()),
-        new Clyde(15.5f, 17, 0.75f, 0, map.getMapHeight())
+        new Inky(11.5f, 17, 0.75f, map.getMapWidth()-1, map.getMapHeight()-1),
+        new Clyde(15.5f, 17, 0.75f, 0, map.getMapHeight()-1)
     };
     private boolean run = true;
     
