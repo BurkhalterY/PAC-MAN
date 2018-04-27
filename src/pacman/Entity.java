@@ -61,17 +61,6 @@ public class Entity {
      * @return the x
      */
     public int getX() {
-        /*int xa = 0;
-        switch (directionCourente) {
-            case Gauche:
-                xa = (int) Math.ceil(x);
-                break;
-            case Haut: case Droite: case Bas:
-                xa = (int) Math.floor(x);
-                break;
-            default:
-                break;
-        }*/
         return Math.round(x);
     }
 
@@ -79,17 +68,6 @@ public class Entity {
      * @return the y
      */
     public int getY() {
-        /*int ya = 0;
-        switch (directionCourente) {
-            case Haut:
-                ya = (int) Math.ceil(y);
-                break;
-            case Droite: case Gauche: case Bas:
-                ya = (int) Math.floor(y);
-                break;
-            default:
-                break;
-        }*/
         return Math.round(y);
     }
     
@@ -129,27 +107,50 @@ public class Entity {
             peutTourner = true;
         }
         
-        byte d1 = 0;
-        byte d2 = 0;
+        boolean d1 = false, d2 = false;
         
         if(direction == Direction.Gauche || direction == Direction.Droite){
-            d1 = 1;
+            d1 = false;
         } else if(direction == Direction.Haut || direction == Direction.Bas){
-            d1 = 2;
+            d1 = true;
         }
         if(directionCourente == Direction.Gauche || directionCourente == Direction.Droite){
-            d2 = 1;
+            d2 = false;
         } else if(directionCourente == Direction.Haut || directionCourente == Direction.Bas){
-            d2 = 2;
+            d2 = true;
         }
         boolean entreBorne = false;
         
         if(d1 == d2){
             entreBorne = true;
-        } else if(d1 == 1 && d2 == 2){
-            entreBorne = ((y + vitesse) % 1 < vitesse)||((y - vitesse) % 1 > (1-vitesse))||(int)y == y;
-        } else if(d1 == 2 && d2 == 1){
-            entreBorne = ((x + vitesse) % 1 < vitesse)||((x - vitesse) % 1 > (1-vitesse))||(int)x == x;
+        } else if(d1 && !d2){
+            if(direction == Direction.Haut){
+                if(directionCourente == Direction.Gauche){
+                    entreBorne = ((x + vitesse) % 1 > (1-vitesse))||((x - vitesse) % 1 == 0)||(int)x == x;
+                } else if(directionCourente == Direction.Droite){
+                    entreBorne = ((x + vitesse) % 1 == 0)||((x - vitesse) % 1 > (1-vitesse))||(int)x == x;
+                }
+            } else if(direction == Direction.Bas){
+                if(directionCourente == Direction.Gauche){
+                    entreBorne = ((x + vitesse) % 1 == 0)||((x - vitesse) % 1 > (1-vitesse))||(int)x == x;
+                } else if(directionCourente == Direction.Droite){
+                    entreBorne = ((x + vitesse) % 1 > (1-vitesse))||((x - vitesse) % 1 == 0)||(int)x == x;
+                }
+            }
+        } else if(!d1 && d2){
+            if(direction == Direction.Gauche){
+                if(directionCourente == Direction.Haut){
+                    entreBorne = ((y + vitesse) % 1 == 0)||((y - vitesse) % 1 > (1-vitesse))||(int)y == y;
+                } else if(directionCourente == Direction.Bas){
+                    entreBorne = ((y + vitesse) % 1 == 0)||((y - vitesse) % 1 > (1-vitesse))||(int)y == y;
+                }
+            } else if(direction == Direction.Droite){
+                if(directionCourente == Direction.Haut){
+                    entreBorne = ((y + vitesse) % 1 > (1-vitesse))||((y - vitesse) % 1 == 0)||(int)y == y;
+                } else if(directionCourente == Direction.Bas){
+                    entreBorne = ((y + vitesse) % 1 == 0)||((y - vitesse) % 1 > (1-vitesse))||(int)y == y;
+                }
+            }
         }
         
         return peutTourner && entreBorne;
@@ -165,6 +166,7 @@ public class Entity {
                     x -= vitesse;
                     stop = false;
                 } else {
+                    x = Math.round(x);
                     stop = true;
                 }
                 break;
@@ -173,6 +175,7 @@ public class Entity {
                     y -= vitesse;
                     stop = false;
                 } else {
+                    y = Math.round(y);
                     stop = true;
                 }
                 break;
@@ -181,6 +184,7 @@ public class Entity {
                     x += vitesse;
                     stop = false;
                 } else {
+                    x = Math.round(x);
                     stop = true;
                 }
                 break;
@@ -189,6 +193,7 @@ public class Entity {
                     y += vitesse;
                     stop = false;
                 } else {
+                    y = Math.round(y);
                     stop = true;
                 }
                 break;

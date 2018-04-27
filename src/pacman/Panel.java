@@ -60,6 +60,7 @@ public class Panel extends JPanel{
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficherTuile(g, this.getWidth(), this.getHeight());
         }
+        System.out.println(ghostsTab[1].x + "\t" + ghostsTab[1].y + "\t" + ghostsTab[1].vitesse);
     }
 
     /**
