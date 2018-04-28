@@ -21,22 +21,22 @@ public class Panel extends JPanel{
         new Inky(11.5f, 17, 0.75f, map.getMapWidth()-1, map.getMapHeight()-1),
         new Clyde(15.5f, 17, 0.75f, 0, map.getMapHeight()-1)
     };
-    private boolean run = true;
+    private static boolean run = true;
     
     private long start, pauseStart, pauseDuree;
-    
+
     /**
      * @return the run
      */
-    public boolean isRun() {
+    public static boolean isRun() {
         return run;
     }
 
     /**
-     * @param run the run to set
+     * @param aRun the run to set
      */
-    public void setRun(boolean run) {
-        this.run = run;
+    public static void setRun(boolean aRun) {
+        run = aRun;
     }
     
     public void go(){
@@ -60,7 +60,6 @@ public class Panel extends JPanel{
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficherTuile(g, this.getWidth(), this.getHeight());
         }
-        System.out.println(ghostsTab[0].x + "\t" + ghostsTab[0].y + "\t" + ghostsTab[2].vitesse);
     }
 
     /**

@@ -124,32 +124,16 @@ public class Entity {
         if(d1 == d2){
             entreBorne = true;
         } else if(d1 && !d2){
-            if(direction == Direction.Haut){
-                if(directionCourente == Direction.Gauche){
-                    entreBorne = ((x + vitesse) % 1 > (1-vitesse))||((x - vitesse) % 1 > (1-vitesse))||(int)x == x;
-                } else if(directionCourente == Direction.Droite){
-                    entreBorne = ((x + vitesse) % 1 > (1-vitesse))||((x - vitesse) % 1 == 0)||(int)x == x;
-                }
-            } else if(direction == Direction.Bas){
-                if(directionCourente == Direction.Gauche){
-                    entreBorne = ((x + vitesse) % 1 > (1-vitesse))||((x - vitesse) % 1 > (1-vitesse))||(int)x == x;
-                } else if(directionCourente == Direction.Droite){
-                    entreBorne = ((x + vitesse) % 1 == 0)||((x - vitesse) % 1 > (1-vitesse))||(int)x == x;
-                }
+            if(directionCourente == Direction.Gauche){
+                entreBorne = ((x - vitesse) % 1 > (1-vitesse)) || (int)x == x;
+            } else if(directionCourente == Direction.Droite){
+                entreBorne = ((x + vitesse) % 1 < vitesse) || (int)x == x;
             }
         } else if(!d1 && d2){
-            if(direction == Direction.Gauche){
-                if(directionCourente == Direction.Haut){
-                    entreBorne = ((y + vitesse) % 1 > (1-vitesse))||((y - vitesse) % 1 > (1-vitesse))||(int)y == y;
-                } else if(directionCourente == Direction.Bas){
-                    entreBorne = ((y + vitesse) % 1 < vitesse)||((y - vitesse) % 1 < vitesse)||(int)y == y;
-                }
-            } else if(direction == Direction.Droite){
-                if(directionCourente == Direction.Haut){
-                    entreBorne = ((y + vitesse) % 1 > (1-vitesse))||((y - vitesse) % 1 > (1-vitesse))||(int)y == y;
-                } else if(directionCourente == Direction.Bas){
-                    entreBorne = ((y + vitesse) % 1 == 0)||((y - vitesse) % 1 > (1-vitesse))||(int)y == y;
-                }
+            if(directionCourente == Direction.Haut){
+                entreBorne = ((y - vitesse) % 1 > (1-vitesse)) || (int)y == y;
+            } else if(directionCourente == Direction.Bas){
+                entreBorne = ((y + vitesse) % 1 < vitesse) || (int)y == y;
             }
         }
         

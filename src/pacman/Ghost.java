@@ -32,7 +32,7 @@ public class Ghost extends Entity{
     protected Tile cible = new Tile(0, 0, 0);
     protected Etat etat;
     protected int xScatter, yScatter;
-    protected boolean basAttente, enTrainDeSortir;
+    protected boolean basAttente, enTrainDeSortir, dejaManger;
     protected BufferedImage cibles, cibleImg;
     private static boolean scatter = true, peur;
     private static int phase;
@@ -99,13 +99,7 @@ public class Ghost extends Entity{
     }
     
     public void avancer(){
-        if(peur){
-            if(etat == Etat.Attente || etat == Etat.AttenteBleu){
-                etat = Etat.AttenteBleu;
-            } else if(etat == Etat.Normal || etat == Etat.Scatter){
-                etat = Etat.Peur;
-            }
-        } else {
+        if(!peur){
             if(scatter){
                 if(etat == Etat.Normal || etat == Etat.Peur){
                     etat = Etat.Scatter;
@@ -123,49 +117,87 @@ public class Ghost extends Entity{
         
         if(etat == Etat.Attente || etat == Etat.AttenteBleu){
             if((peutSortir() && y == cage.getY()+3) || enTrainDeSortir){
-                setVitesse(vitesseDefaut/2);
-                if(x > cage.getX()+0.6f){
-                    x-=vitesse;
-                } else if(x < cage.getX()+0.4f){
-                    x+=vitesse;
+                if(dejaManger){
+                    setVitesse(vitesseDefaut);
                 } else {
+                    setVitesse(vitesseDefaut/2);
+                }
+                if(x > cage.getX()+0.5f+vitesse){
+                    x-=vitesse;
+                    directionCourente = Direction.Gauche;
+                } else if(x < cage.getX()+0.5f-vitesse){
+                    x+=vitesse;
+                    directionCourente = Direction.Droite;
+                } else {
+                    basAttente = false;
                     enTrainDeSortir = true;
                     sortir();
                 }
             } else {
+                if(etat == Etat.AttenteBleu){
+                    setVitesse(vitesseDefaut/2);
+                } else {
+                    setVitesse(vitesseDefaut);
+                }
                 if(basAttente){
                     y+=vitesse;
+                    directionCourente = Direction.Bas;
                     if(y >= cage.getY()+3.5f){
                         basAttente = false;
                     }
                 } else {
                     y-=vitesse;
+                    directionCourente = Direction.Haut;
                     if(y <= cage.getY()+2.5f){
                         basAttente = true;
                     }
                 }
             }
         } else {
+            float vitesseMode = vitesseDefaut;
+            
             if(etat == Etat.Scatter){
                 cible = new Tile(xScatter, yScatter, 0);
             } else if(etat == Etat.Peur){
                 cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY(), 0);
+                vitesseMode = vitesseDefaut/2;
             } else if(etat == Etat.Normal){
                 setCible();
             } else if(etat == Etat.Retour){
                 cible = cage;
+                vitesseMode = vitesseDefaut*2;
+                if(Math.round(x-0.5f) == cage.getX() && Math.round(y) == cage.getY()){
+                    basAttente = true;
+                }
             }
-            if(Panel.getMap().effet(getX(), getY()) == 1){
-                setVitesse(vitesseDefaut/2);
-            } else {
-                setVitesse(vitesseDefaut);
-            }
-            if(etat == Etat.Peur){
-                setVitesse(vitesseDefaut/2);
-            }
-            setDirection();
             
-            super.avancer();
+            setVitesse(vitesseMode);
+            
+            if(Panel.getMap().effet(Math.round(x), Math.round(y)) == 1){
+                vitesse /= 2;
+            }
+            
+            if(basAttente){
+                if(y < cible.getY()+3 && !enTrainDeSortir){
+                    y += vitesse;
+                } else {
+                    etat = Etat.Attente;
+                    enTrainDeSortir = true;
+                    sortir();
+                }
+            } else {
+                setDirection();
+                super.avancer();
+            }
+                        
+            if(touchePacman()){
+                if(etat == Etat.Peur || etat == Etat.AttenteBleu){
+                    etat = Etat.Retour;
+                    dejaManger = true;
+                } else if(etat == Etat.Normal || etat == Etat.Scatter){
+                    Panel.setRun(false);
+                }
+            }
         }
     }
     
@@ -233,7 +265,7 @@ public class Ghost extends Entity{
             i++;
         }
         
-        /*if(newDirection == null){
+        if(newDirection == null){
             Direction directionRestante = setDirectionRestante();
             int j=0;
             while(newDirection == null && j < directionsPreferees.length){
@@ -242,12 +274,8 @@ public class Ghost extends Entity{
                 }
                 j++;
             }
-        }*//*
-        System.out.println(x + "\t"+ y);
-        System.out.println(directionsPossibles[0] + "\t" + directionsPossibles[1] + "\t" + directionsPossibles[2] + "\t" + directionsPossibles[3]);
-        System.out.println(directionsPreferees[0] + "\t" + directionsPreferees[1] + "\t" + directionsPreferees[2] + "\t" + directionsPreferees[3]);
+        }
         
-        */
         directionSuivante = newDirection;
     }
     
@@ -255,7 +283,7 @@ public class Ghost extends Entity{
         Direction directionsPossibles[] = new Direction[4];
         
         int i = 0;
-        if(collision(Direction.Haut) && directionCourente != Direction.Bas && Panel.getMap().effet(getX(), getY()) != 2){
+        if(collision(Direction.Haut) && directionCourente != Direction.Bas && Panel.getMap().effet(Math.round(x), Math.round(y)) != 2){
             directionsPossibles[i] = Direction.Haut;
             i++;
         }
@@ -305,7 +333,7 @@ public class Ghost extends Entity{
         cible = new Tile(xPacman, yPacman, 0);
     }
     
-    public boolean touherPacman(){
+    public boolean touchePacman(){
         boolean touche = false;
         
         if(getX() == Panel.getPlayersTab()[0].getX() && getY() == Panel.getPlayersTab()[0].getY()){
@@ -318,13 +346,16 @@ public class Ghost extends Entity{
     public void setIdSprite(){
         if(etat == Etat.Peur || etat == Etat.AttenteBleu){
             idSprite = 8;
+            if(Frame.getMs() - pauseStart >= pausePrevu-2000 && (Frame.getMs() - pauseStart) % 500 < 250){
+                idSprite += 2;
+            }
         } else {
             switch (directionCourente) {
-                case Gauche:
-                    idSprite = 2;
-                    break;
                 case Droite:
                     idSprite = 0;
+                    break;
+                case Gauche:
+                    idSprite = 2;
                     break;
                 case Haut:
                     idSprite = 4;
@@ -336,7 +367,10 @@ public class Ghost extends Entity{
                     break;
             }
         }
-        if(Frame.getMs() % (16/vitesse) >= 8/vitesse){
+        if(etat == Etat.Retour){
+            idSprite /= 2;
+            idSprite += 12;
+        } else if (Frame.getTicksTotal() % (1/vitesse) >= 0.5f/vitesse){
             idSprite++;
         }
     }
@@ -362,6 +396,11 @@ public class Ghost extends Entity{
         peur = true;
         for(int i = 0; i < Panel.getGhostsTab().length; i++){
             Panel.getGhostsTab()[i].inverserDirection();
+            if(Panel.getGhostsTab()[i].etat == Etat.Normal || Panel.getGhostsTab()[i].etat == Etat.Scatter){
+                Panel.getGhostsTab()[i].etat = Etat.Peur;
+            } else if(Panel.getGhostsTab()[i].etat == Etat.Attente){
+                Panel.getGhostsTab()[i].etat = Etat.AttenteBleu;
+            }
         }
         pausePrevu += 6000;
         pauseStart = Frame.getMs();
@@ -374,18 +413,17 @@ public class Ghost extends Entity{
     public void sortir(){
         if(y > cage.getY()){
             y-=vitesse;
+            directionCourente = Direction.Haut;
         } else if(y == cage.getY()){
             enTrainDeSortir = false;
-            if(peur){
+            basAttente = false;
+            if(etat == Etat.AttenteBleu){
                 etat = Etat.Peur;
-                setVitesse(getVitesseDefaut()/2);
             } else {
                 if(scatter){
                     etat = Etat.Scatter;
-                    setVitesse(getVitesseDefaut());
                 } else {
                     etat = Etat.Normal;
-                    setVitesse(getVitesseDefaut());
                 }
             }
         }
