@@ -38,7 +38,7 @@ public class Ghost extends Entity{
     private static int phase;
     private static int phases[] = {7, 20, 7, 20, 5, 20, 5};
     private static long start = 0, pauseStart = 0, pauseDuree = 0, pausePrevu = 0;
-    private static Tile cage = new Tile(13, 14, 0);
+    private static Tile cage;
 
     public Ghost(float x, float y, float vitesse, int xScatter, int yScatter, String pictureFile, int rows, int columns, int numero) {
         super(x, y, vitesse, pictureFile, rows, columns);
@@ -86,7 +86,7 @@ public class Ghost extends Entity{
             } else {
                 if(Frame.getMs() - start - pauseDuree >= phases[phase]*1000){
                     scatter = !scatter;
-                    System.out.println(scatter);
+                    //System.out.println(scatter);
                     for(int i = 0; i < Panel.getGhostsTab().length; i++){
                         Panel.getGhostsTab()[i].inverserDirection();
                     }
@@ -173,7 +173,7 @@ public class Ghost extends Entity{
             
             setVitesse(vitesseMode);
             
-            if(Panel.getMap().effet(Math.round(x), Math.round(y)) == 1){
+            if(Panel.getMap().effet(Math.round(x), Math.round(y)) == 3){
                 vitesse /= 2;
             }
             
@@ -283,7 +283,7 @@ public class Ghost extends Entity{
         Direction directionsPossibles[] = new Direction[4];
         
         int i = 0;
-        if(collision(Direction.Haut) && directionCourente != Direction.Bas && Panel.getMap().effet(Math.round(x), Math.round(y)) != 2){
+        if(collision(Direction.Haut) && directionCourente != Direction.Bas && Panel.getMap().effet(Math.round(x), Math.round(y)) != 4){
             directionsPossibles[i] = Direction.Haut;
             i++;
         }
@@ -465,5 +465,19 @@ public class Ghost extends Entity{
         rotation.translate(cible.getX()*size, cible.getY()*size);
         rotation.scale(size/8, size/8);
         g2d.drawImage(cibleImg, rotation, null);
+    }
+
+    /**
+     * @param aCage the cage to set
+     */
+    public static void setCage(Tile aCage) {
+        cage = aCage;
+    }
+    
+    /**
+     * @return the cage
+     */
+    public static Tile getCage() {
+        return cage;
     }
 }

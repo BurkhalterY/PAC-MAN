@@ -13,13 +13,13 @@ import javax.swing.JPanel;
  * @author BuYa
  */
 public class Panel extends JPanel{
-    private static Map map = new Map("res/map");
-    private static Player playersTab[] = {new Pacman(13.5f, 26, 0.8f)};
+    private static Map map = new Map("res/google");
+    private static Player playersTab[] = {new Pacman(Player.getSpawn().getX(), Player.getSpawn().getY(), 0.8f)};
     private static Ghost ghostsTab[] = {
-        new Blinky(13.5f, 14, 0.75f, map.getMapWidth()-3, 0),
-        new Pinky(13.5f, 17, 0.75f, 2, 0),
-        new Inky(11.5f, 17, 0.75f, map.getMapWidth()-1, map.getMapHeight()-1),
-        new Clyde(15.5f, 17, 0.75f, 0, map.getMapHeight()-1)
+        new Blinky(Ghost.getCage().getX()+0.5f, Ghost.getCage().getY(), 0.75f, map.getMapWidth()-3, 0),
+        new Pinky(Ghost.getCage().getX()+0.5f, Ghost.getCage().getY()+3, 0.75f, 2, 0),
+        new Inky(Ghost.getCage().getX()+2.5f, Ghost.getCage().getY()+3, 0.75f, map.getMapWidth()-1, map.getMapHeight()-1),
+        new Clyde(Ghost.getCage().getX()-1.5f, Ghost.getCage().getY()+3, 0.75f, 0, map.getMapHeight()-1)
     };
     private static boolean run = true;
     

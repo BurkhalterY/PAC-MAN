@@ -10,6 +10,7 @@ package pacman;
  * @author BuYa
  */
 public class Player extends Entity{
+    private static Tile spawn;
 
     public Player(float x, float y, float vitesse, String pictureFile, int rows, int columns) {
         super(x, y, vitesse, pictureFile, rows, columns);
@@ -24,5 +25,19 @@ public class Player extends Entity{
         if(Panel.getMap().mangerGraine(getX(), getY())){
             Ghost.setPeurTrue();
         }
+    }
+    
+    /**
+     * @param aSpawn the cage to set
+     */
+    public static void setSpawn(Tile aSpawn) {
+        spawn = aSpawn;
+    }
+    
+    /**
+     * @return the cage
+     */
+    public static Tile getSpawn() {
+        return spawn;
     }
 }
