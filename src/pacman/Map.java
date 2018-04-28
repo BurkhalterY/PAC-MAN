@@ -27,18 +27,11 @@ public class Map {
     private int mapSp[][];
     private BufferedImage tileset;
     private BufferedImage tiles[] = new BufferedImage[6*9];
-    private int tilesID = 0;
-    private int mapWidth = 60;
-    private int mapHeight = 26;
-    private int nbBulletTotal = 0;
-    private int nbBulletRestantes = 0;
-    int width;
-    int height;
+    private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0, tileWidth, tileHeight;
+    private boolean totalLoaded = false;
     
     public Map(String path){
-        map = new Tile[mapWidth][mapHeight];
-        mapSp = new int[mapWidth][mapHeight];
-        
+
         try
         {
             File f1 = new File (path+".txt");
@@ -47,9 +40,20 @@ public class Map {
             FileReader fr2 = new FileReader (f2);
             BufferedReader br1 = new BufferedReader (fr1);
             BufferedReader br2 = new BufferedReader (fr2);
-
+            FileReader fr3 = new FileReader (f1);
+            BufferedReader br3 = new BufferedReader (fr3);
             try
             {
+                int nombreLignes = 0;
+                String line = br3.readLine();
+                while(line != null){
+                    nombreLignes++;
+                    line = br3.readLine();
+                }
+                
+                br3.close();
+                fr3.close();
+
                 String line1 = br1.readLine();
                 String line2 = br2.readLine();
                 
@@ -62,6 +66,16 @@ public class Map {
                     line1 = br1.readLine();
                     line2 = br2.readLine();
                     
+                    if(mapWidth == 0 || mapHeight == 0){
+                        mapWidth = tableLigne1.length;
+                        mapHeight = nombreLignes;
+                    }
+                    
+                    if(map == null){
+                        map = new Tile[mapWidth][mapHeight];
+                        mapSp = new int[mapWidth][mapHeight];
+                    }
+                    
                     for(int x = 0; x < mapWidth; x++){
                         map[x][y] = new Tile(x, y, Integer.parseInt(tableLigne1[x]));
                         if(map[x][y].getType() == 45 || map[x][y].getType() == 47){
@@ -70,16 +84,18 @@ public class Map {
                         mapSp[x][y] = Integer.parseInt(tableLigne2[x]);
                         if(mapSp[x][y] == 1){
                             Player.setSpawn(new Tile(x, y, 0));
+                            
                         } else if(mapSp[x][y] == 2){
                             Ghost.setCage(new Tile(x, y-1, 0));
                         }
                     }
                     y++;
                 }
+                
                 br1.close();
                 br2.close();
-                fr1.close();        
-                fr2.close();                
+                fr1.close();
+                fr2.close();
             }
             catch (IOException exception)
             {
@@ -93,19 +109,22 @@ public class Map {
         nbBulletRestantes = nbBulletTotal;
         
         try {
-            tileset = ImageIO.read(new File("res/new-tileset.png"));
+            tileset = ImageIO.read(new File("res/pokemon-tileset.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
-        width = tileset.getWidth()/9;
-        height = tileset.getHeight()/6;
+        tileWidth = tileset.getWidth()/9;
+        tileHeight = tileset.getHeight()/6;
 
+        int tilesID = 0;
         for(int y = 0; y < 6; y++){
             for(int x = 0; x < 9; x++){
-                tiles[tilesID] = tileset.getSubimage(x * width, y * height, width, height);
+                tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
                 tilesID++;
             }
         }
+        
+        totalLoaded = true;
     }
     
     public boolean libreA(int x, int y){
@@ -149,21 +168,23 @@ public class Map {
     
     public void afficher(Graphics g, int width, int height){
         
-        double size;
-        if(width/mapWidth > height/mapHeight){
-            size = height/mapHeight;
-        } else {
-            size = width/mapWidth;
-        }
-        
-        Graphics2D g2d = (Graphics2D)g;
+        if(totalLoaded){
+            double size;
+            if(width/mapWidth > height/mapHeight){
+                size = height/mapHeight;
+            } else {
+                size = width/mapWidth;
+            }
 
-        for(int y=0; y < mapHeight; y++){
-            for(int x=0; x < mapWidth; x++){
-                AffineTransform rotation = new AffineTransform();
-                rotation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
-                rotation.scale(size/this.width, size/this.height);
-                g2d.drawImage(tiles[map[x][y].getType()], rotation, null);
+            Graphics2D g2d = (Graphics2D)g;
+
+            for(int y=0; y < mapHeight; y++){
+                for(int x=0; x < mapWidth; x++){
+                    AffineTransform rotation = new AffineTransform();
+                    rotation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
+                    rotation.scale(size/this.tileWidth, size/this.tileHeight);
+                    g2d.drawImage(tiles[map[x][y].getType()], rotation, null);
+                }
             }
         }
     }
@@ -198,5 +219,12 @@ public class Map {
     
     public int getNbBulletMangees() {
         return nbBulletTotal-nbBulletRestantes;
+    }
+
+    /**
+     * @return the totalLoaded
+     */
+    public boolean isTotalLoaded() {
+        return totalLoaded;
     }
 }

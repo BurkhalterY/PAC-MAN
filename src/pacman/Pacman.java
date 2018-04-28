@@ -18,11 +18,11 @@ public class Pacman extends Player {
     public void setIdSprite(){
         if(!stop){
             switch (directionCourente) {
-                case Gauche:
-                    idSprite = 2;
-                    break;
                 case Droite:
                     idSprite = 0;
+                    break;
+                case Gauche:
+                    idSprite = 2;
                     break;
                 case Haut:
                     idSprite = 4;
@@ -33,31 +33,32 @@ public class Pacman extends Player {
                 default:
                     break;
             }
-        
-            if((Frame.getMs() % 200 >= 50 && Frame.getMs() % 200 < 100) || Frame.getMs() % 200 >= 150){
+
+            if((Frame.getTicksTotal() % (2/vitesse) >= 0.5f/vitesse && Frame.getTicksTotal() % (2/vitesse) < 1/vitesse) || Frame.getTicksTotal() % (2/vitesse) >= 1.5f/vitesse){
                 idSprite++;
-            } else if(Frame.getMs() % 200 >= 100 && Frame.getMs() % 200 < 150){
+            } else if(Frame.getTicksTotal() % (2/vitesse) >= 1/vitesse && Frame.getTicksTotal() % (2/vitesse) < 1.5f/vitesse){
                 idSprite = 8;
             }
         } else {
             if(idSprite == 8){
                 switch (directionCourente) {
-                    case Gauche:
-                        idSprite = 3;
-                        break;
                     case Droite:
-                        idSprite = 1;
+                        idSprite = 0;
+                        break;
+                    case Gauche:
+                        idSprite = 2;
                         break;
                     case Haut:
-                        idSprite = 5;
+                        idSprite = 4;
                         break;
                     case Bas:
-                        idSprite = 7;
+                        idSprite = 6;
                         break;
                     default:
                         break;
                 }
             }
         }
+        
     }
 }

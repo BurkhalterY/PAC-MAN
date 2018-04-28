@@ -29,7 +29,7 @@ public class Ghost extends Entity{
         Retour,
         AttenteBleu;
     }
-    protected Tile cible = new Tile(0, 0, 0);
+    protected Tile cible = new Tile(-1, -1, 0);
     protected Etat etat;
     protected int xScatter, yScatter;
     protected boolean basAttente, enTrainDeSortir, dejaManger;
@@ -414,7 +414,7 @@ public class Ghost extends Entity{
         if(y > cage.getY()){
             y-=vitesse;
             directionCourente = Direction.Haut;
-        } else if(y == cage.getY()){
+        } else {
             enTrainDeSortir = false;
             basAttente = false;
             if(etat == Etat.AttenteBleu){

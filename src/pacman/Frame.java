@@ -20,7 +20,9 @@ public class Frame extends JFrame{
 
     public Frame(){
         this.setTitle("PAC-MAN");
-        this.setSize(500, 700);
+        this.setSize(Panel.getMap().getMapWidth()*16+16, Panel.getMap().getMapHeight()*16+38);
+        //this.setSize(this.getToolkit().getScreenSize());
+        //this.setUndecorated(true);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(pan);

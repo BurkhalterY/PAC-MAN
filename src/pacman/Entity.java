@@ -34,7 +34,7 @@ public class Entity {
     protected BufferedImage spriteSheet;
     protected BufferedImage[] sprites;
     protected boolean stop;
-    protected static float facteurVitesse = 0.125f;
+    protected static float facteurVitesse = 0.155f;
     
     public Entity(float x, float y, float vitesse, String pictureFile, int rows, int columns){
         this.x = x;
@@ -188,6 +188,11 @@ public class Entity {
             x = Panel.getMap().getMapWidth() + 1;
         } else if(x >= Panel.getMap().getMapWidth() + 2){
             x = -1;
+        }
+        if(y <= -2){
+            y = Panel.getMap().getMapHeight()+ 1;
+        } else if(y >= Panel.getMap().getMapHeight() + 2){
+            y = -1;
         }
     }
     
