@@ -11,6 +11,7 @@ package pacman;
  */
 public class Player extends Entity{
     private static Tile spawn;
+    private int tempsArret = 0;
 
     public Player(float x, float y, float vitesse, String pictureFile, int rows, int columns) {
         super(x, y, vitesse, pictureFile, rows, columns);
@@ -21,9 +22,14 @@ public class Player extends Entity{
     }
     
     public void avancer(){
-        super.avancer();
-        if(Panel.getMap().mangerGraine(getX(), getY())){
+        tempsArret += Panel.getMap().mangerGraine(getX(), getY());
+        if(tempsArret == 0){
+            super.avancer();
+        } else if(tempsArret == 3){
             Ghost.setPeurTrue();
+            tempsArret--;
+        } else {
+            tempsArret--;
         }
     }
     

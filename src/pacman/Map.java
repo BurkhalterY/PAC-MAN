@@ -109,7 +109,7 @@ public class Map {
         nbBulletRestantes = nbBulletTotal;
         
         try {
-            tileset = ImageIO.read(new File("res/pokemon-tileset.png"));
+            tileset = ImageIO.read(new File("res/default-tileset.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -139,22 +139,23 @@ public class Map {
         return libre;
     }
     
-    public boolean mangerGraine(int x, int y){
-        boolean puissance = false;
+    public int mangerGraine(int x, int y){
+        int type = 0;
         
         if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
             if(map[x][y].getType() == 45){
                 map[x][y].setType(10);
                 nbBulletRestantes--;
+                type = 1;
             }
             if(map[x][y].getType() == 47){
                 map[x][y].setType(10);
-                puissance = true;
                 nbBulletRestantes--;
+                type = 3;
             }
         }
         
-        return puissance;
+        return type;
     }
     
     public int effet(int x, int y){
