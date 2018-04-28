@@ -115,7 +115,7 @@ public class Map {
         }
         
         try {
-            tileset = ImageIO.read(new File("res/default-tileset.png"));
+            tileset = ImageIO.read(new File("res/pokemon-tileset.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
