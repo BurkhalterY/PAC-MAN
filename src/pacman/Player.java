@@ -22,6 +22,12 @@ public class Player extends Entity{
     }
     
     public void avancer(){
+        float vitesseMode = vitesseDefaut;
+        if(Ghost.isPeur()){
+            vitesseMode = vitesseDefaut+(1-vitesseDefaut)/2;
+        }
+        setVitesse(vitesseMode);
+        
         tempsArret += Panel.getMap().mangerGraine(getX(), getY());
         if(tempsArret == 0){
             super.avancer();

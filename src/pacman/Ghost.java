@@ -116,7 +116,7 @@ public class Ghost extends Entity{
         }
         
         if(etat == Etat.Attente || etat == Etat.AttenteBleu){
-            if((peutSortir() && y == cage.getY()+3) || enTrainDeSortir){
+            if((peutSortir() && y > cage.getY()+3-vitesse && y < cage.getY()+3+vitesse) || enTrainDeSortir){
                 if(dejaManger){
                     setVitesse(vitesseDefaut);
                 } else {
@@ -160,7 +160,7 @@ public class Ghost extends Entity{
                 cible = new Tile(xScatter, yScatter, 0);
             } else if(etat == Etat.Peur){
                 cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY(), 0);
-                vitesseMode = vitesseDefaut/2;
+                vitesseMode = 0.05f*Math.round((((vitesseDefaut+facteurVitesse)*(2f/3f))+0.025f)/0.05f)-0.15f;
             } else if(etat == Etat.Normal){
                 setCible();
             } else if(etat == Etat.Retour){
@@ -171,12 +171,12 @@ public class Ghost extends Entity{
                 }
             }
             
-            setVitesse(vitesseMode);
-            
             if(Panel.getMap().effet(Math.round(x), Math.round(y)) == 3){
-                vitesse /= 2;
+                vitesseMode = 0.05f*Math.round((((vitesseDefaut+facteurVitesse)*(2f/3f))+0.025f)/0.05f)-0.25f;
             }
             
+            setVitesse(vitesseMode);
+
             if(basAttente){
                 if(y < cible.getY()+3 && !enTrainDeSortir){
                     y += vitesse;
@@ -479,5 +479,12 @@ public class Ghost extends Entity{
      */
     public static Tile getCage() {
         return cage;
+    }
+    
+    /**
+     * @return the peur
+     */
+    public static boolean isPeur() {
+        return peur;
     }
 }

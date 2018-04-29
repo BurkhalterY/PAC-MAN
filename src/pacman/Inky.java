@@ -31,6 +31,7 @@ public class Inky extends Ghost{
                 xPacman += 2;
                 break;
             case Haut:
+                xPacman -= 2;
                 yPacman -= 2;
                 break;
             case Bas:

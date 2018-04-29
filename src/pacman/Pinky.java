@@ -28,6 +28,7 @@ public class Pinky extends Ghost{
                 xPacman += 4;
                 break;
             case Haut:
+                xPacman -= 4;
                 yPacman -= 4;
                 break;
             case Bas:
