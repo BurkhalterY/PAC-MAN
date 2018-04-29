@@ -12,6 +12,7 @@ package pacman;
 public class Player extends Entity{
     private static Tile spawn;
     private int tempsArret = 0;
+    private Tile casePrecedente = new Tile(Math.round(x), Math.round(y), 0);
 
     public Player(float x, float y, float vitesse, String pictureFile) {
         super(x, y, vitesse, pictureFile, Texture.getPacman_rows(), Texture.getPacman_columns());
@@ -37,6 +38,17 @@ public class Player extends Entity{
         } else {
             tempsArret--;
         }
+        
+        if(casePrecedente.getX() == Math.round(x) && casePrecedente.getY() == Math.round(y) && tempsArret == 0){
+            if(!Sound.isChompWait()){
+                Sound.waitChomp();
+            }
+        } else {
+            if(Sound.isChompWait()){
+                Sound.notifyChomp();
+            }
+        }
+        casePrecedente = new Tile(Math.round(x), Math.round(y), 0);
     }
     
     /**

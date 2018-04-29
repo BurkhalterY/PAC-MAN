@@ -18,7 +18,8 @@ public class Frame extends JFrame{
     private static int ticksTotal = 0;
 
     public Frame(){
-        Texture.initTexture("pacman-arrangement");
+        Texture.initTexture("original");
+        Sound.initSound("original");
         Panel pan = new Panel();
         this.setTitle("PAC-MAN");
         this.setSize(Panel.getMap().getMapWidth()*16+16, Panel.getMap().getMapHeight()*16+38);
@@ -41,9 +42,11 @@ public class Frame extends JFrame{
         double deltaU = 0, deltaF = 0;
         int frames = 0, ticks = 0;
         long timer = System.currentTimeMillis();
+        
+        Sound.loopSiren();
 
         while (pan.isRun()) {
-
+            
             long currentTime = System.nanoTime();
             deltaU += (currentTime - initialTime) / timeU;
             deltaF += (currentTime - initialTime) / timeF;
