@@ -40,33 +40,43 @@ public class Ghost extends Entity{
     private static long start = 0, pauseStart = 0, pauseDuree = 0, pausePrevu = 0;
     private static Tile cage;
 
-    public Ghost(float x, float y, float vitesse, int xScatter, int yScatter, String pictureFile, int rows, int columns, int numero) {
-        super(x, y, vitesse, pictureFile, rows, columns);
+    public Ghost(float x, float y, float vitesse, int xScatter, int yScatter, String pictureFile, int numero) {
+        super(x, y, vitesse, pictureFile, Texture.getGhosts_rows(), Texture.getGhosts_columns());
         this.xScatter = xScatter;
         this.yScatter = yScatter;
         etat = Etat.Attente;
         
         BufferedImage[] prov = sprites;
-        sprites = new BufferedImage[rows * columns * 2];
+        if(Texture.isGhosts_scarred_multiframe()){
+            sprites = new BufferedImage[Texture.getGhosts_rows() * Texture.getGhosts_columns() * 4];
+        } else {
+            sprites = new BufferedImage[Texture.getGhosts_rows() * Texture.getGhosts_columns() * 2];
+        }
+        
         
         for(int i = 0; i < prov.length; i++){
             sprites[i] = prov[i];
         }
         
+        BufferedImage spriteSheet = null;
         try {
-            spriteSheet = ImageIO.read(new File("res/peur.png"));
+            spriteSheet = ImageIO.read(new File("res/"+Texture.getTextureFolder()+"/peur.png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        for(int i = 0; i < columns; i++) {
+        int rows = Texture.getGhosts_rows();
+        if(Texture.isGhosts_scarred_multiframe()){
+            rows *= 3;
+        }
+        for(int i = 0; i < Texture.getGhosts_columns(); i++) {
             for(int j = 0; j < rows; j++) {
-                sprites[(j * columns) + i + prov.length] = spriteSheet.getSubimage(i * 16, j * 16, 16, 16);
+                sprites[(j * Texture.getGhosts_columns()) + i + prov.length] = spriteSheet.getSubimage(i * 16, j * 16, 16, 16);
             }
         }
         
         try {
-            cibles = ImageIO.read(new File("res/cibles3.png"));
+            cibles = ImageIO.read(new File("res/"+Texture.getTextureFolder()+"/cibles3.png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -344,34 +354,52 @@ public class Ghost extends Entity{
     }
     
     public void setIdSprite(){
-        if(etat == Etat.Peur || etat == Etat.AttenteBleu){
-            idSprite = 8;
+        
+        if(!Texture.isGhosts_scarred_multiframe() && (etat == Etat.Peur || etat == Etat.AttenteBleu)){
+            idSprite = Texture.getGhosts_moving_frames()*4;
             if(Frame.getMs() - pauseStart >= pausePrevu-2000 && (Frame.getMs() - pauseStart) % 500 < 250){
-                idSprite += 2;
+                idSprite += Texture.getGhosts_moving_frames();
             }
         } else {
             switch (directionCourente) {
                 case Droite:
-                    idSprite = 0;
+                    idSprite = Texture.getGhosts_moving_frames()*0;
                     break;
                 case Gauche:
-                    idSprite = 2;
+                    idSprite = Texture.getGhosts_moving_frames()*1;
                     break;
                 case Haut:
-                    idSprite = 4;
+                    idSprite = Texture.getGhosts_moving_frames()*2;
                     break;
                 case Bas:
-                    idSprite = 6;
+                    idSprite = Texture.getGhosts_moving_frames()*3;
                     break;
                 default:
                     break;
             }
+            
+            if(Texture.isGhosts_scarred_multiframe()){
+                if(etat == Etat.Peur || etat == Etat.AttenteBleu){
+                    idSprite += Texture.getGhosts_moving_frames()*4;
+                    if(Frame.getMs() - pauseStart >= pausePrevu-2000 && (Frame.getMs() - pauseStart) % 500 < 250){
+                        idSprite += Texture.getGhosts_moving_frames()*4;
+                    }
+                } else if(etat == Etat.Retour){
+                    idSprite += Texture.getGhosts_moving_frames()*12;
+                }
+            }
         }
-        if(etat == Etat.Retour){
-            idSprite /= 2;
-            idSprite += 12;
-        } else if (Frame.getTicksTotal() % (1/vitesse) >= 0.5f/vitesse){
-            idSprite++;
+
+        for(int i = 0; i < Texture.getGhosts_moving_frames(); i++){
+            if(Frame.getTicksTotal() % (Texture.getGhosts_moving_frames()/Texture.getGhosts_speed()/vitesse) >= i*(Texture.getGhosts_moving_frames()/Texture.getGhosts_speed()/vitesse)/(Texture.getGhosts_moving_frames())
+            && Frame.getTicksTotal() % (Texture.getGhosts_moving_frames()/Texture.getGhosts_speed()/vitesse) < (i+1)*(Texture.getGhosts_moving_frames()/Texture.getGhosts_speed()/vitesse)/(Texture.getGhosts_moving_frames())){
+                idSprite += (i%Texture.getGhosts_moving_frames());
+            }
+        }
+    
+        if(etat == Etat.Retour && !Texture.isGhosts_scarred_multiframe()){
+            idSprite /= Texture.getGhosts_moving_frames();
+            idSprite += Texture.getGhosts_moving_frames()*6;
         }
     }
 

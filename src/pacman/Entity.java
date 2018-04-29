@@ -31,7 +31,6 @@ public class Entity {
     protected float x, y, vitesse, vitesseDefaut;
     protected Direction directionCourente, directionSuivante;
     protected int idSprite = 0;
-    protected BufferedImage spriteSheet;
     protected BufferedImage[] sprites;
     protected boolean stop;
     protected static float facteurVitesse = 0.155f;
@@ -44,8 +43,9 @@ public class Entity {
         directionCourente = Direction.Gauche;
         directionSuivante = Direction.Gauche;
         sprites = new BufferedImage[rows * columns];
+        BufferedImage spriteSheet = null;
         try {
-            spriteSheet = ImageIO.read(new File("res/"+pictureFile+".png"));
+            spriteSheet = ImageIO.read(new File("res/"+Texture.getTextureFolder()+"/"+pictureFile+".png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
         }

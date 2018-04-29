@@ -13,12 +13,13 @@ import javax.swing.JFrame;
  * @author BuYa
  */
 public class Frame extends JFrame{
-    
-    private Panel pan = new Panel();
+
     private static long ms = 0;
     private static int ticksTotal = 0;
 
     public Frame(){
+        Texture.initTexture("pacman-arrangement");
+        Panel pan = new Panel();
         this.setTitle("PAC-MAN");
         this.setSize(Panel.getMap().getMapWidth()*16+16, Panel.getMap().getMapHeight()*16+38);
         //this.setSize(this.getToolkit().getScreenSize());

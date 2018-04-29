@@ -13,8 +13,8 @@ public class Player extends Entity{
     private static Tile spawn;
     private int tempsArret = 0;
 
-    public Player(float x, float y, float vitesse, String pictureFile, int rows, int columns) {
-        super(x, y, vitesse, pictureFile, rows, columns);
+    public Player(float x, float y, float vitesse, String pictureFile) {
+        super(x, y, vitesse, pictureFile, Texture.getPacman_rows(), Texture.getPacman_columns());
     }
     
     public void setDirection(Direction direction){

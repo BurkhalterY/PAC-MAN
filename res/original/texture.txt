@@ -1,0 +1,9 @@
+pacman_rows:3
+pacman_columns:8
+ghosts_rows:1
+ghosts_columns:8
+pacman_moving_frames:2
+ghosts_moving_frames:2
+pacman_closed_frame:true
+ghosts_scarred_multiframe:false
+ghosts_speed:2

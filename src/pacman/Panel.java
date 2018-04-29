@@ -56,10 +56,10 @@ public class Panel extends JPanel{
         }
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
-        }
+        }/*
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficherTuile(g, this.getWidth(), this.getHeight());
-        }
+        }*/
     }
 
     /**

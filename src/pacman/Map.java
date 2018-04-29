@@ -28,7 +28,6 @@ public class Map {
     private BufferedImage tileset;
     private BufferedImage tiles[] = new BufferedImage[6*9];
     private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0, tileWidth, tileHeight;
-    private boolean totalLoaded = false;
     
     public Map(String path){
 
@@ -109,7 +108,7 @@ public class Map {
         nbBulletRestantes = nbBulletTotal;
         
         try {
-            tileset = ImageIO.read(new File("res/default-tileset.png"));
+            tileset = ImageIO.read(new File("res/pokemon-tileset.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -123,8 +122,7 @@ public class Map {
                 tilesID++;
             }
         }
-        
-        totalLoaded = true;
+
     }
     
     public boolean libreA(int x, int y){
@@ -168,24 +166,21 @@ public class Map {
     }
     
     public void afficher(Graphics g, int width, int height){
-        
-        if(totalLoaded){
-            double size;
-            if(width/mapWidth > height/mapHeight){
-                size = height/mapHeight;
-            } else {
-                size = width/mapWidth;
-            }
+        double size;
+        if(width/mapWidth > height/mapHeight){
+            size = height/mapHeight;
+        } else {
+            size = width/mapWidth;
+        }
 
-            Graphics2D g2d = (Graphics2D)g;
+        Graphics2D g2d = (Graphics2D)g;
 
-            for(int y=0; y < mapHeight; y++){
-                for(int x=0; x < mapWidth; x++){
-                    AffineTransform rotation = new AffineTransform();
-                    rotation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
-                    rotation.scale(size/this.tileWidth, size/this.tileHeight);
-                    g2d.drawImage(tiles[map[x][y].getType()], rotation, null);
-                }
+        for(int y=0; y < mapHeight; y++){
+            for(int x=0; x < mapWidth; x++){
+                AffineTransform rotation = new AffineTransform();
+                rotation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
+                rotation.scale(size/this.tileWidth, size/this.tileHeight);
+                g2d.drawImage(tiles[map[x][y].getType()], rotation, null);
             }
         }
     }
@@ -220,12 +215,5 @@ public class Map {
     
     public int getNbBulletMangees() {
         return nbBulletTotal-nbBulletRestantes;
-    }
-
-    /**
-     * @return the totalLoaded
-     */
-    public boolean isTotalLoaded() {
-        return totalLoaded;
     }
 }
