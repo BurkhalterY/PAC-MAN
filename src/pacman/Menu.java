@@ -108,57 +108,47 @@ public class Menu extends JPanel implements ActionListener, Runnable{
 
     public void paintComponent(Graphics g){
         if(idMenu == 0){
-            btnPlay.setBounds(this.getWidth()/3, (this.getHeight()-25)/2, this.getWidth()/3, 25);
-            
-            labelMap.setForeground(Color.white);
-            labelMap.setBounds(0, (int) ((this.getHeight()-25)/1.5f)-50, this.getWidth()/3, 25);
-            choixMap.setBounds(0, (int) ((this.getHeight()-25)/1.5f)-25, this.getWidth()/3, 25);
-            
-            labelTexturePack.setForeground(Color.white);
-            labelTexturePack.setBounds(this.getWidth()/3, (int) ((this.getHeight()-25)/1.5f)-25, this.getWidth()/3, 25);
-            choixTexturePack.setBounds(this.getWidth()/3, (int) ((this.getHeight()-25)/1.5f), this.getWidth()/3, 25);
-            
-            labelTileset.setForeground(Color.white);
-            labelTileset.setBounds(this.getWidth()-this.getWidth()/3, (int) ((this.getHeight()-25)/1.5f), this.getWidth()/3, 25);
-            choixTileset.setBounds(this.getWidth()-this.getWidth()/3, (int) ((this.getHeight()-25)/1.5f)+25, this.getWidth()/3, 25);
-            
-            float size;
-            if(this.getWidth()/logo.getWidth() > this.getHeight()/logo.getHeight()){
-                size = (float)this.getHeight()/logo.getHeight();
-            } else {
-                size = (float)this.getWidth()/logo.getWidth();
-            }
-
-            Graphics2D g2d = (Graphics2D)g;
-
-            g.setColor(Color.black);
-            g.fillRect(0, 0, this.getWidth(), this.getHeight());
-
-            AffineTransform transformation = new AffineTransform();
-            transformation.scale(size, size);
-
-            g2d.drawImage(logo, transformation, null);
+            drawSelectionMenu();
         } else if(idMenu == 10){
-            btnReprendre.setBounds(this.getWidth()/3, (this.getHeight()-25)/2, this.getWidth()/3, 25);
-            
-            float size;
-            if(this.getWidth()/logo.getWidth() > this.getHeight()/logo.getHeight()){
-                size = (float)this.getHeight()/logo.getHeight();
-            } else {
-                size = (float)this.getWidth()/logo.getWidth();
-            }
-
-            Graphics2D g2d = (Graphics2D)g;
-
-            g.setColor(Color.black);
-            g.fillRect(0, 0, this.getWidth(), this.getHeight());
-
-            AffineTransform transformation = new AffineTransform();
-            transformation.scale(size, size);
-
-            g2d.drawImage(logo, transformation, null);
+            drawPauseMenu();
         }
-        
+
+        float size;
+        if(this.getWidth()/logo.getWidth() > this.getHeight()/logo.getHeight()){
+            size = (float)this.getHeight()/logo.getHeight();
+        } else {
+            size = (float)this.getWidth()/logo.getWidth();
+        }
+
+        Graphics2D g2d = (Graphics2D)g;
+
+        g.setColor(Color.black);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+        AffineTransform transformation = new AffineTransform();
+        transformation.scale(size, size);
+
+        g2d.drawImage(logo, transformation, null);
+    }
+    
+    public void drawSelectionMenu(){
+        btnPlay.setBounds(this.getWidth()/3, (this.getHeight()-25)/2, this.getWidth()/3, 25);
+            
+        labelMap.setForeground(Color.white);
+        labelMap.setBounds(0, (int) ((this.getHeight()-25)/1.5f)-50, this.getWidth()/3, 25);
+        choixMap.setBounds(0, (int) ((this.getHeight()-25)/1.5f)-25, this.getWidth()/3, 25);
+
+        labelTexturePack.setForeground(Color.white);
+        labelTexturePack.setBounds(this.getWidth()/3, (int) ((this.getHeight()-25)/1.5f)-25, this.getWidth()/3, 25);
+        choixTexturePack.setBounds(this.getWidth()/3, (int) ((this.getHeight()-25)/1.5f), this.getWidth()/3, 25);
+
+        labelTileset.setForeground(Color.white);
+        labelTileset.setBounds(this.getWidth()-this.getWidth()/3, (int) ((this.getHeight()-25)/1.5f), this.getWidth()/3, 25);
+        choixTileset.setBounds(this.getWidth()-this.getWidth()/3, (int) ((this.getHeight()-25)/1.5f)+25, this.getWidth()/3, 25);
+    }
+    
+    public void drawPauseMenu(){
+        btnReprendre.setBounds(this.getWidth()/3, (this.getHeight()-25)/2, this.getWidth()/3, 25);
     }
 
     @Override
