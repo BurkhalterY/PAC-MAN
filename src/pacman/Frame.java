@@ -44,7 +44,8 @@ public class Frame extends JFrame{
         Sound.initSound("original");
         menu.selectionMenu();
         this.setTitle("PAC-MAN");
-        this.setSize(Panel.getMap().getMapWidth()*16+16, Panel.getMap().getMapHeight()*16+38);
+        this.setSize(600, 800);
+        //this.setSize(Panel.getMap().getMapWidth()*16+16, Panel.getMap().getMapHeight()*16+38);
         //this.setSize(this.getToolkit().getScreenSize());
         //this.setUndecorated(true);
         this.setLocationRelativeTo(null);
@@ -52,7 +53,7 @@ public class Frame extends JFrame{
 
         menu.addKeyListener(clav);
         
-        Sound.loopSiren();
+        //Sound.loopSiren();
         
         content.setLayout(cl);
         content.add(menu, "menu");
@@ -61,8 +62,6 @@ public class Frame extends JFrame{
         this.setVisible(true);
         
         cl.show(content, "menu");
-        
-        init();
     }
 
     /**
@@ -77,12 +76,6 @@ public class Frame extends JFrame{
      */
     public static int getTicksTotal() {
         return ticksTotal;
-    }
-    
-    public static void init(){
-        pan = new Panel();
-        pan.addKeyListener(clav);
-        content.add(pan, "pan");
     }
     
     public static void go(){
@@ -122,9 +115,6 @@ public class Frame extends JFrame{
         menu.requestFocusInWindow();
     }
 
-    /**
-     * @param aPause the pause to set
-     */
     public static void setPause() {
         pause = !pause;
         if(!pause){
@@ -135,5 +125,17 @@ public class Frame extends JFrame{
         } else {
             pauseStart = System.currentTimeMillis();
         }
+    }
+    
+    public static void start() {
+        pause = false;
+        Texture.initTexture(menu.getTexturePack());
+        pan = new Panel();
+        pan.init(menu.getMap(), menu.getTileset());
+        pan.addKeyListener(clav);
+        content.add(pan, "pan");
+        pauseLong += System.currentTimeMillis() - pauseStart;
+        t = new Thread(new Menu());
+        t.start();
     }
 }

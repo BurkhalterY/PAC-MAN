@@ -14,17 +14,24 @@ import javax.swing.JPanel;
  * @author BuYa
  */
 public class Panel extends JPanel{
-    private static Map map = new Map("original", "default-tileset");
-    private static Player playersTab[] = {new Pacman(Player.getSpawn().getX(), Player.getSpawn().getY(), 0.8f)};
-    private static Ghost ghostsTab[] = {
-        new Blinky(Ghost.getCage().getX()+0.5f, Ghost.getCage().getY(), 0.75f, map.getMapWidth()-3, 0),
-        new Pinky(Ghost.getCage().getX()+0.5f, Ghost.getCage().getY()+3, 0.75f, 2, 0),
-        new Inky(Ghost.getCage().getX()-1.5f, Ghost.getCage().getY()+3, 0.75f, map.getMapWidth()-1, map.getMapHeight()-1),
-        new Clyde(Ghost.getCage().getX()+2.5f, Ghost.getCage().getY()+3, 0.75f, 0, map.getMapHeight()-1)
-    };
+    
+    private static Map map;
+    private static Player playersTab[];
+    private static Ghost ghostsTab[];
     private static boolean run = true;
     
     private long start, pauseStart, pauseDuree;
+    
+    public static void init(String pMap, String pTileset){
+        map = new Map(pMap, pTileset);
+        playersTab = new Player[]{new Pacman(Player.getSpawn().getX(), Player.getSpawn().getY(), 0.8f)};
+        ghostsTab = new Ghost[]{
+            new Blinky(Ghost.getCage().getX()+0.5f, Ghost.getCage().getY(), 0.75f, map.getMapWidth()-3, 0),
+            new Pinky(Ghost.getCage().getX()+0.5f, Ghost.getCage().getY()+3, 0.75f, 2, 0),
+            new Inky(Ghost.getCage().getX()-1.5f, Ghost.getCage().getY()+3, 0.75f, map.getMapWidth()-1, map.getMapHeight()-1),
+            new Clyde(Ghost.getCage().getX()+2.5f, Ghost.getCage().getY()+3, 0.75f, 0, map.getMapHeight()-1)
+        };
+    }
     
     /**
      * @return the run
@@ -60,10 +67,10 @@ public class Panel extends JPanel{
         }
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
-        }
+        }/*
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficherTuile(g, this.getWidth(), this.getHeight());
-        }
+        }*/
     }
 
     /**

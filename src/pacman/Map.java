@@ -108,7 +108,7 @@ public class Map {
         nbBulletRestantes = nbBulletTotal;
         
         try {
-            tileset = ImageIO.read(new File("res/tileset/"+tilesetPicture+".png"));
+            tileset = ImageIO.read(new File("res/tileset/"+tilesetPicture));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }

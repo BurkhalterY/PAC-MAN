@@ -83,7 +83,7 @@ public class Entity {
         int xb, yb;
         xb = yb = -1;
         
-        switch (direction) {
+        if(direction != null)switch (direction) {
             case Gauche:
                 xb = (int)(x-vitesse);
                 yb = Math.round(y);
