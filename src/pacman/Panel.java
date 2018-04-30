@@ -5,6 +5,7 @@
  */
 package pacman;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
@@ -50,16 +51,19 @@ public class Panel extends JPanel{
     }
     
     public void paintComponent(Graphics g){
+        g.setColor(Color.black);
+        g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        
         map.afficher(g, this.getWidth(), this.getHeight());
         for(int i = 0; i < playersTab.length; i++){
             playersTab[i].afficher(g, this.getWidth(), this.getHeight());
         }
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
-        }/*
+        }
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficherTuile(g, this.getWidth(), this.getHeight());
-        }*/
+        }
     }
 
     /**

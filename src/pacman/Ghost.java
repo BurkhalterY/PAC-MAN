@@ -126,7 +126,7 @@ public class Ghost extends Entity{
         }
         
         if(etat == Etat.Attente || etat == Etat.AttenteBleu){
-            if((peutSortir() && y > cage.getY()+3-vitesse && y < cage.getY()+3+vitesse) || enTrainDeSortir){
+            if((peutSortir() && (y > cage.getY()+3-vitesse && y < cage.getY()+3+vitesse) || y == cage.getY()) || enTrainDeSortir){
                 if(dejaManger){
                     setVitesse(vitesseDefaut);
                 } else {
@@ -435,7 +435,7 @@ public class Ghost extends Entity{
     }
     
     public boolean peutSortir(){
-        return false;
+        return true;
     }
     
     public void sortir(){
@@ -477,22 +477,22 @@ public class Ghost extends Entity{
     }
     
     public void afficherTuile(Graphics g, int width, int height){
-        double size;
+        float size;
         int mapWidth = Panel.getMap().getMapWidth();
         int mapHeight = Panel.getMap().getMapHeight();
         
         if(width/mapWidth > height/mapHeight){
-            size = height/mapHeight;
+            size = (float)height/mapHeight;
         } else {
-            size = width/mapWidth;
+            size = (float)width/mapWidth;
         }
         
         Graphics2D g2d = (Graphics2D)g;
-        AffineTransform rotation = new AffineTransform();
+        AffineTransform transformation = new AffineTransform();
         
-        rotation.translate(cible.getX()*size, cible.getY()*size);
-        rotation.scale(size/8, size/8);
-        g2d.drawImage(cibleImg, rotation, null);
+        transformation.translate(cible.getX()*size, cible.getY()*size);
+        transformation.scale(size/8, size/8);
+        g2d.drawImage(cibleImg, transformation, null);
     }
 
     /**

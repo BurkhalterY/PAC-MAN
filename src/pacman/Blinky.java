@@ -13,10 +13,10 @@ public class Blinky extends Ghost{
 
     public Blinky(float x, float y, float vitesse, int xScatter, int yScatter) {
         super(x, y, vitesse, xScatter, yScatter, "blinky", 0);
-        etat = Etat.Scatter;
     }
     
     public void setCible(){
         cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY(), 0);
     }
+    
 }

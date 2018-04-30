@@ -230,22 +230,22 @@ public class Entity {
     public void afficher(Graphics g, int width, int height){
         setIdSprite();
         
-        double size;
+        float size;
         int mapWidth = Panel.getMap().getMapWidth();
         int mapHeight = Panel.getMap().getMapHeight();
         
         if(width/mapWidth > height/mapHeight){
-            size = height/mapHeight;
+            size = (float)height/mapHeight;
         } else {
-            size = width/mapWidth;
+            size = (float)width/mapWidth;
         }
         
         Graphics2D g2d = (Graphics2D)g;
-        AffineTransform rotation = new AffineTransform();
+        AffineTransform transformation = new AffineTransform();
         
-        rotation.translate((x-0.5)*size, (y-0.5)*size);
-        rotation.scale(size/8, size/8);
-        g2d.drawImage(sprites[idSprite], rotation, null);
+        transformation.translate((x-0.5)*size, (y-0.5)*size);
+        transformation.scale(size/8, size/8);
+        g2d.drawImage(sprites[idSprite], transformation, null);
     }
     
     public void setIdSprite(){

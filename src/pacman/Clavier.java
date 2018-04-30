@@ -40,5 +40,9 @@ public class Clavier extends KeyAdapter{
         }
 
         Panel.getPlayersTab()[0].setDirection(direction);
+        
+        if(e.getKeyCode() == KeyEvent.VK_ESCAPE){
+            Frame.setPause();
+        }
     }
 }

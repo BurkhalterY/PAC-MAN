@@ -166,21 +166,21 @@ public class Map {
     }
     
     public void afficher(Graphics g, int width, int height){
-        double size;
+        float size;
         if(width/mapWidth > height/mapHeight){
-            size = height/mapHeight;
+            size = (float)height/mapHeight;
         } else {
-            size = width/mapWidth;
+            size = (float)width/mapWidth;
         }
 
         Graphics2D g2d = (Graphics2D)g;
 
         for(int y=0; y < mapHeight; y++){
             for(int x=0; x < mapWidth; x++){
-                AffineTransform rotation = new AffineTransform();
-                rotation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
-                rotation.scale(size/this.tileWidth, size/this.tileHeight);
-                g2d.drawImage(tiles[map[x][y].getType()], rotation, null);
+                AffineTransform transformation = new AffineTransform();
+                transformation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
+                transformation.scale(size/this.tileWidth, size/this.tileHeight);
+                g2d.drawImage(tiles[map[x][y].getType()], transformation, null);
             }
         }
     }
