@@ -12,7 +12,7 @@ package pacman;
 public class Blinky extends Ghost{
 
     public Blinky(float x, float y, float vitesse, int xScatter, int yScatter) {
-        super(x, y, vitesse, xScatter, yScatter, "blinky", 0);
+        super(x, y, vitesse, xScatter, yScatter, "blinky", 1, 8, 0);
         etat = Etat.Scatter;
     }
     

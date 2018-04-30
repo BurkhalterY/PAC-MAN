@@ -12,7 +12,7 @@ package pacman;
 public class Pinky extends Ghost{
     
     public Pinky(float x, float y, float vitesse, int xScatter, int yScatter) {
-        super(x, y, vitesse, xScatter, yScatter, "pinky", 1);
+        super(x, y, vitesse, xScatter, yScatter, "pinky", 1, 8, 1);
         basAttente = true;
     }
     
@@ -28,7 +28,6 @@ public class Pinky extends Ghost{
                 xPacman += 4;
                 break;
             case Haut:
-                xPacman -= 4;
                 yPacman -= 4;
                 break;
             case Bas:

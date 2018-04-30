@@ -12,7 +12,7 @@ package pacman;
 public class Clyde extends Ghost{
     
     public Clyde(float x, float y, float vitesse, int xScatter, int yScatter) {
-        super(x, y, vitesse, xScatter, yScatter, "clyde", 3);
+        super(x, y, vitesse, xScatter, yScatter, "clyde", 1, 8, 3);
     }
     
     public void setCible(){

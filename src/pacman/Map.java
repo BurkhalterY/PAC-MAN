@@ -27,74 +27,44 @@ public class Map {
     private int mapSp[][];
     private BufferedImage tileset;
     private BufferedImage tiles[] = new BufferedImage[6*9];
-    private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0, tileWidth, tileHeight;
+    private int tilesID = 0;
+    private int mapWidth = 28;
+    private int mapHeight = 36;
+    private int nbBulletTotal = 0;
+    private int nbBulletRestantes = 0;
+    int width;
+    int height;
     
     public Map(String path){
-
+        map = new Tile[mapWidth][mapHeight];
+        
         try
         {
-            File f1 = new File (path+".txt");
-            File f2 = new File (path+"_sp.txt");
-            FileReader fr1 = new FileReader (f1);
-            FileReader fr2 = new FileReader (f2);
-            BufferedReader br1 = new BufferedReader (fr1);
-            BufferedReader br2 = new BufferedReader (fr2);
-            FileReader fr3 = new FileReader (f1);
-            BufferedReader br3 = new BufferedReader (fr3);
+            File f = new File (path+".txt");
+            FileReader fr = new FileReader (f);
+            BufferedReader br = new BufferedReader (fr);
+
             try
             {
-                int nombreLignes = 0;
-                String line = br3.readLine();
-                while(line != null){
-                    nombreLignes++;
-                    line = br3.readLine();
-                }
-                
-                br3.close();
-                fr3.close();
-
-                String line1 = br1.readLine();
-                String line2 = br2.readLine();
-                
+                String line = br.readLine();
+               
                 int y = 0;
                 
-                while (line1 != null && line2 != null)
+                while (line != null)
                 {
-                    String tableLigne1[] = line1.split("\t");
-                    String tableLigne2[] = line2.split("\t");
-                    line1 = br1.readLine();
-                    line2 = br2.readLine();
-                    
-                    if(mapWidth == 0 || mapHeight == 0){
-                        mapWidth = tableLigne1.length;
-                        mapHeight = nombreLignes;
-                    }
-                    
-                    if(map == null){
-                        map = new Tile[mapWidth][mapHeight];
-                        mapSp = new int[mapWidth][mapHeight];
-                    }
+                    String tableLigne[] = line.split("\t");
+                    line = br.readLine();
                     
                     for(int x = 0; x < mapWidth; x++){
-                        map[x][y] = new Tile(x, y, Integer.parseInt(tableLigne1[x]));
+                        map[x][y] = new Tile(x, y, Integer.parseInt(tableLigne[x]));
                         if(map[x][y].getType() == 45 || map[x][y].getType() == 47){
                             nbBulletTotal++;
-                        }
-                        mapSp[x][y] = Integer.parseInt(tableLigne2[x]);
-                        if(mapSp[x][y] == 1){
-                            Player.setSpawn(new Tile(x, y, 0));
-                            
-                        } else if(mapSp[x][y] == 2){
-                            Ghost.setCage(new Tile(x, y-1, 0));
                         }
                     }
                     y++;
                 }
-                
-                br1.close();
-                br2.close();
-                fr1.close();
-                fr2.close();
+                br.close();
+                fr.close();                
             }
             catch (IOException exception)
             {
@@ -107,22 +77,58 @@ public class Map {
         }
         nbBulletRestantes = nbBulletTotal;
         
+        mapSp = new int[mapWidth][mapHeight];
+        
+        try
+        {
+            File f = new File (path+"_sp.txt");
+            FileReader fr = new FileReader (f);
+            BufferedReader br = new BufferedReader (fr);
+
+            try
+            {
+                String line = br.readLine();
+               
+                int y = 0;
+                
+                while (line != null)
+                {
+                    String tableLigne[] = line.split("\t");
+                    line = br.readLine();
+                    
+                    for(int x = 0; x < mapWidth; x++){
+                        mapSp[x][y] = Integer.parseInt(tableLigne[x]);
+                    }
+                    y++;
+                }
+                br.close();
+                fr.close();                
+            }
+            catch (IOException exception)
+            {
+                System.out.println ("Erreur lors de la lecture : " + exception.getMessage());
+            }
+        }
+        catch (FileNotFoundException exception)
+        {
+            System.out.println ("Le fichier n'a pas été trouvé");
+        }
+        
         try {
             tileset = ImageIO.read(new File("res/default-tileset.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
-        tileWidth = tileset.getWidth()/9;
-        tileHeight = tileset.getHeight()/6;
+        
+        width = tileset.getWidth()/9;
+        height = tileset.getHeight()/6;
 
-        int tilesID = 0;
         for(int y = 0; y < 6; y++){
             for(int x = 0; x < 9; x++){
-                tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                tiles[tilesID] = tileset.getSubimage(x * width, y * height, width, height);
                 tilesID++;
             }
         }
-
     }
     
     public boolean libreA(int x, int y){
@@ -137,23 +143,22 @@ public class Map {
         return libre;
     }
     
-    public int mangerGraine(int x, int y){
-        int type = 0;
+    public boolean mangerGraine(int x, int y){
+        boolean puissance = false;
         
         if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
             if(map[x][y].getType() == 45){
                 map[x][y].setType(10);
                 nbBulletRestantes--;
-                type = 1;
             }
             if(map[x][y].getType() == 47){
                 map[x][y].setType(10);
+                puissance = true;
                 nbBulletRestantes--;
-                type = 3;
             }
         }
         
-        return type;
+        return puissance;
     }
     
     public int effet(int x, int y){
@@ -166,20 +171,21 @@ public class Map {
     }
     
     public void afficher(Graphics g, int width, int height){
+        
         double size;
         if(width/mapWidth > height/mapHeight){
             size = height/mapHeight;
         } else {
             size = width/mapWidth;
         }
-
+        
         Graphics2D g2d = (Graphics2D)g;
 
-        for(int y=0; y < mapHeight; y++){
-            for(int x=0; x < mapWidth; x++){
+        for(int y=0; y < 36; y++){
+            for(int x=0; x < 28; x++){
                 AffineTransform rotation = new AffineTransform();
                 rotation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
-                rotation.scale(size/this.tileWidth, size/this.tileHeight);
+                rotation.scale(size/this.width, size/this.height);
                 g2d.drawImage(tiles[map[x][y].getType()], rotation, null);
             }
         }
