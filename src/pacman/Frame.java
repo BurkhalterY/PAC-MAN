@@ -35,7 +35,7 @@ public class Frame extends JFrame{
         
         long startTime = System.currentTimeMillis();
         long initialTime = System.nanoTime();
-        int UPS = 30;
+        int UPS = 60;
         final double timeU = 1000000000 / UPS;
         int FPS = 60;
         final double timeF = 1000000000 / FPS;

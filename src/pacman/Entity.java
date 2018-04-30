@@ -61,6 +61,17 @@ public class Entity {
      * @return the x
      */
     public int getX() {
+        /*int xa = 0;
+        switch (directionCourente) {
+            case Gauche:
+                xa = (int) Math.ceil(x);
+                break;
+            case Haut: case Droite: case Bas:
+                xa = (int) Math.floor(x);
+                break;
+            default:
+                break;
+        }*/
         return Math.round(x);
     }
 
@@ -68,6 +79,17 @@ public class Entity {
      * @return the y
      */
     public int getY() {
+        /*int ya = 0;
+        switch (directionCourente) {
+            case Haut:
+                ya = (int) Math.ceil(y);
+                break;
+            case Droite: case Gauche: case Bas:
+                ya = (int) Math.floor(y);
+                break;
+            default:
+                break;
+        }*/
         return Math.round(y);
     }
     
@@ -107,26 +129,27 @@ public class Entity {
             peutTourner = true;
         }
         
-        boolean d1 = false, d2 = false;
+        byte d1 = 0;
+        byte d2 = 0;
         
         if(direction == Direction.Gauche || direction == Direction.Droite){
-            d1 = false;
+            d1 = 1;
         } else if(direction == Direction.Haut || direction == Direction.Bas){
-            d1 = true;
+            d1 = 2;
         }
         if(directionCourente == Direction.Gauche || directionCourente == Direction.Droite){
-            d2 = false;
+            d2 = 1;
         } else if(directionCourente == Direction.Haut || directionCourente == Direction.Bas){
-            d2 = true;
+            d2 = 2;
         }
         boolean entreBorne = false;
         
         if(d1 == d2){
             entreBorne = true;
-        } else if(d1 && !d2){
-            entreBorne = ((x + vitesse) % 1 < vitesse)||((x - vitesse) % 1 > (1-vitesse))||(int)x == x;
-        } else if(!d1 && d2){
+        } else if(d1 == 1 && d2 == 2){
             entreBorne = ((y + vitesse) % 1 < vitesse)||((y - vitesse) % 1 > (1-vitesse))||(int)y == y;
+        } else if(d1 == 2 && d2 == 1){
+            entreBorne = ((x + vitesse) % 1 < vitesse)||((x - vitesse) % 1 > (1-vitesse))||(int)x == x;
         }
         
         return peutTourner && entreBorne;

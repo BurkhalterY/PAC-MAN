@@ -42,6 +42,7 @@ public class Inky extends Ghost{
         }
         
         cible = new Tile(xPacman - (xBlinky - xPacman), yPacman - (yBlinky - yPacman), 0);
+        System.out.println(cible.getX()+"\t"+cible.getY());
     }
     
     public boolean peutSortir(){
