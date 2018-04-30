@@ -34,14 +34,15 @@ public class Frame extends JFrame{
     private static long pauseStart = System.currentTimeMillis();
     private static long pauseLong = 0;
     
-    private static Panel pan = new Panel();
+    private static Panel pan;
     private static Menu menu = new Menu();
     private static CardLayout cl = new CardLayout();
     private static JPanel content = new JPanel();
+    private static Clavier clav = new Clavier(); 
 
     public Frame(){
         Sound.initSound("original");
-        menu.defaultMenu();
+        menu.selectionMenu();
         this.setTitle("PAC-MAN");
         this.setSize(Panel.getMap().getMapWidth()*16+16, Panel.getMap().getMapHeight()*16+38);
         //this.setSize(this.getToolkit().getScreenSize());
@@ -49,20 +50,19 @@ public class Frame extends JFrame{
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        Clavier clav = new Clavier(); 
-        pan.addKeyListener(clav);
         menu.addKeyListener(clav);
         
         Sound.loopSiren();
         
         content.setLayout(cl);
-        content.add(pan, "pan");
         content.add(menu, "menu");
         
         this.setContentPane(content);
         this.setVisible(true);
         
         cl.show(content, "menu");
+        
+        init();
     }
 
     /**
@@ -77,6 +77,12 @@ public class Frame extends JFrame{
      */
     public static int getTicksTotal() {
         return ticksTotal;
+    }
+    
+    public static void init(){
+        pan = new Panel();
+        pan.addKeyListener(clav);
+        content.add(pan, "pan");
     }
     
     public static void go(){

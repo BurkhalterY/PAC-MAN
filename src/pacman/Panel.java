@@ -14,7 +14,7 @@ import javax.swing.JPanel;
  * @author BuYa
  */
 public class Panel extends JPanel{
-    private static Map map = new Map("res/map");
+    private static Map map = new Map("original", "default-tileset");
     private static Player playersTab[] = {new Pacman(Player.getSpawn().getX(), Player.getSpawn().getY(), 0.8f)};
     private static Ghost ghostsTab[] = {
         new Blinky(Ghost.getCage().getX()+0.5f, Ghost.getCage().getY(), 0.75f, map.getMapWidth()-3, 0),

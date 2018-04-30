@@ -25,11 +25,16 @@ import javax.swing.JPanel;
  * @author BuYa
  */
 public class Menu extends JPanel implements ActionListener, Runnable{
-    BufferedImage logo;
-    JButton btnPlay;
+    
+    private int idMenu = 0;
+    private BufferedImage logo;
+    private JButton btnPlay;
 
-    public void defaultMenu(){
+    public void selectionMenu(){ //0
 
+        File rep = new File("res/textures_pack");
+        File[] files = rep.listFiles();
+        
         try {
             logo = ImageIO.read(new File("res/logo.png"));
         } catch (IOException ex) {
@@ -42,28 +47,48 @@ public class Menu extends JPanel implements ActionListener, Runnable{
 
         this.add(btnPlay);
         this.setLayout(null);  
-        //this.setVisible(true);
+    }
+    
+    public void pauseMenu(){ //10
+
+        try {
+            logo = ImageIO.read(new File("res/logo.png"));
+        } catch (IOException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        btnPlay = new JButton("Reprendre");
+
+        btnPlay.addActionListener(this);
+
+        this.add(btnPlay);
+        this.setLayout(null);  
     }
 
     public void paintComponent(Graphics g){
-        btnPlay.setBounds(this.getWidth()/3, (this.getHeight()-25)/2, this.getWidth()/3, 25);
+        if(idMenu == 0){
+            btnPlay.setBounds(this.getWidth()/3, (this.getHeight()-25)/2, this.getWidth()/3, 25);
 
-        float size;
-        if(this.getWidth()/logo.getWidth() > this.getHeight()/logo.getHeight()){
-            size = (float)this.getHeight()/logo.getHeight();
-        } else {
-            size = (float)this.getWidth()/logo.getWidth();
+            float size;
+            if(this.getWidth()/logo.getWidth() > this.getHeight()/logo.getHeight()){
+                size = (float)this.getHeight()/logo.getHeight();
+            } else {
+                size = (float)this.getWidth()/logo.getWidth();
+            }
+
+            Graphics2D g2d = (Graphics2D)g;
+
+            g.setColor(Color.black);
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+            AffineTransform transformation = new AffineTransform();
+            transformation.scale(size, size);
+
+            g2d.drawImage(logo, transformation, null);
+        } else if(idMenu == 10){
+            
         }
-
-        Graphics2D g2d = (Graphics2D)g;
-
-        g.setColor(Color.black);
-        g.fillRect(0, 0, this.getWidth(), this.getHeight());
-
-        AffineTransform transformation = new AffineTransform();
-        transformation.scale(size, size);
-
-        g2d.drawImage(logo, transformation, null);
+        
     }
 
     @Override

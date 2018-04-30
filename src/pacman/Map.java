@@ -29,12 +29,12 @@ public class Map {
     private BufferedImage tiles[] = new BufferedImage[6*9];
     private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0, tileWidth, tileHeight;
     
-    public Map(String path){
+    public Map(String mapFolder, String tilesetPicture){
 
         try
         {
-            File f1 = new File (path+".txt");
-            File f2 = new File (path+"_sp.txt");
+            File f1 = new File ("res/maps/"+mapFolder+"/map.txt");
+            File f2 = new File ("res/maps/"+mapFolder+"/map_sp.txt");
             FileReader fr1 = new FileReader (f1);
             FileReader fr2 = new FileReader (f2);
             BufferedReader br1 = new BufferedReader (fr1);
@@ -108,7 +108,7 @@ public class Map {
         nbBulletRestantes = nbBulletTotal;
         
         try {
-            tileset = ImageIO.read(new File("res/default-tileset.png"));
+            tileset = ImageIO.read(new File("res/tileset/"+tilesetPicture+".png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }

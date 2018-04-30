@@ -31,7 +31,7 @@ public class Texture {
         textureFolder = path;
         try
         {
-            File f = new File ("res/"+path+"/texture.txt");
+            File f = new File ("res/textures_pack/"+path+"/texture.txt");
             FileReader fr = new FileReader (f);
             BufferedReader br = new BufferedReader (fr);
             

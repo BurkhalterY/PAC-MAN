@@ -45,7 +45,7 @@ public class Entity {
         sprites = new BufferedImage[rows * columns];
         BufferedImage spriteSheet = null;
         try {
-            spriteSheet = ImageIO.read(new File("res/"+Texture.getTextureFolder()+"/"+pictureFile+".png"));
+            spriteSheet = ImageIO.read(new File("res/textures_pack/"+Texture.getTextureFolder()+"/"+pictureFile+".png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
         }

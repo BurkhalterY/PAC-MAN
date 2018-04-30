@@ -60,7 +60,7 @@ public class Ghost extends Entity{
         
         BufferedImage spriteSheet = null;
         try {
-            spriteSheet = ImageIO.read(new File("res/"+Texture.getTextureFolder()+"/peur.png"));
+            spriteSheet = ImageIO.read(new File("res/textures_pack/"+Texture.getTextureFolder()+"/peur.png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -76,7 +76,7 @@ public class Ghost extends Entity{
         }
         
         try {
-            cibles = ImageIO.read(new File("res/"+Texture.getTextureFolder()+"/cibles3.png"));
+            cibles = ImageIO.read(new File("res/textures_pack/"+Texture.getTextureFolder()+"/cibles.png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
         }
