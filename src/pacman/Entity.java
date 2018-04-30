@@ -31,10 +31,9 @@ public class Entity {
     protected float x, y, vitesse, vitesseDefaut;
     protected Direction directionCourente, directionSuivante;
     protected int idSprite = 0;
-    protected BufferedImage spriteSheet;
     protected BufferedImage[] sprites;
     protected boolean stop;
-    protected static float facteurVitesse = 0.125f;
+    protected static float facteurVitesse = 0.155f;
     
     public Entity(float x, float y, float vitesse, String pictureFile, int rows, int columns){
         this.x = x;
@@ -44,8 +43,9 @@ public class Entity {
         directionCourente = Direction.Gauche;
         directionSuivante = Direction.Gauche;
         sprites = new BufferedImage[rows * columns];
+        BufferedImage spriteSheet = null;
         try {
-            spriteSheet = ImageIO.read(new File("res/"+pictureFile+".png"));
+            spriteSheet = ImageIO.read(new File("res/"+Texture.getTextureFolder()+"/"+pictureFile+".png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -61,17 +61,6 @@ public class Entity {
      * @return the x
      */
     public int getX() {
-        /*int xa = 0;
-        switch (directionCourente) {
-            case Gauche:
-                xa = (int) Math.ceil(x);
-                break;
-            case Haut: case Droite: case Bas:
-                xa = (int) Math.floor(x);
-                break;
-            default:
-                break;
-        }*/
         return Math.round(x);
     }
 
@@ -79,17 +68,6 @@ public class Entity {
      * @return the y
      */
     public int getY() {
-        /*int ya = 0;
-        switch (directionCourente) {
-            case Haut:
-                ya = (int) Math.ceil(y);
-                break;
-            case Droite: case Gauche: case Bas:
-                ya = (int) Math.floor(y);
-                break;
-            default:
-                break;
-        }*/
         return Math.round(y);
     }
     
@@ -129,27 +107,34 @@ public class Entity {
             peutTourner = true;
         }
         
-        byte d1 = 0;
-        byte d2 = 0;
+        boolean d1 = false, d2 = false;
         
         if(direction == Direction.Gauche || direction == Direction.Droite){
-            d1 = 1;
+            d1 = false;
         } else if(direction == Direction.Haut || direction == Direction.Bas){
-            d1 = 2;
+            d1 = true;
         }
         if(directionCourente == Direction.Gauche || directionCourente == Direction.Droite){
-            d2 = 1;
+            d2 = false;
         } else if(directionCourente == Direction.Haut || directionCourente == Direction.Bas){
-            d2 = 2;
+            d2 = true;
         }
         boolean entreBorne = false;
         
         if(d1 == d2){
             entreBorne = true;
-        } else if(d1 == 1 && d2 == 2){
-            entreBorne = ((y + vitesse) % 1 < vitesse)||((y - vitesse) % 1 > (1-vitesse))||(int)y == y;
-        } else if(d1 == 2 && d2 == 1){
-            entreBorne = ((x + vitesse) % 1 < vitesse)||((x - vitesse) % 1 > (1-vitesse))||(int)x == x;
+        } else if(d1 && !d2){
+            if(directionCourente == Direction.Gauche){
+                entreBorne = ((x - vitesse) % 1 > (1-vitesse)) || (int)x == x;
+            } else if(directionCourente == Direction.Droite){
+                entreBorne = ((x + vitesse) % 1 < vitesse) || (int)x == x;
+            }
+        } else if(!d1 && d2){
+            if(directionCourente == Direction.Haut){
+                entreBorne = ((y - vitesse) % 1 > (1-vitesse)) || (int)y == y;
+            } else if(directionCourente == Direction.Bas){
+                entreBorne = ((y + vitesse) % 1 < vitesse) || (int)y == y;
+            }
         }
         
         return peutTourner && entreBorne;
@@ -165,6 +150,7 @@ public class Entity {
                     x -= vitesse;
                     stop = false;
                 } else {
+                    x = Math.round(x);
                     stop = true;
                 }
                 break;
@@ -173,6 +159,7 @@ public class Entity {
                     y -= vitesse;
                     stop = false;
                 } else {
+                    y = Math.round(y);
                     stop = true;
                 }
                 break;
@@ -181,6 +168,7 @@ public class Entity {
                     x += vitesse;
                     stop = false;
                 } else {
+                    x = Math.round(x);
                     stop = true;
                 }
                 break;
@@ -189,6 +177,7 @@ public class Entity {
                     y += vitesse;
                     stop = false;
                 } else {
+                    y = Math.round(y);
                     stop = true;
                 }
                 break;
@@ -199,6 +188,11 @@ public class Entity {
             x = Panel.getMap().getMapWidth() + 1;
         } else if(x >= Panel.getMap().getMapWidth() + 2){
             x = -1;
+        }
+        if(y <= -2){
+            y = Panel.getMap().getMapHeight()+ 1;
+        } else if(y >= Panel.getMap().getMapHeight() + 2){
+            y = -1;
         }
     }
     

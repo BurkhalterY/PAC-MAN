@@ -12,7 +12,7 @@ package pacman;
 public class Inky extends Ghost{
     
     public Inky(float x, float y, float vitesse, int xScatter, int yScatter) {
-        super(x, y, vitesse, xScatter, yScatter, "inky", 1, 8, 2);
+        super(x, y, vitesse, xScatter, yScatter, "inky", 2);
     }
     
     public void setCible(){
@@ -31,6 +31,7 @@ public class Inky extends Ghost{
                 xPacman += 2;
                 break;
             case Haut:
+                xPacman -= 2;
                 yPacman -= 2;
                 break;
             case Bas:
@@ -41,7 +42,6 @@ public class Inky extends Ghost{
         }
         
         cible = new Tile(xPacman - (xBlinky - xPacman), yPacman - (yBlinky - yPacman), 0);
-        System.out.println(cible.getX()+"\t"+cible.getY());
     }
     
     public boolean peutSortir(){
