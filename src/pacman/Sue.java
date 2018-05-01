@@ -60,4 +60,11 @@ public class Sue extends Ghost{
         setCible();
     }
     
+    public boolean peutSortir(){
+        boolean sortir = false;
+        if(Panel.getMap().getNbBulletMangees() > Panel.getMap().getNbBulletTotal()/3){
+            sortir = true;
+        }
+        return sortir;
+    }
 }

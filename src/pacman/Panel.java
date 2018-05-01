@@ -119,7 +119,7 @@ public class Panel extends JPanel{
             playersTab[i].afficher(g, this.getWidth(), this.getHeight());
         }
         for(int i = 0; i < ghostsTab.length; i++){
-            ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
+            //ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
         }/*
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficherTuile(g, this.getWidth(), this.getHeight());

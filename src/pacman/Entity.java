@@ -197,15 +197,19 @@ public class Entity {
     }
     
     public void setNewDirection(Direction direction){
-        if(direction != null && x >= 0 && x < Panel.getMap().getMapWidth()-1){
+        if(direction != null){
             switch (direction) {
                 case Gauche: case Droite:
-                    y = Math.round(y);
-                    directionCourente = directionSuivante;
+                    if(Math.round(y) >= 0 && Math.round(y) < Panel.getMap().getMapHeight()-1){
+                        y = Math.round(y);
+                        directionCourente = directionSuivante;
+                    }
                     break;
                 case Haut: case Bas:
-                    x = Math.round(x);
-                    directionCourente = directionSuivante;
+                    if(Math.round(x) >= 0 && Math.round(x) < Panel.getMap().getMapWidth()-1){
+                        x = Math.round(x);
+                        directionCourente = directionSuivante;
+                    }
                     break;
                 default:
                     break;
