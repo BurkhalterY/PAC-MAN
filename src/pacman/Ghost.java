@@ -63,6 +63,11 @@ public class Ghost extends Entity{
             spriteSheet = ImageIO.read(new File("res/textures_pack/"+Texture.getTextureFolder()+"/peur.png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                spriteSheet = ImageIO.read(new File("res/textures_pack/original/peur.png"));
+            } catch (IOException ex1) {
+                Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
         
         int rows = Texture.getGhosts_rows();
@@ -79,6 +84,11 @@ public class Ghost extends Entity{
             cibles = ImageIO.read(new File("res/textures_pack/"+Texture.getTextureFolder()+"/cibles.png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                spriteSheet = ImageIO.read(new File("res/textures_pack/original/cibles.png"));
+            } catch (IOException ex1) {
+                Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
         cibleImg = cibles.getSubimage(numero*8, 0, 8, 8);
     }

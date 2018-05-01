@@ -49,6 +49,11 @@ public class Entity {
             spriteSheet = ImageIO.read(new File("res/textures_pack/"+Texture.getTextureFolder()+"/"+pictureFile+".png"));
         } catch (IOException ex) {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
+            try {
+                spriteSheet = ImageIO.read(new File("res/textures_pack/original/"+pictureFile+".png"));
+            } catch (IOException ex1) {
+                Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex1);
+            }
         }
         
         spriteWidth = spriteSheet.getWidth()/columns;
