@@ -44,7 +44,7 @@ public class Frame extends JFrame{
         Sound.initSound("original");
         menu.selectionMenu();
         this.setTitle("PAC-MAN");
-        this.setSize(600, 800);
+        this.setSize(500, 600);
         //this.setSize(Panel.getMap().getMapWidth()*16+16, Panel.getMap().getMapHeight()*16+38);
         //this.setSize(this.getToolkit().getScreenSize());
         //this.setUndecorated(true);
@@ -131,7 +131,7 @@ public class Frame extends JFrame{
         pause = false;
         Texture.initTexture(menu.getTexturePack());
         pan = new Panel();
-        pan.init(menu.getMap(), menu.getTileset());
+        pan.init(menu.getMap(), menu.getTileset(), 1, menu.getListFantomes());
         pan.addKeyListener(clav);
         content.add(pan, "pan");
         pauseLong += System.currentTimeMillis() - pauseStart;

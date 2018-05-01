@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -39,6 +40,12 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     private JComboBox choixMap;
     private JLabel labelTileset = new JLabel("Tileset :");
     private JComboBox choixTileset;
+    
+    private JLabel labelFantome1 = new JLabel("Fantôme 1:");
+    private JLabel labelFantome2 = new JLabel("Fantôme 2:");
+    private JLabel labelFantome3 = new JLabel("Fantôme 3:");
+    private JLabel labelFantome4 = new JLabel("Fantôme 4:");
+    private JComboBox[] choixFantome = new JComboBox[4];
     
     //1
     private JButton btnReprendre;
@@ -71,6 +78,12 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         }
         choixTileset = new JComboBox(listTileset);
         
+        
+        for(int i = 0; i < choixFantome.length; i++){
+            choixFantome[i] = new JComboBox(new String[]{"Blinky", "Pinky", "Inky", "Clyde"});
+            choixFantome[i].setSelectedIndex(i);
+        }
+        
         try {
             logo = ImageIO.read(new File("res/logo.png"));
         } catch (IOException ex) {
@@ -87,6 +100,13 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         this.add(choixMap);
         this.add(labelTileset);
         this.add(choixTileset);
+        this.add(labelFantome1);
+        this.add(labelFantome2);
+        this.add(labelFantome3);
+        this.add(labelFantome4);
+        for(int i = 0; i < choixFantome.length; i++){
+            this.add(choixFantome[i]);
+        }
         this.setLayout(null);
     }
     
@@ -145,6 +165,22 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         labelTileset.setForeground(Color.white);
         labelTileset.setBounds(this.getWidth()-this.getWidth()/3, (int) ((this.getHeight()-25)/1.5f), this.getWidth()/3, 25);
         choixTileset.setBounds(this.getWidth()-this.getWidth()/3, (int) ((this.getHeight()-25)/1.5f)+25, this.getWidth()/3, 25);
+        
+        labelFantome1.setForeground(Color.red);
+        labelFantome1.setBounds(0, this.getHeight()-50, this.getWidth()/4, 25);
+        
+        labelFantome2.setForeground(Color.pink);
+        labelFantome2.setBounds(this.getWidth()/4, this.getHeight()-50, this.getWidth()/4, 25);
+        
+        labelFantome3.setForeground(Color.cyan);
+        labelFantome3.setBounds(this.getWidth()/4*2, this.getHeight()-50, this.getWidth()/4, 25);
+        
+        labelFantome4.setForeground(Color.orange);
+        labelFantome4.setBounds(this.getWidth()/4*3, this.getHeight()-50, this.getWidth()/4, 25);
+        
+        for(int i = 0; i < choixFantome.length; i++){
+            choixFantome[i].setBounds(this.getWidth()/4*i, this.getHeight()-25, this.getWidth()/4, 25);
+        }
     }
     
     public void drawPauseMenu(){
@@ -178,5 +214,13 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     
     public String getTileset(){
         return choixTileset.getSelectedItem().toString();
+    }
+    
+    public String[] getListFantomes(){
+        String[] listFantomes = new String[choixFantome.length];
+        for (int i = 0; i < listFantomes.length; i++){
+            listFantomes[i] = choixFantome[i].getSelectedItem().toString();
+        }
+        return listFantomes;
     }
 }
