@@ -167,9 +167,9 @@ public class Ghost extends Entity{
             float vitesseMode = vitesseDefaut;
             
             if(etat == Etat.Scatter){
-                cible = new Tile(xScatter, yScatter, 0);
+                setCibleScatter();
             } else if(etat == Etat.Peur){
-                cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY(), 0);
+                setCiblePeur();
                 vitesseMode = 0.05f*Math.round((((vitesseDefaut+facteurVitesse)*(2f/3f))+0.025f)/0.05f)-0.15f;
             } else if(etat == Etat.Normal){
                 setCible();
@@ -205,7 +205,7 @@ public class Ghost extends Entity{
                     etat = Etat.Retour;
                     dejaManger = true;
                 } else if(etat == Etat.Normal || etat == Etat.Scatter){
-                    Panel.setRun(false);
+                    //Frame.start();
                 }
             }
         }
@@ -339,8 +339,12 @@ public class Ghost extends Entity{
         cible = new Tile(0, 0, 0);
     }
     
-    public void setCiblePeur(int xPacman, int yPacman){
-        cible = new Tile(xPacman, yPacman, 0);
+    public void setCibleScatter(){
+        cible = new Tile(xScatter, yScatter, 0);
+    }
+    
+    public void setCiblePeur(){
+        cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY(), 0);
     }
     
     public boolean touchePacman(){
@@ -443,6 +447,7 @@ public class Ghost extends Entity{
             y-=vitesse;
             directionCourente = Direction.Haut;
         } else {
+            y = Math.round(y);
             enTrainDeSortir = false;
             basAttente = false;
             if(etat == Etat.AttenteBleu){

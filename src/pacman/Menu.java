@@ -80,7 +80,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         
         
         for(int i = 0; i < choixFantome.length; i++){
-            choixFantome[i] = new JComboBox(new String[]{"Blinky", "Pinky", "Inky", "Clyde"});
+            choixFantome[i] = new JComboBox(new String[]{"Blinky", "Pinky", "Inky", "Clyde", "Sue"});
             choixFantome[i].setSelectedIndex(i);
         }
         
