@@ -7,6 +7,8 @@ package pacman;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.lang.reflect.Constructor;
 import javax.swing.JPanel;
 
@@ -14,7 +16,7 @@ import javax.swing.JPanel;
  *
  * @author BuYa
  */
-public class Panel extends JPanel{
+public class Panel extends JPanel implements MouseListener{
     
     private static Map map;
     private static Player playersTab[];
@@ -119,7 +121,7 @@ public class Panel extends JPanel{
             playersTab[i].afficher(g, this.getWidth(), this.getHeight());
         }
         for(int i = 0; i < ghostsTab.length; i++){
-            //ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
+            ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
         }/*
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficherTuile(g, this.getWidth(), this.getHeight());
@@ -142,5 +144,34 @@ public class Panel extends JPanel{
     
     public static Map getMap(){
         return map;
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+        for (int i = 0; i < ghostsTab.length; i++){
+            if(ghostsTab[i].getClass().getName().equals("pacman.Bouton")){
+                ((Bouton)ghostsTab[i]).verifSouris(me.getX(), me.getY(), this.getWidth(), this.getHeight());
+            }
+        }
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
+        Sound.stopElevator();
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
+        
     }
 }

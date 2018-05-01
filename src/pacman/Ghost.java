@@ -71,7 +71,7 @@ public class Ghost extends Entity{
         }
         for(int i = 0; i < Texture.getGhosts_columns(); i++) {
             for(int j = 0; j < rows; j++) {
-                sprites[(j * Texture.getGhosts_columns()) + i + prov.length] = spriteSheet.getSubimage(i * 16, j * 16, 16, 16);
+                sprites[(j * Texture.getGhosts_columns()) + i + prov.length] = spriteSheet.getSubimage(i * spriteWidth, j * spriteHeight, spriteWidth, spriteHeight);
             }
         }
         

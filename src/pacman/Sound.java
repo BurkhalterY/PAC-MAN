@@ -29,6 +29,8 @@ public class Sound {
     private static AudioClip intermission;
     private static AudioClip siren;
     
+    private static AudioClip elevator;
+    
     public static void initSound(String path){
         URL url = null;
         try {
@@ -102,6 +104,14 @@ public class Sound {
         }
         
         siren = Applet.newAudioClip(url);
+        
+        try {
+            url = new File("res/sounds/"+path+"/elevator.wav").toURI().toURL();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Sound.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        elevator = Applet.newAudioClip(url);
     }
     
     public static void playBeginning(){
@@ -165,4 +175,12 @@ public class Sound {
         siren.stop();
     }
 
+    
+    public static void loopElevator(){
+        elevator.loop();
+    }
+    
+    public static void stopElevator(){
+        elevator.stop();
+    }
 }

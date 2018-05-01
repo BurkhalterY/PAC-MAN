@@ -138,4 +138,8 @@ public class Frame extends JFrame{
         t = new Thread(new Menu());
         t.start();
     }
+    
+    public static void setPanMouseListener(){
+        pan.addMouseListener(pan);
+    }
 }

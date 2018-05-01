@@ -34,6 +34,7 @@ public class Entity {
     protected BufferedImage[] sprites;
     protected boolean stop;
     protected static float facteurVitesse = 0.155f;
+    protected int spriteWidth, spriteHeight;
     
     public Entity(float x, float y, float vitesse, String pictureFile, int rows, int columns){
         this.x = x;
@@ -50,9 +51,12 @@ public class Entity {
             Logger.getLogger(Entity.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        spriteWidth = spriteSheet.getWidth()/columns;
+        spriteHeight = spriteSheet.getHeight()/rows;
+        
         for(int i = 0; i < columns; i++) {
             for(int j = 0; j < rows; j++) {
-                sprites[(j * columns) + i] = spriteSheet.getSubimage(i * 16, j * 16, 16, 16);
+                sprites[(j * columns) + i] = spriteSheet.getSubimage(i * spriteWidth, j * spriteHeight, spriteWidth, spriteHeight);
             }
         }
     }
@@ -248,7 +252,7 @@ public class Entity {
         AffineTransform transformation = new AffineTransform();
         
         transformation.translate((x-0.5)*size, (y-0.5)*size);
-        transformation.scale(size/8, size/8);
+        transformation.scale(size/(spriteWidth/2), size/(spriteHeight/2));
         g2d.drawImage(sprites[idSprite], transformation, null);
     }
     
