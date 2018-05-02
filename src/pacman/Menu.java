@@ -58,7 +58,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
             listTexturePack[i] = filesTexturePack[i].getName();
         }
         choixTexturePack = new JComboBox(listTexturePack);
-        
+        choixTexturePack.setSelectedItem("original");
 
         File repMap = new File("res/maps");
         File[] filesMap = repMap.listFiles();
@@ -67,7 +67,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
             listMap[i] = filesMap[i].getName();
         }
         choixMap = new JComboBox(listMap);
-        
+        choixMap.setSelectedItem("original");
         
         File repTileset = new File("res/tileset");
         File[] filesTileset = repTileset.listFiles();
@@ -76,10 +76,10 @@ public class Menu extends JPanel implements ActionListener, Runnable{
             listTileset[i] = filesTileset[i].getName();
         }
         choixTileset = new JComboBox(listTileset);
-        
+        choixTileset.setSelectedItem("original.png");
         
         for(int i = 0; i < choixFantome.length; i++){
-            choixFantome[i] = new JComboBox(new String[]{"Blinky", "Pinky", "Inky", "Clyde", "Sue", "Bouton"});
+            choixFantome[i] = new JComboBox(new String[]{"Blinky", "Pinky", "Inky", "Clyde", "Sue", "Snake", "Bouton"});
             choixFantome[i].setSelectedIndex(i);
         }
         

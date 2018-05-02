@@ -221,6 +221,10 @@ public class Ghost extends Entity{
         }
     }
     
+    public void avancerEntity(){
+        super.avancer();
+    }
+    
     public Direction[] setDirectionsPreferees(){
         Direction directionsPreferees[] = new Direction[4];
         
