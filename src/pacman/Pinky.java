@@ -38,7 +38,7 @@ public class Pinky extends Ghost{
                 break;
         }
         
-        cible = new Tile(xPacman, yPacman, 0);
+        cible = new Tile(xPacman, yPacman);
     }
     
     public boolean peutSortir(){

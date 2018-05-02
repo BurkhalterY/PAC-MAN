@@ -53,7 +53,7 @@ public class Sue extends Ghost{
                 break;
         }
         
-        cible = new Tile(xSue, ySue, 0);
+        cible = new Tile(xSue, ySue);
     }
     
     public void setCibleScatter(){

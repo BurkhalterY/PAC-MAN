@@ -143,7 +143,7 @@ public class Snake extends Ghost{
     }
     
     public void setCible(){
-        cible = new Tile(apple.getX(), apple.getY(), 0);
+        cible = new Tile(apple.getX(), apple.getY());
     }
     
     public boolean peutSortir(){
@@ -165,8 +165,14 @@ public class Snake extends Ghost{
         
         Graphics2D g2d = (Graphics2D)g;
         
+        AffineTransform transformation = new AffineTransform();
+        
+        transformation.translate((apple.getX()-0.5)*size, (apple.getY()-0.5)*size);
+        transformation.scale(size/(spriteWidth/2), size/(spriteHeight/2));
+        g2d.drawImage(pomme, transformation, null);
+        
         for(int i = longueur; i >= 0; i--){
-            AffineTransform transformation = new AffineTransform();
+            transformation = new AffineTransform();
         
             transformation.translate((blocsSerpent[i].getX()-0.5)*size, (blocsSerpent[i].getY()-0.5)*size);
             transformation.scale(size/(spriteWidth/2), size/(spriteHeight/2));
@@ -176,11 +182,6 @@ public class Snake extends Ghost{
                 g2d.drawImage(queue, transformation, null);
             }
         }
-        AffineTransform transformation = new AffineTransform();
-        
-        transformation.translate((apple.getX()-0.5)*size, (apple.getY()-0.5)*size);
-        transformation.scale(size/(spriteWidth/2), size/(spriteHeight/2));
-        g2d.drawImage(pomme, transformation, null);
         
     }
     

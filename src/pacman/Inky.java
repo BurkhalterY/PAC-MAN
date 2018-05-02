@@ -41,7 +41,7 @@ public class Inky extends Ghost{
                 break;
         }
         
-        cible = new Tile(xPacman - (xBlinky - xPacman), yPacman - (yBlinky - yPacman), 0);
+        cible = new Tile(xPacman - (xBlinky - xPacman), yPacman - (yBlinky - yPacman));
     }
     
     public boolean peutSortir(){

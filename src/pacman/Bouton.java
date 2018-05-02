@@ -17,7 +17,7 @@ public class Bouton extends Ghost{
     }
     
     public void setCible(){
-        cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY(), 0);
+        cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY());
     }
     
     public void verifSouris(int xMouse, int yMouse, int width, int height){

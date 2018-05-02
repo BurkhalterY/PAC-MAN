@@ -29,7 +29,7 @@ public class Ghost extends Entity{
         Retour,
         AttenteBleu;
     }
-    protected Tile cible = new Tile(-1, -1, 0);
+    protected Tile cible = new Tile(-1, -1);
     protected Etat etat;
     protected int xScatter, yScatter;
     protected boolean basAttente, enTrainDeSortir, dejaManger;
@@ -350,15 +350,15 @@ public class Ghost extends Entity{
     }
     
     public void setCible(){
-        cible = new Tile(0, 0, 0);
+        cible = new Tile(0, 0);
     }
     
     public void setCibleScatter(){
-        cible = new Tile(xScatter, yScatter, 0);
+        cible = new Tile(xScatter, yScatter);
     }
     
     public void setCiblePeur(){
-        cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY(), 0);
+        cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY());
     }
     
     public boolean touchePacman(){

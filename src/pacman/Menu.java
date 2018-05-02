@@ -48,7 +48,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     private JLabel labelFantome2 = new JLabel("Fantôme 2:");
     private JLabel labelFantome3 = new JLabel("Fantôme 3:");
     private JLabel labelFantome4 = new JLabel("Fantôme 4:");
-    private JComboBox[] choixFantome = new JComboBox[4000];
+    private JComboBox[] choixFantome = new JComboBox[4];
     
     //10
     private JButton btnReprendre;

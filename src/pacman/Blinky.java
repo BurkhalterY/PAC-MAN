@@ -16,7 +16,7 @@ public class Blinky extends Ghost{
     }
     
     public void setCible(){
-        cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY(), 0);
+        cible = new Tile(Panel.getPlayersTab()[0].getX(), Panel.getPlayersTab()[0].getY());
     }
     
 }

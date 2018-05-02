@@ -20,9 +20,9 @@ public class Clyde extends Ghost{
         int yPacman = Panel.getPlayersTab()[0].getY();
         
         if(Math.sqrt(Math.pow(x - xPacman, 2) + Math.pow(y - yPacman, 2)) > 8){
-            cible = new Tile(xPacman, yPacman, 0);
+            cible = new Tile(xPacman, yPacman);
         } else {
-            cible = new Tile(xScatter, yScatter, 0);
+            cible = new Tile(xScatter, yScatter);
         }
     }
     

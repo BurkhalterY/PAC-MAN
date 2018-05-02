@@ -5,6 +5,9 @@
  */
 package pacman;
 
+import java.awt.Color;
+import java.awt.image.BufferedImage;
+
 /**
  *
  * @author BuYa
@@ -15,6 +18,12 @@ public class Tile {
     private int y;
     private int type;
     private boolean solide;
+    private BufferedImage img;
+    
+    public Tile(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
     
     public Tile(int x, int y, int type){
         this.x = x;
@@ -25,8 +34,9 @@ public class Tile {
         } else {
             this.solide = true;
         }
+        this.img = img;
     }
-
+    
     /**
      * @return the x
      */
@@ -60,6 +70,20 @@ public class Tile {
      */
     public boolean isSolide() {
         return solide;
+    }
+
+    /**
+     * @return the img
+     */
+    public BufferedImage getImg() {
+        return img;
+    }
+
+    /**
+     * @param img the img to set
+     */
+    public void setImg(BufferedImage img) {
+        this.img = img;
     }
     
     
