@@ -51,7 +51,7 @@ public class Panel extends JPanel implements MouseListener{
             {
                 Class classe = Class.forName ("pacman."+listFantomes[i]);
                 Constructor c = classe.getConstructor (new Class [] {Float.TYPE, Float.TYPE, Float.TYPE, Integer.TYPE, Integer.TYPE});
-                ghostsTab[i] = (Ghost) c.newInstance (new Object [] {listArguments[i][0], listArguments[i][1], listArguments[i][2], (int)listArguments[i][3], (int)listArguments[i][4]});
+                ghostsTab[i] = (Ghost) c.newInstance (new Object [] {listArguments[i%4][0], listArguments[i%4][1], listArguments[i%4][2], (int)listArguments[i%4][3], (int)listArguments[i%4][4]});
             }
             catch (ClassNotFoundException e)
             {

@@ -48,7 +48,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     private JLabel labelFantome2 = new JLabel("Fantôme 2:");
     private JLabel labelFantome3 = new JLabel("Fantôme 3:");
     private JLabel labelFantome4 = new JLabel("Fantôme 4:");
-    private JComboBox[] choixFantome = new JComboBox[4];
+    private JComboBox[] choixFantome = new JComboBox[4000];
     
     //10
     private JButton btnReprendre;
@@ -94,9 +94,11 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         choixTileset = new JComboBox(listTileset);
         choixTileset.setSelectedItem("original.png");
         
+        String[] listFantomes = new String[]{"Blinky", "Pinky", "Inky", "Clyde", "Sue", "Snake", "Bouton"};
+        
         for(int i = 0; i < choixFantome.length; i++){
-            choixFantome[i] = new JComboBox(new String[]{"Blinky", "Pinky", "Inky", "Clyde", "Sue", "Snake", "Bouton"});
-            choixFantome[i].setSelectedIndex(i);
+            choixFantome[i] = new JComboBox(listFantomes);
+            choixFantome[i].setSelectedIndex(i%listFantomes.length);
         }
         
         try {
@@ -203,6 +205,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     
     public void drawPauseMenu(){
         btnReprendre.setBounds(this.getWidth()/3, (this.getHeight()-25)/2, this.getWidth()/3, 25);
+        btnQuit.setBounds(this.getWidth()/3, (this.getHeight()+50)/2, this.getWidth()/3, 25);
     }
 
     @Override
@@ -212,6 +215,8 @@ public class Menu extends JPanel implements ActionListener, Runnable{
             this.removeAll();
             pauseMenu();
             setIdMenu(10);
+        } else if(arg0.getSource() == btnQuit){
+            Frame.stop();
         } else if(arg0.getSource() == btnReprendre){
             Frame.setPause();
         }

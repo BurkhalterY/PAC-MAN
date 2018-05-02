@@ -148,6 +148,7 @@ public class Frame extends JFrame{
         startTime = System.currentTimeMillis();
         pauseStart = System.currentTimeMillis();
         ticksTotal = 0;
+        menu.repaint();
     }
     
     public static void setPanMouseListener(){

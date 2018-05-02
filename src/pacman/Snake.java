@@ -136,8 +136,8 @@ public class Snake extends Ghost{
         do{
             apple = new Queue((int)(Math.random() * Panel.getMap().getMapWidth()), (int)(Math.random() * Panel.getMap().getMapHeight()), 1);
             suite = (Panel.getMap().libreA(apple.getX(), apple.getY()))
-                && (apple.getX() < Ghost.getCage().getX()-3 || apple.getY() > Ghost.getCage().getY()+4)
-                && (apple.getY() < Ghost.getCage().getY() || apple.getY() > Ghost.getCage().getY()+5);
+                && !(apple.getX() > Ghost.getCage().getX()-3 && apple.getX() < Ghost.getCage().getX()+4
+                && apple.getY() > Ghost.getCage().getY() && apple.getY() < Ghost.getCage().getY()+5);
         } while (!suite);
         
     }
