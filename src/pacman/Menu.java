@@ -46,7 +46,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     private JLabel labelFantome4 = new JLabel("Fantôme 4:");
     private JComboBox[] choixFantome = new JComboBox[4];
     
-    //1
+    //10
     private JButton btnReprendre;
 
     public void selectionMenu(){ //0
@@ -192,7 +192,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
             Frame.start();
             this.removeAll();
             pauseMenu();
-            idMenu = 10;
+            setIdMenu(10);
         } else if(arg0.getSource() == btnReprendre){
             Frame.setPause();
         }
@@ -222,4 +222,13 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         }
         return listFantomes;
     }
+
+    /**
+     * @param idMenu the idMenu to set
+     */
+    public void setIdMenu(int idMenu) {
+        this.idMenu = idMenu;
+    }
+    
+    
 }

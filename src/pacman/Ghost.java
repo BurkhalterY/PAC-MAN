@@ -215,7 +215,7 @@ public class Ghost extends Entity{
                     etat = Etat.Retour;
                     dejaManger = true;
                 } else if(etat == Etat.Normal || etat == Etat.Scatter){
-                    //Frame.start();
+                    Frame.stop();
                 }
             }
         }

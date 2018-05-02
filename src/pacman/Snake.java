@@ -98,14 +98,9 @@ public class Snake extends Ghost{
             x = blocsSerpent[0].getX();
             y = blocsSerpent[0].getY();
 
-            /*if(touchePacman()){
-                if(etat == Etat.Peur || etat == Etat.AttenteBleu){
-                    etat = Etat.Retour;
-                    dejaManger = true;
-                } else if(etat == Etat.Normal || etat == Etat.Scatter){
-                    //Frame.start();
-                }
-            }*/
+            if(touchePacman()){
+                Frame.stop();
+            }
             
             if(blocsSerpent[0].getX() == apple.getX() && blocsSerpent[0].getY() == apple.getY()){
                 manger();
@@ -204,7 +199,7 @@ public class Snake extends Ghost{
     public boolean touchePacman(){
         boolean touche = false;
         
-        for(int i = 1; i <= longueur; i++){
+        for(int i = 0; i <= longueur; i++){
             if(blocsSerpent[i].getX() == Panel.getPlayersTab()[0].getX() && blocsSerpent[i].getY() == Panel.getPlayersTab()[0].getY()){
                 touche = true;
             }

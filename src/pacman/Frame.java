@@ -139,6 +139,17 @@ public class Frame extends JFrame{
         t.start();
     }
     
+    public static void stop() {
+        pause = true;
+        menu.removeAll();
+        menu.selectionMenu();
+        menu.setIdMenu(0);
+        pauseLong = 0;
+        startTime = System.currentTimeMillis();
+        pauseStart = System.currentTimeMillis();
+        ticksTotal = 0;
+    }
+    
     public static void setPanMouseListener(){
         pan.addMouseListener(pan);
     }
