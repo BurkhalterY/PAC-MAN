@@ -6,8 +6,11 @@
 package pacman;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.AffineTransform;
@@ -30,6 +33,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     
     private int idMenu = 0;
     private BufferedImage logo;
+    private Font pac_font;
     
     //0
     private JButton btnPlay;
@@ -48,6 +52,18 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     
     //10
     private JButton btnReprendre;
+    private JButton btnQuit;
+    
+    public Menu(){
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("res/PAC-FONT.ttf")));
+        } catch (FontFormatException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public void selectionMenu(){ //0
 
@@ -118,10 +134,13 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         }
 
         btnReprendre = new JButton("Reprendre");
+        btnQuit = new JButton("Quitter");
 
         btnReprendre.addActionListener(this);
+        btnQuit.addActionListener(this);
 
         this.add(btnReprendre);
+        this.add(btnQuit);
         this.setLayout(null);
     }
 
