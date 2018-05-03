@@ -6,6 +6,8 @@
 package pacman;
 
 import java.awt.CardLayout;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
@@ -35,6 +37,7 @@ public class Frame extends JFrame{
     private static long pauseLong = 0;
     
     private static Panel pan;
+    private static Editor editor;
     private static Menu menu = new Menu();
     private static CardLayout cl = new CardLayout();
     private static JPanel content = new JPanel();
@@ -149,6 +152,15 @@ public class Frame extends JFrame{
         pauseStart = System.currentTimeMillis();
         ticksTotal = 0;
         menu.repaint();
+    }
+    
+    public static void startLevelEditor() {
+        menu.removeAll();
+        editor = new Editor();
+        editor.init(20, 30);
+        editor.addMouseMotionListener(editor);
+        content.add(editor, "editor");
+        cl.show(content, "editor");
     }
     
     public static void setPanMouseListener(){

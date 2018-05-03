@@ -16,7 +16,6 @@ public class Tile {
     
     private int x;
     private int y;
-    private int type;
     private boolean solide;
     private BufferedImage img;
     
@@ -28,7 +27,6 @@ public class Tile {
     public Tile(int x, int y, int type){
         this.x = x;
         this.y = y;
-        this.type = type;
         if(type == 10 || type == 45 || type == 46 || type == 47){
             this.solide = false;
         } else {
@@ -52,24 +50,17 @@ public class Tile {
     }
 
     /**
-     * @return the type
-     */
-    public int getType() {
-        return type;
-    }
-
-    /**
-     * @param type the type to set
-     */
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    /**
      * @return the solide
      */
     public boolean isSolide() {
         return solide;
+    }
+    
+    /**
+     * @param solide the solide to set
+     */
+    public void setSolide(boolean solide) {
+        this.solide = solide;
     }
 
     /**
@@ -85,6 +76,6 @@ public class Tile {
     public void setImg(BufferedImage img) {
         this.img = img;
     }
-    
+
     
 }

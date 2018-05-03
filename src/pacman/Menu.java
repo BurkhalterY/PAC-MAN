@@ -50,6 +50,8 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     private JLabel labelFantome4 = new JLabel("Fantôme 4:");
     private JComboBox[] choixFantome = new JComboBox[4];
     
+    private JButton btnLevelEditor;
+    
     //10
     private JButton btnReprendre;
     private JButton btnQuit;
@@ -110,7 +112,11 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         btnPlay = new JButton("1 Player");
         btnPlay.addActionListener(this);
         
+        btnLevelEditor = new JButton("Editor");
+        btnLevelEditor.addActionListener(this);
+        
         this.add(btnPlay);
+        this.add(btnLevelEditor);
         this.add(labelTexturePack);
         this.add(choixTexturePack);
         this.add(labelMap);
@@ -201,6 +207,8 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         for(int i = 0; i < choixFantome.length; i++){
             choixFantome[i].setBounds(this.getWidth()/4*i, this.getHeight()-25, this.getWidth()/4, 25);
         }
+        
+        btnLevelEditor.setBounds(this.getWidth()-100, 0, 100, 25);
     }
     
     public void drawPauseMenu(){
@@ -215,6 +223,8 @@ public class Menu extends JPanel implements ActionListener, Runnable{
             this.removeAll();
             pauseMenu();
             setIdMenu(10);
+        } else if(arg0.getSource() == btnLevelEditor){
+            Frame.startLevelEditor();
         } else if(arg0.getSource() == btnQuit){
             Frame.stop();
         } else if(arg0.getSource() == btnReprendre){
