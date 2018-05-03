@@ -9,7 +9,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -18,9 +20,12 @@ import javax.swing.JPanel;
 public class Editor extends JPanel implements MouseMotionListener{
     
     private static Map map;
+    private JComboBox selectionTile = new JComboBox(new String[]{"Passage", "Mur simple", "Mur double"});
     
-    public static void init(int mapWidth, int mapHeight){
+    public Editor(int mapWidth, int mapHeight){
         map = new Map(mapWidth, mapHeight);
+        this.addMouseMotionListener(this);
+        this.add(selectionTile);
     }
     
     public void paintComponent(Graphics g){
@@ -44,7 +49,12 @@ public class Editor extends JPanel implements MouseMotionListener{
 
         int x = me.getX()/size;
         int y = me.getY()/size;
-        map.setTile(x, y, true);
+        
+        if(SwingUtilities.isLeftMouseButton(me)){
+            map.setTile(x, y, 0);
+        } else {
+            map.setTile(x, y, 1);
+        }
         this.repaint();
     }
 

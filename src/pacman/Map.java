@@ -127,7 +127,7 @@ public class Map {
         
         for(int x = 0; x < this.getMapWidth(); x++){
             for(int y = 0; y < this.getMapHeight(); y++){
-                if(!libreA(x, y)){
+                if(solideA(x, y)){
                     map[x][y].setImg(tiles[tileIndex(x, y)]);
                 }
             }
@@ -161,7 +161,7 @@ public class Map {
         
         for(int x = 0; x < mapWidth; x++){
             for(int y = 0; y < mapHeight; y++){
-                map[x][y] = new Tile(x, y, 10);
+                map[x][y] = new Tile(x, y, 1);
                 map[x][y].setImg(tiles[0]);
             }
         }
@@ -169,15 +169,15 @@ public class Map {
     
     public int tileIndex(int x, int y){
         
-        int north_tile = !libreA(x, y-1) ? 1 : 0;
-        int south_tile = !libreA(x, y+1) ? 1 : 0;
-        int west_tile = !libreA(x-1, y) ? 1 : 0;
-        int east_tile = !libreA(x+1, y) ? 1 : 0;
+        int north_tile = solideA(x, y-1) ? 1 : 0;
+        int south_tile = solideA(x, y+1) ? 1 : 0;
+        int west_tile = solideA(x-1, y) ? 1 : 0;
+        int east_tile = solideA(x+1, y) ? 1 : 0;
         
-        int north_west_tile = !libreA(x-1, y-1) && west_tile == 1 && north_tile == 1 ? 1 : 0;
-        int north_east_tile = !libreA(x+1,y-1) && north_tile == 1 && east_tile == 1 ? 1 : 0;
-        int south_west_tile = !libreA(x-1,y+1) && south_tile == 1 && west_tile == 1 ? 1 : 0;
-        int south_east_tile = !libreA(x+1,y+1) && south_tile == 1 && east_tile == 1 ? 1 : 0;
+        int north_west_tile = solideA(x-1, y-1) && west_tile == 1 && north_tile == 1 ? 1 : 0;
+        int north_east_tile = solideA(x+1,y-1) && north_tile == 1 && east_tile == 1 ? 1 : 0;
+        int south_west_tile = solideA(x-1,y+1) && south_tile == 1 && west_tile == 1 ? 1 : 0;
+        int south_east_tile = solideA(x+1,y+1) && south_tile == 1 && east_tile == 1 ? 1 : 0;
 
         int index = north_west_tile + 2*north_tile + 4*north_east_tile + 8*west_tile + 16*east_tile + 32*south_west_tile + 64*south_tile + 128*south_east_tile;
         
@@ -203,6 +203,36 @@ public class Map {
         
         return libre;
     }
+    
+    public boolean solideA(int x, int y){
+        boolean libre = false;
+        
+        if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
+            if(map[x][y].isSolide()){
+                libre = true;
+            }
+        } else {
+            libre = true;
+        }
+        
+        return libre;
+    }
+    
+    public boolean dansLaMap(int x, int y){
+        return x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
+    }
+    /*
+    public boolean enDehors(int x, int y){
+        boolean libre = true;
+        
+        if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
+            if(map[x][y].getType() == 2){
+                libre = false;
+            }
+        }
+        
+        return libre;
+    }*/
     
     public int mangerGraine(int x, int y){
         int type = 0;
@@ -286,13 +316,18 @@ public class Map {
         return nbBulletTotal-nbBulletRestantes;
     }
     
-    public void setTile(int x, int y, boolean solide){
+    public void setTile(int x, int y, int type){
         if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
-            map[x][y].setSolide(solide);
+            map[x][y].setType(type);
+            
             for(int i = x-1; i <= x+1; i++){
                 for(int j = y-1; j <= y+1 ; j++){
-                    if(!libreA(i, j)){
-                        map[i][j].setImg(tiles[tileIndex(i, j)]);
+                    if(dansLaMap(i, j)){
+                        if(map[i][j].getType() == 0){
+                            map[i][j].setImg(tiles[tileIndex(i, j)]);
+                        } else {
+                            map[i][j].setImg(tiles[0]);
+                        }
                     }
                 }
             }
