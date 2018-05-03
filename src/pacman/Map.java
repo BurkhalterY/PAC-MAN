@@ -27,7 +27,7 @@ public class Map {
     private Tile map[][];
     private int mapSp[][];
     private BufferedImage tileset;
-    private BufferedImage tiles[] = new BufferedImage[7*8];
+    private BufferedImage tiles[] = new BufferedImage[8*8];
     private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0, tileWidth, tileHeight;
     
     public Map(String mapFolder, String tilesetPicture){
@@ -39,10 +39,10 @@ public class Map {
         }
 
         tileWidth = tileset.getWidth()/8;
-        tileHeight = tileset.getHeight()/7;
+        tileHeight = tileset.getHeight()/8;
 
         int tilesID = 0;
-        for(int y = 0; y < 7; y++){
+        for(int y = 0; y < 8; y++){
             for(int x = 0; x < 8; x++){
                 tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
                 tilesID++;
@@ -144,10 +144,10 @@ public class Map {
         }
 
         tileWidth = tileset.getWidth()/8;
-        tileHeight = tileset.getHeight()/7;
+        tileHeight = tileset.getHeight()/8;
 
         int tilesID = 0;
-        for(int y = 0; y < 7; y++){
+        for(int y = 0; y < 8; y++){
             for(int x = 0; x < 8; x++){
                 tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
                 tilesID++;
@@ -374,27 +374,41 @@ public class Map {
                             }
                             //----------------------0
                             if(index == 33){
-                                if(isType2(i-1, j-1)){
-                                    index = 48;
+                                if(isType2(i-1, j)){
+                                    if(isType2(i, j-1)){
+                                        index = 48;
+                                    } else if(!solideA(i+1, j+1)){
+                                        index = 56;
+                                    }
                                 }
                             }
                             if(index == 41){
-                                if(isType2(i+1, j-1)){
-                                    index = 50;
+                                if(isType2(i+1, j)){
+                                    if(isType2(i, j-1)){
+                                        index = 50;
+                                    } else if(!solideA(i-1, j+1)){
+                                        index = 57;
+                                    }
                                 }
                             }
                             if(index == 44){
-                                if(isType2(i-1, j+1)){
-                                    index = 53;
+                                if(isType2(i-1, j)){
+                                    if(isType2(i, j+1)){
+                                        index = 53;
+                                    } else if(!solideA(i+1, j-1)){
+                                        index = 58;
+                                    }
                                 }
                             }
                             if(index == 45){
-                                if(isType2(i+1, j+1)){
-                                    index = 55;
+                                if(isType2(i+1, j)){
+                                    if(isType2(i, j+1)){
+                                        index = 55;
+                                    } else if(!solideA(i-1, j-1)){
+                                       index = 59;
+                                    }
                                 }
-                            }
-                            //----------------------0
-                            
+                            }                      
                             
                             map[i][j].setImg(tiles[index]);
                             

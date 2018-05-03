@@ -141,7 +141,7 @@ public class Frame extends JFrame{
     }
     
     public static void stop() {
-        pause = true;
+        /*pause = true;
         menu.removeAll();
         menu.selectionMenu();
         menu.setIdMenu(0);
@@ -149,7 +149,7 @@ public class Frame extends JFrame{
         startTime = System.currentTimeMillis();
         pauseStart = System.currentTimeMillis();
         ticksTotal = 0;
-        menu.repaint();
+        menu.repaint();*/
     }
     
     public static void startLevelEditor() {
