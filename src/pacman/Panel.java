@@ -116,7 +116,7 @@ public class Panel extends JPanel implements MouseListener{
         g.setColor(Color.black);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         
-        map.afficher(g, this.getWidth(), this.getHeight());
+        map.afficher(g, this.getWidth(), this.getHeight(), false);
         for(int i = 0; i < playersTab.length; i++){
             playersTab[i].afficher(g, this.getWidth(), this.getHeight());
         }

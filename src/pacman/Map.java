@@ -27,7 +27,7 @@ public class Map {
     private Tile map[][];
     private int mapSp[][];
     private BufferedImage tileset;
-    private BufferedImage tiles[] = new BufferedImage[6*8];
+    private BufferedImage tiles[] = new BufferedImage[7*8];
     private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0, tileWidth, tileHeight;
     
     public Map(String mapFolder, String tilesetPicture){
@@ -39,10 +39,10 @@ public class Map {
         }
 
         tileWidth = tileset.getWidth()/8;
-        tileHeight = tileset.getHeight()/6;
+        tileHeight = tileset.getHeight()/7;
 
         int tilesID = 0;
-        for(int y = 0; y < 6; y++){
+        for(int y = 0; y < 7; y++){
             for(int x = 0; x < 8; x++){
                 tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
                 tilesID++;
@@ -127,9 +127,7 @@ public class Map {
         
         for(int x = 0; x < this.getMapWidth(); x++){
             for(int y = 0; y < this.getMapHeight(); y++){
-                if(solideA(x, y)){
-                    map[x][y].setImg(tiles[tileIndex(x, y)]);
-                }
+                setTile(x, y, map[x][y].getType());
             }
         }
     }
@@ -146,10 +144,10 @@ public class Map {
         }
 
         tileWidth = tileset.getWidth()/8;
-        tileHeight = tileset.getHeight()/6;
+        tileHeight = tileset.getHeight()/7;
 
         int tilesID = 0;
-        for(int y = 0; y < 6; y++){
+        for(int y = 0; y < 7; y++){
             for(int x = 0; x < 8; x++){
                 tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
                 tilesID++;
@@ -218,6 +216,21 @@ public class Map {
         return libre;
     }
     
+    public boolean isType2(int x, int y){
+        boolean libre = false;
+        
+        if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
+            if(map[x][y].getType() == 2){
+                libre = true;
+            }
+        } else {
+            libre = true;
+        }
+        
+        return libre;
+    }
+
+    
     public boolean dansLaMap(int x, int y){
         return x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
     }
@@ -264,7 +277,7 @@ public class Map {
         return sp;
     }
     
-    public void afficher(Graphics g, int width, int height){
+    public void afficher(Graphics g, int width, int height, boolean quad){
         float size;
         if(width/mapWidth > height/mapHeight){
             size = (float)height/mapHeight;
@@ -280,6 +293,18 @@ public class Map {
                 transformation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
                 transformation.scale(size/this.tileWidth, size/this.tileHeight);
                 g2d.drawImage(map[x][y].getImg(), transformation, null);
+            }
+        }
+        
+        if(quad){
+            
+            g.setColor(Color.white);
+            for(int i = 0; i <= mapWidth; i++){
+                g.drawLine((int)(size*i), 0, (int)(size*i), (int)(size*mapHeight));
+            }
+
+            for(int i = 0; i <= mapHeight; i++){
+                g.drawLine(0, (int)(size*i), (int)(size*mapWidth), (int)(size*i));
             }
         }
     }
@@ -324,7 +349,55 @@ public class Map {
                 for(int j = y-1; j <= y+1 ; j++){
                     if(dansLaMap(i, j)){
                         if(map[i][j].getType() == 0){
-                            map[i][j].setImg(tiles[tileIndex(i, j)]);
+        
+                            int index = tileIndex(i, j);
+                            
+                            if(index == 28){
+                                if(isType2(i-1, j)){
+                                    index = 51;
+                                }
+                            }
+                            if(index == 36){
+                                if(isType2(i+1, j)){
+                                    index = 52;
+                                }
+                            }
+                            if(index == 12){
+                                if(isType2(i, j-1)){
+                                    index = 49;
+                                }
+                            }
+                            if(index == 42){
+                                if(isType2(i, j+1)){
+                                    index = 54;
+                                }
+                            }
+                            //----------------------0
+                            if(index == 33){
+                                if(isType2(i-1, j-1)){
+                                    index = 48;
+                                }
+                            }
+                            if(index == 41){
+                                if(isType2(i+1, j-1)){
+                                    index = 50;
+                                }
+                            }
+                            if(index == 44){
+                                if(isType2(i-1, j+1)){
+                                    index = 53;
+                                }
+                            }
+                            if(index == 45){
+                                if(isType2(i+1, j+1)){
+                                    index = 55;
+                                }
+                            }
+                            //----------------------0
+                            
+                            
+                            map[i][j].setImg(tiles[index]);
+                            
                         } else {
                             map[i][j].setImg(tiles[0]);
                         }
@@ -333,4 +406,19 @@ public class Map {
             }
         }
     }
+    
+    /**
+     * @return the tileWidth
+     */
+    public int getTileWidth() {
+        return tileWidth;
+    }
+
+    /**
+     * @return the tileHeight
+     */
+    public int getTileHeight() {
+        return tileHeight;
+    }
+    
 }
