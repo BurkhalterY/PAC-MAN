@@ -127,23 +127,24 @@ public class Map {
         
         for(int x = 0; x < this.getMapWidth(); x++){
             for(int y = 0; y < this.getMapHeight(); y++){
-                System.out.println(tileIndex(x, y));
-                map[x][y].setImg(tiles[tileIndex(x, y)]);
+                if(!libreA(x, y)){
+                    map[x][y].setImg(tiles[tileIndex(x, y)]);
+                }
             }
         }
     }
     
     public int tileIndex(int x, int y){
         
-        int north_tile = libreA(x, y-1) ? 1 : 0;
-        int south_tile = libreA(x, y+1) ? 1 : 0;
-        int west_tile = libreA(x-1, y) ? 1 : 0;
-        int east_tile = libreA(x+1, y) ? 1 : 0;
+        int north_tile = !libreA(x, y-1) ? 1 : 0;
+        int south_tile = !libreA(x, y+1) ? 1 : 0;
+        int west_tile = !libreA(x-1, y) ? 1 : 0;
+        int east_tile = !libreA(x+1, y) ? 1 : 0;
         
-        int north_west_tile = libreA(x-1, y-1) && west_tile == 1 && north_tile == 1 ? 1 : 0;
-        int north_east_tile = libreA(x+1,y-1) && north_tile == 1 && east_tile == 1 ? 1 : 0;
-        int south_west_tile = libreA(x-1,y+1) && south_tile == 1 && west_tile == 1 ? 1 : 0;
-        int south_east_tile = libreA(x+1,y+1) && south_tile == 1 && east_tile == 1 ? 1 : 0;
+        int north_west_tile = !libreA(x-1, y-1) && west_tile == 1 && north_tile == 1 ? 1 : 0;
+        int north_east_tile = !libreA(x+1,y-1) && north_tile == 1 && east_tile == 1 ? 1 : 0;
+        int south_west_tile = !libreA(x-1,y+1) && south_tile == 1 && west_tile == 1 ? 1 : 0;
+        int south_east_tile = !libreA(x+1,y+1) && south_tile == 1 && east_tile == 1 ? 1 : 0;
 
         int index = north_west_tile + 2*north_tile + 4*north_east_tile + 8*west_tile + 16*east_tile + 32*south_west_tile + 64*south_tile + 128*south_east_tile;
         
