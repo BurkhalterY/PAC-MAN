@@ -154,7 +154,7 @@ public class Frame extends JFrame{
     
     public static void startLevelEditor() {
         menu.removeAll();
-        editor = new Editor(30, 30);
+        editor = new Editor();
         content.add(editor, "editor");
         cl.show(content, "editor");
     }

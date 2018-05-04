@@ -191,7 +191,7 @@ public class Ghost extends Entity{
                 }
             }
             
-            if(Panel.getMap().effet(Math.round(x), Math.round(y)) == 3){
+            if(Panel.getMap().effet(Math.round(x), Math.round(y)) == 2){
                 vitesseMode = 0.05f*Math.round((((vitesseDefaut+facteurVitesse)*(2f/3f))+0.025f)/0.05f)-0.25f;
             }
             
@@ -307,7 +307,7 @@ public class Ghost extends Entity{
         Direction directionsPossibles[] = new Direction[4];
         
         int i = 0;
-        if(collision(Direction.Haut) && directionCourente != Direction.Bas && Panel.getMap().effet(Math.round(x), Math.round(y)) != 4){
+        if(collision(Direction.Haut) && directionCourente != Direction.Bas && Panel.getMap().effet(Math.round(x), Math.round(y)) != 3){
             directionsPossibles[i] = Direction.Haut;
             i++;
         }

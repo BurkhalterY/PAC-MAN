@@ -94,7 +94,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
             listTileset[i] = filesTileset[i].getName();
         }
         choixTileset = new JComboBox(listTileset);
-        choixTileset.setSelectedItem("tileset.png");
+        choixTileset.setSelectedItem("original");
         
         String[] listFantomes = new String[]{"Blinky", "Pinky", "Inky", "Clyde", "Sue", "Snake", "Bouton"};
         

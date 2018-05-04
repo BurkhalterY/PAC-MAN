@@ -32,14 +32,18 @@ public class Map {
     private BufferedImage bulletset;
     private int bulletsetRows = 1, bulletsetColumns = 4;
     private BufferedImage bullets[] = new BufferedImage[bulletsetColumns*bulletsetRows];
+    private BufferedImage effetset;
+    private int effetsetRows = 1, effetsetColumns = 4;
+    private BufferedImage effets[] = new BufferedImage[effetsetColumns*effetsetRows];
     private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0, tileWidth, tileHeight;
-    private int cageX = -8, cageY = -5;
+    private int cageX = -8, cageY = -5, spawnX = 0, spawnY = 0;
     
     public Map(String mapFolder, String tilesetPicture){
         
         try {
-            tileset = ImageIO.read(new File("res/tileset/"+tilesetPicture));
-            bulletset = ImageIO.read(new File("res/tileset/bullets.png"));
+            tileset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/tileset.png"));
+            bulletset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/bullets.png"));
+            effetset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/effets.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -58,6 +62,13 @@ public class Map {
         for(int y = 0; y < bulletsetRows; y++){
             for(int x = 0; x < bulletsetColumns; x++){
                 bullets[tilesID] = bulletset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                tilesID++;
+            }
+        }
+        tilesID = 0;
+        for(int y = 0; y < effetsetRows; y++){
+            for(int x = 0; x < effetsetColumns; x++){
+                effets[tilesID] = effetset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
                 tilesID++;
             }
         }
@@ -111,16 +122,16 @@ public class Map {
                         if(map[x][y].getType() == 3 && cageX < 0 && cageY < 0){
                             cageX = x;
                             cageY = y;
+                            Ghost.setCage(new Tile(x+3, y-1));
                         }
-                        /*if(map[x][y].getType() == 45 || map[x][y].getType() == 47){
+                        if(map[x][y].getType() >= 4){
                             nbBulletTotal++;
-                        }*/
+                        }
                         mapSp[x][y] = Integer.parseInt(tableLigne2[x]);
+                        
                         if(mapSp[x][y] == 1){
                             Player.setSpawn(new Tile(x, y));
                             
-                        } else if(mapSp[x][y] == 2){
-                            Ghost.setCage(new Tile(x, y-1));
                         }
                     }
                     y++;
@@ -155,8 +166,9 @@ public class Map {
         this.mapHeight = mapHeight;
         
         try {
-            tileset = ImageIO.read(new File("res/tileset/tileset.png"));
-            bulletset = ImageIO.read(new File("res/tileset/bullets.png"));
+            tileset = ImageIO.read(new File("res/tileset/original/tileset.png"));
+            bulletset = ImageIO.read(new File("res/tileset/original/bullets.png"));
+            effetset = ImageIO.read(new File("res/tileset/original/effets.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -178,6 +190,13 @@ public class Map {
                 tilesID++;
             }
         }
+        tilesID = 0;
+        for(int y = 0; y < effetsetRows; y++){
+            for(int x = 0; x < effetsetColumns; x++){
+                effets[tilesID] = effetset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                tilesID++;
+            }
+        }
         
         map = new Tile[mapWidth][mapHeight];
         mapSp = new int[mapWidth][mapHeight];
@@ -186,6 +205,7 @@ public class Map {
             for(int y = 0; y < mapHeight; y++){
                 map[x][y] = new Tile(x, y, 1);
                 map[x][y].setImg(tiles[0]);
+                mapSp[x][y] = 0;
             }
         }
     }
@@ -273,36 +293,22 @@ public class Map {
     public boolean dansLaMap(int x, int y){
         return x >= 0 && x < mapWidth && y >= 0 && y < mapHeight;
     }
-    /*
-    public boolean enDehors(int x, int y){
-        boolean libre = true;
-        
-        if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
-            if(map[x][y].getType() == 2){
-                libre = false;
-            }
-        }
-        
-        return libre;
-    }*/
     
     public int mangerGraine(int x, int y){
         int type = 0;
         
-        /*if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
-            if(map[x][y].getType() == 45){
-                map[x][y].setType(10);
-                map[x][y].setImg(tiles[10]);
+        if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
+            if(map[x][y].getType() == 4){
+                setTile(x, y, 1);
                 nbBulletRestantes--;
                 type = 1;
             }
-            if(map[x][y].getType() == 47){
-                map[x][y].setType(10);
-                map[x][y].setImg(tiles[10]);
+            if(map[x][y].getType() == 5){
+                setTile(x, y, 1);
                 nbBulletRestantes--;
                 type = 3;
             }
-        }*/
+        }
         
         return type;
     }
@@ -341,13 +347,22 @@ public class Map {
         
         if(quad){
             
-            g.setColor(Color.white);
+            g2d.setColor(Color.white);
             for(int i = 0; i <= mapWidth; i++){
-                g.drawLine((int)(size*i), 0, (int)(size*i), (int)(size*mapHeight));
+                g2d.drawLine((int)(size*i), 0, (int)(size*i), (int)(size*mapHeight));
             }
 
             for(int i = 0; i <= mapHeight; i++){
-                g.drawLine(0, (int)(size*i), (int)(size*mapWidth), (int)(size*i));
+                g2d.drawLine(0, (int)(size*i), (int)(size*mapWidth), (int)(size*i));
+            }
+            
+            for(int y=0; y < mapHeight; y++){
+                for(int x=0; x < mapWidth; x++){
+                    AffineTransform transformation = new AffineTransform();
+                    transformation.translate(x*size, y*size);
+                    transformation.scale(size/tileWidth, size/tileHeight);
+                    g2d.drawImage(effets[mapSp[x][y]], transformation, null);
+                }
             }
         }
     }
@@ -386,6 +401,9 @@ public class Map {
     
     public void setTile(int x, int y, int type){
         if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
+            if(map[x][y].getType() == 0 || map[x][y].getType() == 2 || map[x][y].getType() == 3){
+                mapSp[x][y] = 0;
+            }
             if(map[x][y].getType() != 3){
                 map[x][y].setType(type);
                 if(type == 3){
@@ -508,6 +526,17 @@ public class Map {
         }
     }
     
+    public void setSp(int x, int y, int type){
+        if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight && libreA(x, y)){
+            if(type == 1){
+                mapSp[spawnX][spawnY] = 0;
+                spawnX = x;
+                spawnY = y;
+            }
+            mapSp[x][y] = type;
+        }
+    }
+    
     /**
      * @return the tileWidth
      */
@@ -527,5 +556,40 @@ public class Map {
      */
     public Tile[][] getMap() {
         return map;
+    }
+    
+    /**
+     * @return the mapSp
+     */
+    public int[][] getMapSp() {
+        return mapSp;
+    }
+    
+    public void setNewSize(int newWidth, int newHeight){
+        if(newWidth > 0 && newHeight > 0){
+            Tile newMap[][] = new Tile[newWidth][newHeight];
+            int newMapSp[][] = new int[newWidth][newHeight];
+
+            for(int i = 0; i < newWidth; i++){
+                for(int j = 0; j < newHeight; j++){
+                    if(dansLaMap(i, j)){
+                        newMap[i][j] = new Tile(i, j, map[i][j].getType());
+                        newMapSp[i][j] = mapSp[i][j];
+                    } else {
+                        newMap[i][j] = new Tile(i, j, 1);
+                        newMapSp[i][j] = 0;
+                    }
+                }
+            }
+            map = newMap;
+            mapSp = newMapSp;
+            mapWidth = newWidth;
+            mapHeight = newHeight;
+            for(int x = 0; x < this.getMapWidth(); x++){
+                for(int y = 0; y < this.getMapHeight(); y++){
+                    setTile(x, y, map[x][y].getType());
+                }
+            }
+        }
     }
 }
