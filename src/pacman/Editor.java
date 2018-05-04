@@ -10,11 +10,15 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -23,52 +27,149 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author BuYa
  */
-public class Editor extends JPanel implements ActionListener, MouseMotionListener{
+public class Editor extends JPanel implements ActionListener, MouseListener, MouseMotionListener{
     
     private static Map map;
     private JButton btnOpenFile = new JButton("Ouvrir un fichier");
     private JButton btnSaveFile = new JButton("Sauvegarder");
-    private JFileChooser fc = new JFileChooser("res/maps");;
+    private JFileChooser fc = new JFileChooser("res/maps");
+    private JCheckBox checkExt = new JCheckBox("Extérieure");
+    private JButton btnGhostsHouse = new JButton("Maison fantômes", new ImageIcon("res/iconGhostHouse.png"));
+    
+    private int tileType = 0, tileX = 0, tileY = 0, margeRight = 300;
+    private float size = 0;
     
     public Editor(int mapWidth, int mapHeight){
         map = new Map(mapWidth, mapHeight);
         fc.setAcceptAllFileFilterUsed(false);
         FileFilter filter = new FileNameExtensionFilter("*.txt", "txt");
         fc.addChoosableFileFilter(filter);
+        this.addMouseListener(this);
         this.addMouseMotionListener(this);
+        
+        btnGhostsHouse.setVerticalTextPosition(SwingConstants.BOTTOM); 
+        btnGhostsHouse.setHorizontalTextPosition(SwingConstants.CENTER); 
+        
         btnOpenFile.addActionListener(this);
         btnSaveFile.addActionListener(this);
+        checkExt.addActionListener(this);
+        btnGhostsHouse.addActionListener(this);
         this.add(btnOpenFile);
         this.add(btnSaveFile);
+        this.add(checkExt);
+        this.add(btnGhostsHouse);
     }
     
     public void paintComponent(Graphics g){
         g.setColor(Color.black);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         
-        map.afficher(g, this.getWidth(), this.getHeight(), true);
+        btnOpenFile.setBounds(this.getWidth()-margeRight+(margeRight/4), 20, margeRight/2, 25);
+        btnSaveFile.setBounds(this.getWidth()-margeRight+(margeRight/4), 50, margeRight/2, 25);
+        checkExt.setBounds(this.getWidth()-margeRight+(margeRight/4), 80, margeRight/2, 25);
+        btnGhostsHouse.setBounds(this.getWidth()-margeRight+(margeRight/4), 110, margeRight/2, 100);
+        
+        map.afficher(g, this.getWidth()-margeRight, this.getHeight(), true);
+        
+        g.setColor(new Color(255, 0, 0, 128));
+        g.fillRect((int)(tileX*size), (int)(tileY*size), (int)(size), (int)(size));
+        
+        if(tileType == 3){
+            if(tileX+8 > map.getMapWidth() || tileY+5 > map.getMapHeight()){
+                g.setColor(new Color(255, 0, 0, 128));
+                g.fillRect((int)(tileX*size), (int)(tileY*size), (int)(size*8), (int)(size*5));
+            } else {
+                g.setColor(new Color(0, 0, 255, 128));
+                g.fillRect((int)(tileX*size), (int)(tileY*size), (int)(size*8), (int)(size*5));
+            }
+        }
+        
+    }
+    
+    
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        int mapWidth = map.getMapWidth();
+        int mapHeight = map.getMapHeight();
+
+        if((this.getWidth()-margeRight)/mapWidth > this.getHeight()/mapHeight){
+            size = (float)this.getHeight()/mapHeight;
+        } else {
+            size = (float)(this.getWidth()-margeRight)/mapWidth;
+        }
+
+        tileX = (int)(me.getX()/size);
+        tileY = (int)(me.getY()/size);
+        
+        if(SwingUtilities.isLeftMouseButton(me)){
+            if(tileType == 3){
+                if(tileX+8 <= map.getMapWidth() && tileY+5 <= map.getMapHeight()){
+                    map.setTile(tileX, tileY, tileType);
+                }
+                tileType = 0;
+            } else {
+                map.setTile(tileX, tileY, tileType);
+            }      
+        } else if(SwingUtilities.isRightMouseButton(me)) {
+            map.setTile(tileX, tileY, 1);
+            if(tileType == 3){
+                tileType = 0;
+            }
+        } else if(SwingUtilities.isMiddleMouseButton(me)) {
+            tileType = map.getMap()[tileX][tileY].getType();
+        }
+        this.repaint();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+        
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
+        
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+        
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
         
     }
 
     @Override
     public void mouseDragged(MouseEvent me) {
-        float size;
+        
         int mapWidth = map.getMapWidth();
         int mapHeight = map.getMapHeight();
 
-        if(this.getWidth()/mapWidth > this.getHeight()/mapHeight){
+        if((this.getWidth()-margeRight)/mapWidth > this.getHeight()/mapHeight){
             size = (float)this.getHeight()/mapHeight;
         } else {
-            size = (float)this.getWidth()/mapWidth;
+            size = (float)(this.getWidth()-margeRight)/mapWidth;
         }
 
-        int x = (int)(me.getX()/size);
-        int y = (int)(me.getY()/size);
+        tileX = (int)(me.getX()/size);
+        tileY = (int)(me.getY()/size);
         
         if(SwingUtilities.isLeftMouseButton(me)){
-            map.setTile(x, y, 0);
-        } else {
-            map.setTile(x, y, 1);
+            if(tileType == 3){
+                if(tileX+8 <= map.getMapWidth() && tileY+5 <= map.getMapHeight()){
+                    map.setTile(tileX, tileY, tileType);
+                }
+                tileType = 0;
+            } else {
+                map.setTile(tileX, tileY, tileType);
+            }
+        } else if(SwingUtilities.isRightMouseButton(me)) {
+            map.setTile(tileX, tileY, 1);
+            if(tileType == 3){
+                tileType = 0;
+            }
         }
         this.repaint();
     }
@@ -76,6 +177,18 @@ public class Editor extends JPanel implements ActionListener, MouseMotionListene
     @Override
     public void mouseMoved(MouseEvent me) {
         
+        int mapWidth = map.getMapWidth();
+        int mapHeight = map.getMapHeight();
+
+        if((this.getWidth()-margeRight)/mapWidth > this.getHeight()/mapHeight){
+            size = (float)this.getHeight()/mapHeight;
+        } else {
+            size = (float)(this.getWidth()-margeRight)/mapWidth;
+        }
+
+        tileX = (int)(me.getX()/size);
+        tileY = (int)(me.getY()/size);
+        this.repaint();
     }
 
     @Override
@@ -90,6 +203,15 @@ public class Editor extends JPanel implements ActionListener, MouseMotionListene
             }
         } else if(arg0.getSource() == btnSaveFile){
             
+        } else if(arg0.getSource() == checkExt){
+            if(tileType == 0){
+                tileType = 2;
+            } else if(tileType == 2){
+                tileType = 0;
+            }
+            
+        } else if(arg0.getSource() == btnGhostsHouse){
+            tileType = 3;
         }
     }
     

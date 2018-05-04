@@ -27,8 +27,9 @@ public class Map {
     private Tile map[][];
     private int mapSp[][];
     private BufferedImage tileset;
-    private BufferedImage tiles[] = new BufferedImage[8*8];
+    private BufferedImage tiles[] = new BufferedImage[8*9];
     private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0, tileWidth, tileHeight;
+    private int cageX = -8, cageY = -5;
     
     public Map(String mapFolder, String tilesetPicture){
         
@@ -39,10 +40,10 @@ public class Map {
         }
 
         tileWidth = tileset.getWidth()/8;
-        tileHeight = tileset.getHeight()/8;
+        tileHeight = tileset.getHeight()/9;
 
         int tilesID = 0;
-        for(int y = 0; y < 8; y++){
+        for(int y = 0; y < 9; y++){
             for(int x = 0; x < 8; x++){
                 tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
                 tilesID++;
@@ -95,6 +96,10 @@ public class Map {
                     
                     for(int x = 0; x < mapWidth; x++){
                         map[x][y] = new Tile(x, y, Integer.parseInt(tableLigne1[x]));
+                        if(map[x][y].getType() == 3 && cageX < 0 && cageY < 0){
+                            cageX = x;
+                            cageY = y;
+                        }
                         /*if(map[x][y].getType() == 45 || map[x][y].getType() == 47){
                             nbBulletTotal++;
                         }*/
@@ -144,10 +149,10 @@ public class Map {
         }
 
         tileWidth = tileset.getWidth()/8;
-        tileHeight = tileset.getHeight()/8;
+        tileHeight = tileset.getHeight()/9;
 
         int tilesID = 0;
-        for(int y = 0; y < 8; y++){
+        for(int y = 0; y < 9; y++){
             for(int x = 0; x < 8; x++){
                 tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
                 tilesID++;
@@ -290,9 +295,13 @@ public class Map {
         for(int y=0; y < mapHeight; y++){
             for(int x=0; x < mapWidth; x++){
                 AffineTransform transformation = new AffineTransform();
-                transformation.translate(map[x][y].getX()*size, map[x][y].getY()*size);
-                transformation.scale(size/this.tileWidth, size/this.tileHeight);
+                transformation.translate(x*size, y*size);
+                transformation.scale(size/tileWidth, size/tileHeight);
                 g2d.drawImage(map[x][y].getImg(), transformation, null);
+                if(map[x][y].getType() == 2 && quad){
+                    g2d.setColor(new Color(96, 96, 96, 128));
+                    g2d.fillRect((int)(x*size), (int)(y*size), (int)(size), (int)(size));
+                }
             }
         }
         
@@ -343,78 +352,122 @@ public class Map {
     
     public void setTile(int x, int y, int type){
         if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
-            map[x][y].setType(type);
-            
-            for(int i = x-1; i <= x+1; i++){
-                for(int j = y-1; j <= y+1 ; j++){
-                    if(dansLaMap(i, j)){
-                        if(map[i][j].getType() == 0){
-        
-                            int index = tileIndex(i, j);
-                            
-                            if(index == 28){
-                                if(isType2(i-1, j)){
-                                    index = 51;
-                                }
+            if(map[x][y].getType() != 3){
+                map[x][y].setType(type);
+                if(type == 3){
+                    for(int j = cageY; j < cageY+5; j++){
+                        for(int i = cageX; i < cageX+8; i++){
+                            if(dansLaMap(i, j)){
+                                map[i][j].setType(0);
                             }
-                            if(index == 36){
-                                if(isType2(i+1, j)){
-                                    index = 52;
-                                }
-                            }
-                            if(index == 12){
-                                if(isType2(i, j-1)){
-                                    index = 49;
-                                }
-                            }
-                            if(index == 42){
-                                if(isType2(i, j+1)){
-                                    index = 54;
-                                }
-                            }
-                            //----------------------0
-                            if(index == 33){
-                                if(isType2(i-1, j)){
-                                    if(isType2(i, j-1)){
-                                        index = 48;
-                                    } else if(!solideA(i+1, j+1)){
-                                        index = 56;
-                                    }
-                                }
-                            }
-                            if(index == 41){
-                                if(isType2(i+1, j)){
-                                    if(isType2(i, j-1)){
-                                        index = 50;
-                                    } else if(!solideA(i-1, j+1)){
-                                        index = 57;
-                                    }
-                                }
-                            }
-                            if(index == 44){
-                                if(isType2(i-1, j)){
-                                    if(isType2(i, j+1)){
-                                        index = 53;
-                                    } else if(!solideA(i+1, j-1)){
-                                        index = 58;
-                                    }
-                                }
-                            }
-                            if(index == 45){
-                                if(isType2(i+1, j)){
-                                    if(isType2(i, j+1)){
-                                        index = 55;
-                                    } else if(!solideA(i-1, j-1)){
-                                       index = 59;
-                                    }
-                                }
-                            }                      
-                            
-                            map[i][j].setImg(tiles[index]);
-                            
-                        } else {
-                            map[i][j].setImg(tiles[0]);
                         }
+                    }
+                    cageX = x;
+                    cageY = y;
+                    for(int i = 0; i < this.getMapWidth(); i++){
+                        for(int j = 0; j < this.getMapHeight(); j++){
+                            setTile(i, j, map[i][j].getType());
+                        }
+                    }
+                } else {
+                    for(int i = x-1; i <= x+1; i++){
+                        for(int j = y-1; j <= y+1 ; j++){
+                            if(dansLaMap(i, j)){
+                                if(map[i][j].getType() == 0){
+
+                                    int index = tileIndex(i, j);
+
+                                    if(index == 28){
+                                        if(isType2(i-1, j)){
+                                            index = 51;
+                                        }
+                                    }
+                                    if(index == 36){
+                                        if(isType2(i+1, j)){
+                                            index = 52;
+                                        }
+                                    }
+                                    if(index == 12){
+                                        if(isType2(i, j-1)){
+                                            index = 49;
+                                        }
+                                    }
+                                    if(index == 42){
+                                        if(isType2(i, j+1)){
+                                            index = 54;
+                                        }
+                                    }
+                                    //----------------------0
+                                    if(index == 33){
+                                        if(isType2(i-1, j)){
+                                            if(isType2(i, j-1)){
+                                                index = 48;
+                                            } else if(!solideA(i+1, j+1)){
+                                                index = 56;
+                                            }
+                                        } else if(isType2(i, j-1)){
+                                            index = 60;
+                                        }
+                                    }
+                                    if(index == 41){
+                                        if(isType2(i+1, j)){
+                                            if(isType2(i, j-1)){
+                                                index = 50;
+                                            } else if(!solideA(i-1, j+1)){
+                                                index = 57;
+                                            }
+                                        } else if(isType2(i, j-1)){
+                                            index = 61;
+                                        }
+                                    }
+                                    if(index == 44){
+                                        if(isType2(i-1, j)){
+                                            if(isType2(i, j+1)){
+                                                index = 53;
+                                            } else if(!solideA(i+1, j-1)){
+                                                index = 58;
+                                            }
+                                        } else if(isType2(i, j+1)){
+                                            index = 62;
+                                        }
+                                    }
+                                    if(index == 45){
+                                        if(isType2(i+1, j)){
+                                            if(isType2(i, j+1)){
+                                                index = 55;
+                                            } else if(!solideA(i-1, j-1)){
+                                               index = 59;
+                                            }
+                                        } else if(isType2(i, j+1)){
+                                            index = 63;
+                                        }
+                                    }                      
+
+                                    map[i][j].setImg(tiles[index]);
+
+                                } else {
+                                    map[i][j].setImg(tiles[0]);
+                                }
+                            }
+                        }
+                    }
+                }
+                int cageTiles[] = {
+                    64, 54, 69, 70, 70, 68, 54, 65,
+                    52,  0,  0,  0,  0,  0,  0, 51,
+                    52,  0,  0,  0,  0,  0,  0, 51,
+                    52,  0,  0,  0,  0,  0,  0, 51,
+                    67, 49, 49, 49, 49, 49, 49, 66
+                };
+                int indexCage = 0;
+
+                for(int j = cageY; j < cageY+5; j++){
+                    for(int i = cageX; i < cageX+8; i++){
+                        if(dansLaMap(i, j)){
+                            map[i][j].setType(3);
+                            map[i][j].setImg(tiles[cageTiles[indexCage]]);
+                        }
+                        indexCage++;
                     }
                 }
             }
@@ -435,4 +488,10 @@ public class Map {
         return tileHeight;
     }
     
+    /**
+     * @return the map
+     */
+    public Tile[][] getMap() {
+        return map;
+    }
 }
