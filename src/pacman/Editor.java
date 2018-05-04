@@ -12,7 +12,13 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import static java.lang.System.out;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -77,9 +83,9 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
         y += 30;
         btnSaveFile.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 25);
         y += 30;
-        btnExt.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 25);
-        y += 30;
         btnMur.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 25);
+        y += 30;
+        btnExt.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 25);
         y += 30;
         btnGhostsHouse.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 75);
         y += 80;
@@ -216,20 +222,31 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
             if (ret == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 map = new Map(file.getParentFile().getName(), "tileset.png");
-                System.out.println(file.getParentFile().getName());
                 this.repaint();
             }
         } else if(arg0.getSource() == btnSaveFile){
-            
+            int ret = fc.showSaveDialog(this);
+            if (ret == JFileChooser.APPROVE_OPTION) {
+                File file = fc.getSelectedFile();
+                try {
+                    FileWriter fstream = new FileWriter(file);
+                    BufferedWriter out = new BufferedWriter(fstream);
+                    for(int y = 0; y < map.getMapHeight(); y++){
+                        for(int x = 0; x < map.getMapWidth(); x++){
+                            out.write(map.getMap()[x][y].getType() + "\t");
+                        }
+                        out.write("\n");
+                    }
+                } catch (IOException ex) {
+                    Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    out.close();
+                }
+            }
         } else if(arg0.getSource() == btnMur){
             tileType = 0;
         } else if(arg0.getSource() == btnExt){
-            if(tileType == 0){
-                tileType = 2;
-            } else if(tileType == 2){
-                tileType = 0;
-            }
-            
+            tileType = 2;
         } else if(arg0.getSource() == btnGhostsHouse){
             tileType = 3;
         } else if(arg0.getSource() == btnBullets){
