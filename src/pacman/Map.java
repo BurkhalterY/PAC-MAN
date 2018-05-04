@@ -27,7 +27,11 @@ public class Map {
     private Tile map[][];
     private int mapSp[][];
     private BufferedImage tileset;
-    private BufferedImage tiles[] = new BufferedImage[8*9];
+    private int tilesetRows = 10, tilesetColumns = 8;
+    private BufferedImage tiles[] = new BufferedImage[tilesetColumns*tilesetRows];
+    private BufferedImage bulletset;
+    private int bulletsetRows = 1, bulletsetColumns = 4;
+    private BufferedImage bullets[] = new BufferedImage[bulletsetColumns*bulletsetRows];
     private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0, tileWidth, tileHeight;
     private int cageX = -8, cageY = -5;
     
@@ -39,13 +43,20 @@ public class Map {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        tileWidth = tileset.getWidth()/8;
-        tileHeight = tileset.getHeight()/9;
+        tileWidth = tileset.getWidth()/tilesetColumns;
+        tileHeight = tileset.getHeight()/tilesetRows;
 
         int tilesID = 0;
-        for(int y = 0; y < 9; y++){
-            for(int x = 0; x < 8; x++){
+        for(int y = 0; y < tilesetRows; y++){
+            for(int x = 0; x < tilesetColumns; x++){
                 tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                tilesID++;
+            }
+        }
+        tilesID = 0;
+        for(int y = 0; y < bulletsetRows; y++){
+            for(int x = 0; x < bulletsetColumns; x++){
+                bullets[tilesID] = bulletset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
                 tilesID++;
             }
         }
@@ -144,17 +155,25 @@ public class Map {
         
         try {
             tileset = ImageIO.read(new File("res/tileset/tileset.png"));
+            bulletset = ImageIO.read(new File("res/tileset/bullets.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        tileWidth = tileset.getWidth()/8;
-        tileHeight = tileset.getHeight()/9;
+        tileWidth = tileset.getWidth()/tilesetColumns;
+        tileHeight = tileset.getHeight()/tilesetRows;
 
         int tilesID = 0;
-        for(int y = 0; y < 9; y++){
-            for(int x = 0; x < 8; x++){
+        for(int y = 0; y < tilesetRows; y++){
+            for(int x = 0; x < tilesetColumns; x++){
                 tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                tilesID++;
+            }
+        }
+        tilesID = 0;
+        for(int y = 0; y < bulletsetRows; y++){
+            for(int x = 0; x < bulletsetColumns; x++){
+                bullets[tilesID] = bulletset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
                 tilesID++;
             }
         }
@@ -445,9 +464,13 @@ public class Map {
 
                                     map[i][j].setImg(tiles[index]);
 
-                                } else {
+                                } else if(map[i][j].getType() == 1 || map[i][j].getType() == 2){
                                     map[i][j].setImg(tiles[0]);
-                                }
+                                } else if(map[i][j].getType() == 4){
+                                    map[i][j].setImg(bullets[0]);
+                                } else if(map[i][j].getType() == 5){
+                                    map[i][j].setImg(bullets[2]);
+                                } 
                             }
                         }
                     }

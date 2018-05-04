@@ -15,7 +15,6 @@ import java.awt.event.MouseMotionListener;
 import java.io.File;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
@@ -33,8 +32,11 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
     private JButton btnOpenFile = new JButton("Ouvrir un fichier");
     private JButton btnSaveFile = new JButton("Sauvegarder");
     private JFileChooser fc = new JFileChooser("res/maps");
-    private JCheckBox checkExt = new JCheckBox("Extérieure");
+    private JButton btnMur = new JButton("Mur");
+    private JButton btnExt = new JButton("Extérieure");
     private JButton btnGhostsHouse = new JButton("Maison fantômes", new ImageIcon("res/iconGhostHouse.png"));
+    private JButton btnBullets = new JButton("Pac-Gomme");
+    private JButton btnSuperBullets = new JButton("Super Pac-Gomme");
     
     private int tileType = 0, tileX = 0, tileY = 0, margeRight = 300;
     private float size = 0;
@@ -52,22 +54,38 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
         
         btnOpenFile.addActionListener(this);
         btnSaveFile.addActionListener(this);
-        checkExt.addActionListener(this);
+        btnMur.addActionListener(this);
+        btnExt.addActionListener(this);
         btnGhostsHouse.addActionListener(this);
+        btnBullets.addActionListener(this);
+        btnSuperBullets.addActionListener(this);
         this.add(btnOpenFile);
         this.add(btnSaveFile);
-        this.add(checkExt);
+        this.add(btnMur);
+        this.add(btnExt);
         this.add(btnGhostsHouse);
+        this.add(btnBullets);
+        this.add(btnSuperBullets);
     }
     
     public void paintComponent(Graphics g){
         g.setColor(Color.black);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
         
-        btnOpenFile.setBounds(this.getWidth()-margeRight+(margeRight/4), 20, margeRight/2, 25);
-        btnSaveFile.setBounds(this.getWidth()-margeRight+(margeRight/4), 50, margeRight/2, 25);
-        checkExt.setBounds(this.getWidth()-margeRight+(margeRight/4), 80, margeRight/2, 25);
-        btnGhostsHouse.setBounds(this.getWidth()-margeRight+(margeRight/4), 110, margeRight/2, 100);
+        int y = 20;
+        btnOpenFile.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 25);
+        y += 30;
+        btnSaveFile.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 25);
+        y += 30;
+        btnExt.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 25);
+        y += 30;
+        btnMur.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 25);
+        y += 30;
+        btnGhostsHouse.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 75);
+        y += 80;
+        btnBullets.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 25);
+        y += 30;
+        btnSuperBullets.setBounds(this.getWidth()-margeRight+(margeRight/4), y, margeRight/2, 25);
         
         map.afficher(g, this.getWidth()-margeRight, this.getHeight(), true);
         
@@ -203,7 +221,7 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
             }
         } else if(arg0.getSource() == btnSaveFile){
             
-        } else if(arg0.getSource() == checkExt){
+        } else if(arg0.getSource() == btnExt){
             if(tileType == 0){
                 tileType = 2;
             } else if(tileType == 2){
@@ -212,6 +230,10 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
             
         } else if(arg0.getSource() == btnGhostsHouse){
             tileType = 3;
+        } else if(arg0.getSource() == btnBullets){
+            tileType = 4;
+        } else if(arg0.getSource() == btnSuperBullets){
+            tileType = 5;
         }
     }
     
