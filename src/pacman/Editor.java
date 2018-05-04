@@ -16,7 +16,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import static java.lang.System.out;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -227,20 +226,29 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
         } else if(arg0.getSource() == btnSaveFile){
             int ret = fc.showSaveDialog(this);
             if (ret == JFileChooser.APPROVE_OPTION) {
-                File file = fc.getSelectedFile();
+                FileWriter fstream = null;
                 try {
-                    FileWriter fstream = new FileWriter(file);
+                    File file = fc.getSelectedFile();
+                    fstream = new FileWriter(file);
                     BufferedWriter out = new BufferedWriter(fstream);
                     for(int y = 0; y < map.getMapHeight(); y++){
                         for(int x = 0; x < map.getMapWidth(); x++){
-                            out.write(map.getMap()[x][y].getType() + "\t");
+                            out.write(Integer.toString(map.getMap()[x][y].getType()));
+                            if(x+1 < map.getMapWidth()){
+                                out.write("\t");
+                            }
                         }
                         out.write("\n");
                     }
+                    out.close();
                 } catch (IOException ex) {
                     Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
                 } finally {
-                    out.close();
+                    try {
+                        fstream.close();
+                    } catch (IOException ex) {
+                        Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+                    }
                 }
             }
         } else if(arg0.getSource() == btnMur){

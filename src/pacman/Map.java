@@ -39,6 +39,7 @@ public class Map {
         
         try {
             tileset = ImageIO.read(new File("res/tileset/"+tilesetPicture));
+            bulletset = ImageIO.read(new File("res/tileset/bullets.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -191,15 +192,15 @@ public class Map {
     
     public int tileIndex(int x, int y){
         
-        int north_tile = solideA(x, y-1) ? 1 : 0;
-        int south_tile = solideA(x, y+1) ? 1 : 0;
-        int west_tile = solideA(x-1, y) ? 1 : 0;
-        int east_tile = solideA(x+1, y) ? 1 : 0;
+        int north_tile = isTypeN(x, y-1, 0, 2) ? 1 : 0;
+        int south_tile = isTypeN(x, y+1, 0, 2) ? 1 : 0;
+        int west_tile = isTypeN(x-1, y, 0, 2) ? 1 : 0;
+        int east_tile = isTypeN(x+1, y, 0, 2) ? 1 : 0;
         
-        int north_west_tile = solideA(x-1, y-1) && west_tile == 1 && north_tile == 1 ? 1 : 0;
-        int north_east_tile = solideA(x+1,y-1) && north_tile == 1 && east_tile == 1 ? 1 : 0;
-        int south_west_tile = solideA(x-1,y+1) && south_tile == 1 && west_tile == 1 ? 1 : 0;
-        int south_east_tile = solideA(x+1,y+1) && south_tile == 1 && east_tile == 1 ? 1 : 0;
+        int north_west_tile = isTypeN(x-1, y-1, 0, 2) && west_tile == 1 && north_tile == 1 ? 1 : 0;
+        int north_east_tile = isTypeN(x+1,y-1, 0, 2) && north_tile == 1 && east_tile == 1 ? 1 : 0;
+        int south_west_tile = isTypeN(x-1,y+1, 0, 2) && south_tile == 1 && west_tile == 1 ? 1 : 0;
+        int south_east_tile = isTypeN(x+1,y+1, 0, 2) && south_tile == 1 && east_tile == 1 ? 1 : 0;
 
         int index = north_west_tile + 2*north_tile + 4*north_east_tile + 8*west_tile + 16*east_tile + 32*south_west_tile + 64*south_tile + 128*south_east_tile;
         
@@ -240,11 +241,25 @@ public class Map {
         return libre;
     }
     
-    public boolean isType2(int x, int y){
+    public boolean isTypeN(int x, int y, int type){
         boolean libre = false;
         
         if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
-            if(map[x][y].getType() == 2){
+            if(map[x][y].getType() == type){
+                libre = true;
+            }
+        } else {
+            libre = true;
+        }
+        
+        return libre;
+    }
+    
+    public boolean isTypeN(int x, int y, int type, int type2){
+        boolean libre = false;
+        
+        if(x >= 0 && x < mapWidth && y >= 0 && y < mapHeight){
+            if(map[x][y].getType() == type || map[x][y].getType() == type2){
                 libre = true;
             }
         } else {
@@ -392,85 +407,81 @@ public class Map {
                     for(int i = x-1; i <= x+1; i++){
                         for(int j = y-1; j <= y+1 ; j++){
                             if(dansLaMap(i, j)){
-                                if(map[i][j].getType() == 0){
-
-                                    int index = tileIndex(i, j);
-
-                                    if(index == 28){
-                                        if(isType2(i-1, j)){
-                                            index = 51;
-                                        }
-                                    }
-                                    if(index == 36){
-                                        if(isType2(i+1, j)){
-                                            index = 52;
-                                        }
-                                    }
-                                    if(index == 12){
-                                        if(isType2(i, j-1)){
-                                            index = 49;
-                                        }
-                                    }
-                                    if(index == 42){
-                                        if(isType2(i, j+1)){
-                                            index = 54;
-                                        }
-                                    }
-                                    //----------------------0
-                                    if(index == 33){
-                                        if(isType2(i-1, j)){
-                                            if(isType2(i, j-1)){
-                                                index = 48;
-                                            } else if(!solideA(i+1, j+1)){
-                                                index = 56;
+                                switch (map[i][j].getType()) {
+                                    case 0:
+                                        int index = tileIndex(i, j);
+                                        if(index == 28){
+                                            if(isTypeN(i-1, j, 2)){
+                                                index = 51;
                                             }
-                                        } else if(isType2(i, j-1)){
-                                            index = 60;
-                                        }
-                                    }
-                                    if(index == 41){
-                                        if(isType2(i+1, j)){
-                                            if(isType2(i, j-1)){
-                                                index = 50;
-                                            } else if(!solideA(i-1, j+1)){
-                                                index = 57;
+                                        }   if(index == 36){
+                                            if(isTypeN(i+1, j, 2)){
+                                                index = 52;
                                             }
-                                        } else if(isType2(i, j-1)){
-                                            index = 61;
-                                        }
-                                    }
-                                    if(index == 44){
-                                        if(isType2(i-1, j)){
-                                            if(isType2(i, j+1)){
-                                                index = 53;
-                                            } else if(!solideA(i+1, j-1)){
-                                                index = 58;
+                                        }   if(index == 12){
+                                            if(isTypeN(i, j-1, 2)){
+                                                index = 49;
                                             }
-                                        } else if(isType2(i, j+1)){
-                                            index = 62;
-                                        }
-                                    }
-                                    if(index == 45){
-                                        if(isType2(i+1, j)){
-                                            if(isType2(i, j+1)){
-                                                index = 55;
-                                            } else if(!solideA(i-1, j-1)){
-                                               index = 59;
+                                        }   if(index == 42){
+                                            if(isTypeN(i, j+1, 2)){
+                                                index = 54;
                                             }
-                                        } else if(isType2(i, j+1)){
-                                            index = 63;
-                                        }
-                                    }                      
-
-                                    map[i][j].setImg(tiles[index]);
-
-                                } else if(map[i][j].getType() == 1 || map[i][j].getType() == 2){
-                                    map[i][j].setImg(tiles[0]);
-                                } else if(map[i][j].getType() == 4){
-                                    map[i][j].setImg(bullets[0]);
-                                } else if(map[i][j].getType() == 5){
-                                    map[i][j].setImg(bullets[2]);
-                                } 
+                                        }   //----------------------0
+                                        if(index == 33){
+                                            if(isTypeN(i-1, j, 2)){
+                                                if(isTypeN(i, j-1, 2)){
+                                                    index = 48;
+                                                } else if(!solideA(i+1, j+1)){
+                                                    index = 56;
+                                                }
+                                            } else if(isTypeN(i, j-1, 2)){
+                                                index = 60;
+                                            }
+                                        }   if(index == 41){
+                                            if(isTypeN(i+1, j, 2)){
+                                                if(isTypeN(i, j-1, 2)){
+                                                    index = 50;
+                                                } else if(!solideA(i-1, j+1)){
+                                                    index = 57;
+                                                }
+                                            } else if(isTypeN(i, j-1, 2)){
+                                                index = 61;
+                                            }
+                                        }   if(index == 44){
+                                            if(isTypeN(i-1, j, 2)){
+                                                if(isTypeN(i, j+1, 2)){
+                                                    index = 53; 
+                                                } else if(!solideA(i+1, j-1)){
+                                                    index = 58;
+                                                }
+                                            } else if(isTypeN(i, j+1, 2)){
+                                                index = 62;
+                                            }
+                                        }   if(index == 45){
+                                            if(isTypeN(i+1, j, 2)){
+                                                if(isTypeN(i, j+1, 2)){
+                                                    index = 55;
+                                                } else if(!solideA(i-1, j-1)){
+                                                    index = 59;
+                                                }
+                                            } else if(isTypeN(i, j+1, 2)){
+                                                index = 63;
+                                            }
+                                        }   map[i][j].setImg(tiles[index]);
+                                        break;
+                                    case 1:
+                                    case 2:
+                                        map[i][j].setImg(tiles[0]);
+                                        break;
+                                    case 4:
+                                        map[i][j].setImg(bullets[0]);
+                                        break;
+                                    case 5:
+                                        map[i][j].setImg(bullets[2]);
+                                        break;
+                                    default:
+                                        break;
+                                }
                             }
                         }
                     }
