@@ -221,6 +221,8 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
             }
         } else if(arg0.getSource() == btnSaveFile){
             
+        } else if(arg0.getSource() == btnMur){
+            tileType = 1;
         } else if(arg0.getSource() == btnExt){
             if(tileType == 0){
                 tileType = 2;
