@@ -85,7 +85,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
             listMap[i] = filesMap[i].getName();
         }
         choixMap = new JComboBox(listMap);
-        choixMap.setSelectedItem("original");
+        choixMap.setSelectedItem("Original");
         
         File repTileset = new File("res/tileset");
         File[] filesTileset = repTileset.listFiles();

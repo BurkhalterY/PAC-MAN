@@ -149,6 +149,7 @@ public class Frame extends JFrame{
         startTime = System.currentTimeMillis();
         pauseStart = System.currentTimeMillis();
         ticksTotal = 0;
+        Ghost.setScatter(true);
         menu.repaint();
     }
     

@@ -534,4 +534,12 @@ public class Ghost extends Entity{
     public static boolean isPeur() {
         return peur;
     }
+
+     /**
+     * @param aScatter the scatter to set
+     */
+    public static void setScatter(boolean aScatter) {
+        scatter = aScatter;
+    }
+    
 }
