@@ -60,7 +60,7 @@ public class Snake extends Ghost{
     }
     
     public void avancer(){
-        if(pz == 10){
+        if(pz >= 10){
             pz = 0;
             for(int i=longueur; i >= 0; i--){
                 blocsSerpent[i+1].setX(blocsSerpent[i].getX());

@@ -38,7 +38,7 @@ public class Ghost extends Entity{
     private static int phase;
     private static int phases[] = {7, 20, 7, 20, 5, 20, 5};
     private static long start = 0, pauseStart = 0, pauseDuree = 0, pausePrevu = 0;
-    private static Tile cage;
+    private static Tile cage = new Tile(-8, -5);
 
     public Ghost(float x, float y, float vitesse, int xScatter, int yScatter, String pictureFile, int numero) {
         super(x, y, vitesse, pictureFile, Texture.getGhosts_rows(), Texture.getGhosts_columns());

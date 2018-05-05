@@ -15,30 +15,50 @@ import pacman.Entity.Direction;
  */
 public class Clavier extends KeyAdapter{
     
-    private Direction direction;
+    private Direction direction, direction2;
 
     public Direction getDirection() {
         return direction;
     }
     
+    public Direction getDirection2() {
+        return direction2;
+    }
+    
     public void keyPressed(KeyEvent e) {
 
-        if(e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode()== KeyEvent.VK_A) {
+        if(e.getKeyCode() == KeyEvent.VK_LEFT) {
             direction = Direction.Gauche;
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode()== KeyEvent.VK_D) {
+        if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
             direction = Direction.Droite;
         } 
         
-        if(e.getKeyCode() == KeyEvent.VK_UP || e.getKeyCode()== KeyEvent.VK_W) {
+        if(e.getKeyCode() == KeyEvent.VK_UP) {
             direction = Direction.Haut;
         }
 
-        if(e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode()== KeyEvent.VK_S) {
+        if(e.getKeyCode() == KeyEvent.VK_DOWN) {
             direction = Direction.Bas;
         }
+        
+        if(e.getKeyCode()== KeyEvent.VK_A) {
+            Panel.getTetris().setDirection(Direction.Gauche);
+        }
 
+        if(e.getKeyCode()== KeyEvent.VK_D) {
+            Panel.getTetris().setDirection(Direction.Droite);
+        }
+
+        if(e.getKeyCode()== KeyEvent.VK_S) {
+            Panel.getTetris().setDirection(Direction.Bas);
+        }
+        
+        if(e.getKeyCode()== KeyEvent.VK_SPACE) {
+            Panel.getTetris().rotation();
+        }
+        
         Panel.getPlayersTab()[0].setDirection(direction);
         
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE){

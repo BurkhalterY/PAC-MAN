@@ -24,25 +24,29 @@ import javax.imageio.ImageIO;
  * @author BuYa
  */
 public class Map {
-    private Tile map[][];
-    private int mapSp[][];
-    private BufferedImage editorset;
-    private int editorsetRows = 10, editorsetColumns = 8;
-    private BufferedImage tileset;
-    private int tilesetRows = 6, tilesetColumns = 9;
-    private BufferedImage tiles[] = new BufferedImage[editorsetColumns*editorsetRows];
-    private BufferedImage bulletset;
-    private int bulletsetRows = 1, bulletsetColumns = 4;
-    private BufferedImage bullets[] = new BufferedImage[bulletsetColumns*bulletsetRows];
-    private BufferedImage effetset;
-    private int effetsetRows = 1, effetsetColumns = 4;
-    private BufferedImage effets[] = new BufferedImage[effetsetColumns*effetsetRows];
-    private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0;
-    private int editorWidth, editorHeight, tileWidth, tileHeight, bulletWidth, bulletHeight, effetWidth, effetHeight;
-    private int cageX = -8, cageY = -5, spawnX = 13, spawnY = 26;
+    protected Tile map[][];
+    protected int mapSp[][];
+    protected BufferedImage editorset;
+    protected int editorsetRows = 10, editorsetColumns = 8;
+    protected BufferedImage tileset;
+    protected int tilesetRows = 6, tilesetColumns = 9;
+    protected BufferedImage tiles[] = new BufferedImage[editorsetColumns*editorsetRows];
+    protected BufferedImage bulletset;
+    protected int bulletsetRows = 1, bulletsetColumns = 4;
+    protected BufferedImage bullets[] = new BufferedImage[bulletsetColumns*bulletsetRows];
+    protected BufferedImage effetset;
+    protected int effetsetRows = 1, effetsetColumns = 4;
+    protected BufferedImage effets[] = new BufferedImage[effetsetColumns*effetsetRows];
+    protected int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0;
+    protected int editorWidth, editorHeight, tileWidth, tileHeight, bulletWidth, bulletHeight, effetWidth, effetHeight;
+    protected int cageX = -8, cageY = -5, spawnX = 13, spawnY = 26;
     
     public Map(String mapFolder, String tilesetPicture, boolean basicTileset){
         readMap("res/maps/"+mapFolder, "res/tileset/"+tilesetPicture, basicTileset);
+    }
+    
+    public Map(String mapFolder, boolean basicTileset){
+        readMap("res/maps/"+mapFolder, "res/editor", basicTileset);
     }
     
     public Map(){

@@ -19,12 +19,18 @@ import javax.swing.JPanel;
 public class Panel extends JPanel implements MouseListener{
     
     private static Map map;
+    private static Tetris tetris = null;
     private static Player playersTab[];
     private static Ghost ghostsTab[];
     private static boolean run = true;
     
     public static void init(String pMap, String pTileset, int nbPlayers, String[] listFantomes){
         map = new Map(pMap, pTileset, true);
+        
+        if(pMap.equals("TETRIS")){
+            tetris = new Tetris();
+        }
+        
         playersTab = new Player[nbPlayers];
         for(int i = 0; i < playersTab.length; i++){
             playersTab[i] = new Pacman(Player.getSpawn().getX(), Player.getSpawn().getY(), 0.8f);
@@ -110,6 +116,9 @@ public class Panel extends JPanel implements MouseListener{
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].avancer();
         }
+        if(tetris != null){
+            tetris.go();
+        }
     }
     
     public void paintComponent(Graphics g){
@@ -122,10 +131,14 @@ public class Panel extends JPanel implements MouseListener{
         }
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficher(g, this.getWidth(), this.getHeight());
+        }
+        if(tetris != null){
+            tetris.afficher(g, this.getWidth(), this.getHeight());
         }/*
         for(int i = 0; i < ghostsTab.length; i++){
             ghostsTab[i].afficherTuile(g, this.getWidth(), this.getHeight());
         }*/
+        
     }
 
     /**
@@ -146,6 +159,13 @@ public class Panel extends JPanel implements MouseListener{
         return map;
     }
 
+    /**
+     * @return the tetris
+     */
+    public static Tetris getTetris() {
+        return tetris;
+    }
+    
     @Override
     public void mouseClicked(MouseEvent me) {
         
