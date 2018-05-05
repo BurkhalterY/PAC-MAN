@@ -24,7 +24,7 @@ public class Panel extends JPanel implements MouseListener{
     private static boolean run = true;
     
     public static void init(String pMap, String pTileset, int nbPlayers, String[] listFantomes){
-        map = new Map(pMap, pTileset);
+        map = new Map(pMap, pTileset, true);
         playersTab = new Player[nbPlayers];
         for(int i = 0; i < playersTab.length; i++){
             playersTab[i] = new Pacman(Player.getSpawn().getX(), Player.getSpawn().getY(), 0.8f);

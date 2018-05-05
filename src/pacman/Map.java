@@ -26,57 +26,97 @@ import javax.imageio.ImageIO;
 public class Map {
     private Tile map[][];
     private int mapSp[][];
+    private BufferedImage editorset;
+    private int editorsetRows = 10, editorsetColumns = 8;
     private BufferedImage tileset;
-    private int tilesetRows = 10, tilesetColumns = 8;
-    private BufferedImage tiles[] = new BufferedImage[tilesetColumns*tilesetRows];
+    private int tilesetRows = 6, tilesetColumns = 9;
+    private BufferedImage tiles[] = new BufferedImage[editorsetColumns*editorsetRows];
     private BufferedImage bulletset;
     private int bulletsetRows = 1, bulletsetColumns = 4;
     private BufferedImage bullets[] = new BufferedImage[bulletsetColumns*bulletsetRows];
     private BufferedImage effetset;
     private int effetsetRows = 1, effetsetColumns = 4;
     private BufferedImage effets[] = new BufferedImage[effetsetColumns*effetsetRows];
-    private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0, tileWidth, tileHeight;
-    private int cageX = -8, cageY = -5, spawnX = 0, spawnY = 0;
+    private int mapWidth = 0, mapHeight = 0, nbBulletTotal = 0, nbBulletRestantes = 0;
+    private int editorWidth, editorHeight, tileWidth, tileHeight, bulletWidth, bulletHeight, effetWidth, effetHeight;
+    private int cageX = -8, cageY = -5, spawnX = 13, spawnY = 26;
     
-    public Map(String mapFolder, String tilesetPicture){
+    public Map(String mapFolder, String tilesetPicture, boolean basicTileset){
+        readMap("res/maps/"+mapFolder, "res/tileset/"+tilesetPicture, basicTileset);
+    }
+    
+    public Map(){
+        readMap("res/editor", "res/editor", false);
+    }
+    
+    public void readMap(String mapFolder, String tilesetPicture, boolean basicTileset){
         
         try {
-            tileset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/tileset.png"));
-            bulletset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/bullets.png"));
-            effetset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/effets.png"));
+            editorset = ImageIO.read(new File("res/editor/tileset.png"));
+            tileset = ImageIO.read(new File(tilesetPicture+"/tileset.png"));
+            bulletset = ImageIO.read(new File(tilesetPicture+"/bullets.png"));
+            effetset = ImageIO.read(new File("res/editor/effets.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        tileWidth = tileset.getWidth()/tilesetColumns;
-        tileHeight = tileset.getHeight()/tilesetRows;
-
+        editorWidth = editorset.getWidth()/editorsetColumns;
+        editorHeight = editorset.getHeight()/editorsetRows;
+                
         int tilesID = 0;
-        for(int y = 0; y < tilesetRows; y++){
-            for(int x = 0; x < tilesetColumns; x++){
-                tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+        for(int y = 0; y < editorsetRows; y++){
+            for(int x = 0; x < editorsetColumns; x++){
+                tiles[tilesID] = editorset.getSubimage(x * editorWidth, y * editorHeight, editorWidth, editorHeight);
                 tilesID++;
             }
         }
+        
+        if(basicTileset){
+            int tilesetCorrespondance[] = {
+                48, 49, 50, 34, 42, 26, 33, 41, 69,
+                51,  0, 52, 36, 46, 28, 44, 45, 68,
+                53, 54, 55,  7, 12,  4, 64, 77, 65,
+                56, 57, 60, 61, 72, 73, 79, 70, 78,
+                58, 59, 62, 63, 75, 74, 67, 76, 66,
+                71
+            };
+            tileWidth = tileset.getWidth()/tilesetColumns;
+            tileHeight = tileset.getHeight()/tilesetRows;
+            
+            for(int i = 0; i < tilesetCorrespondance.length; i++){
+                int x = i % tilesetColumns;
+                int y = i / tilesetColumns;
+                tiles[tilesetCorrespondance[i]] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+            }
+        } else {
+            tileWidth = editorWidth;
+            tileHeight = editorHeight;
+        }
+        bulletWidth = bulletset.getWidth()/bulletsetColumns;
+        bulletHeight = bulletset.getHeight()/bulletsetRows;
+        
         tilesID = 0;
         for(int y = 0; y < bulletsetRows; y++){
             for(int x = 0; x < bulletsetColumns; x++){
-                bullets[tilesID] = bulletset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                bullets[tilesID] = bulletset.getSubimage(x * bulletWidth, y * bulletHeight, bulletWidth, bulletHeight);
                 tilesID++;
             }
         }
+        effetWidth = effetset.getWidth()/effetsetColumns;
+        effetHeight = effetset.getHeight()/effetsetRows;
+        
         tilesID = 0;
         for(int y = 0; y < effetsetRows; y++){
             for(int x = 0; x < effetsetColumns; x++){
-                effets[tilesID] = effetset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
+                effets[tilesID] = effetset.getSubimage(x * effetWidth, y * effetHeight, effetWidth, effetHeight);
                 tilesID++;
             }
         }
         
         try
         {
-            File f1 = new File ("res/maps/"+mapFolder+"/map.txt");
-            File f2 = new File ("res/maps/"+mapFolder+"/map_sp.txt");
+            File f1 = new File (mapFolder+"/map.txt");
+            File f2 = new File (mapFolder+"/map_sp.txt");
             FileReader fr1 = new FileReader (f1);
             FileReader fr2 = new FileReader (f2);
             BufferedReader br1 = new BufferedReader (fr1);
@@ -156,56 +196,6 @@ public class Map {
         for(int x = 0; x < this.getMapWidth(); x++){
             for(int y = 0; y < this.getMapHeight(); y++){
                 setTile(x, y, map[x][y].getType());
-            }
-        }
-    }
-    
-    public Map(int mapWidth, int mapHeight, String tilesetPicture){
-        
-        this.mapWidth = mapWidth;
-        this.mapHeight = mapHeight;
-        
-        try {
-            tileset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/tileset.png"));
-            bulletset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/bullets.png"));
-            effetset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/effets.png"));
-        } catch (IOException ex) {
-            Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-        tileWidth = tileset.getWidth()/tilesetColumns;
-        tileHeight = tileset.getHeight()/tilesetRows;
-
-        int tilesID = 0;
-        for(int y = 0; y < tilesetRows; y++){
-            for(int x = 0; x < tilesetColumns; x++){
-                tiles[tilesID] = tileset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
-                tilesID++;
-            }
-        }
-        tilesID = 0;
-        for(int y = 0; y < bulletsetRows; y++){
-            for(int x = 0; x < bulletsetColumns; x++){
-                bullets[tilesID] = bulletset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
-                tilesID++;
-            }
-        }
-        tilesID = 0;
-        for(int y = 0; y < effetsetRows; y++){
-            for(int x = 0; x < effetsetColumns; x++){
-                effets[tilesID] = effetset.getSubimage(x * tileWidth, y * tileHeight, tileWidth, tileHeight);
-                tilesID++;
-            }
-        }
-        
-        map = new Tile[mapWidth][mapHeight];
-        mapSp = new int[mapWidth][mapHeight];
-        
-        for(int x = 0; x < mapWidth; x++){
-            for(int y = 0; y < mapHeight; y++){
-                map[x][y] = new Tile(x, y, 1);
-                map[x][y].setImg(tiles[0]);
-                mapSp[x][y] = 0;
             }
         }
     }
@@ -338,10 +328,6 @@ public class Map {
                 transformation.translate(x*size, y*size);
                 transformation.scale(size/tileWidth, size/tileHeight);
                 g2d.drawImage(map[x][y].getImg(), transformation, null);
-                if(map[x][y].getType() == 2 && quad){
-                    g2d.setColor(new Color(96, 96, 96, 128));
-                    g2d.fillRect((int)(x*size), (int)(y*size), (int)(size), (int)(size));
-                }
             }
         }
         
@@ -529,8 +515,10 @@ public class Map {
                                         
                                         break;
                                     case 1:
-                                    case 2:
                                         map[i][j].setImg(tiles[0]);
+                                        break;
+                                    case 2:
+                                        map[i][j].setImg(tiles[71]);
                                         break;
                                     case 4:
                                         map[i][j].setImg(bullets[0]);
@@ -541,16 +529,19 @@ public class Map {
                                     default:
                                         break;
                                 }
+                                if(map[x][y].getType() != 0){
+                                    map[i][j].setConforme(true);
+                                }
                             }
                         }
                     }
                 }
                 int cageTiles[] = {
-                    64, 54, 69, 70, 70, 68, 54, 65,
-                    52,  0,  0,  0,  0,  0,  0, 51,
-                    52,  0,  0,  0,  0,  0,  0, 51,
-                    52,  0,  0,  0,  0,  0,  0, 51,
-                    67, 49, 49, 49, 49, 49, 49, 66
+                    64, 77, 69, 70, 70, 68, 77, 65,
+                    79,  0,  0,  0,  0,  0,  0, 78,
+                    79,  0,  0,  0,  0,  0,  0, 78,
+                    79,  0,  0,  0,  0,  0,  0, 78,
+                    67, 76, 76, 76, 76, 76, 76, 66
                 };
                 int indexCage = 0;
 

@@ -44,12 +44,12 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
     private JButton btnApplicate = new JButton("Appliquer");
     private JFileChooser fc = new JFileChooser("res/maps");
     //Tiles
-    private JButton btnMur = new JButton("Mur", new ImageIcon("res/iconMur.png"));
+    private JButton btnMur = new JButton("Mur", new ImageIcon("res/editor/icons/iconMur.png"));
     private JButton btnExt = new JButton("Extérieure");
-    private JButton btnGhostsHouse = new JButton("Maison fantômes", new ImageIcon("res/iconGhostHouse.png"));
+    private JButton btnGhostsHouse = new JButton("Maison fantômes", new ImageIcon("res/editor/icons/iconGhostHouse.png"));
     //Bullets
-    private JButton btnBullets = new JButton("Pac-Gomme", new ImageIcon("res/iconBullet.png"));
-    private JButton btnSuperBullets = new JButton("Super Pac-Gomme", new ImageIcon("res/iconSuperBullet.png"));
+    private JButton btnBullets = new JButton("Pac-Gomme", new ImageIcon("res/editor/icons/iconBullet.png"));
+    private JButton btnSuperBullets = new JButton("Super Pac-Gomme", new ImageIcon("res/editor/icons/iconSuperBullet.png"));
     //Events
     private JButton btnSpawn = new JButton("Spawn");
     private JButton btnGhostRalenti = new JButton("Ralentissement des fantômes");
@@ -60,7 +60,7 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
     private boolean spModif = false;
     
     public Editor(){
-        map = new Map(28, 36, "editor");
+        map = new Map();
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -275,7 +275,7 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
             int ret = fc.showOpenDialog(this);
             if (ret == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                map = new Map(file.getName(), "editor");
+                map = new Map(file.getName(), "editor", false);
                 this.repaint();
             }
         } else if(arg0.getSource() == btnSaveFile){
