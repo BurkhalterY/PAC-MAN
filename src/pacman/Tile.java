@@ -19,6 +19,7 @@ public class Tile {
     private int type;
     private boolean solide;
     private BufferedImage img;
+    private boolean conforme = true;
     
     public Tile(int x, int y){
         this.x = x;
@@ -89,6 +90,21 @@ public class Tile {
     public void setImg(BufferedImage img) {
         this.img = img;
     }
+    
+    /**
+     * @return the conforme
+     */
+    public boolean isConforme() {
+        return conforme;
+    }
+
+    /**
+     * @param conforme the conforme to set
+     */
+    public void setConforme(boolean conforme) {
+        this.conforme = conforme;
+    }
+    
     
     
 }

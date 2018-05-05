@@ -160,15 +160,15 @@ public class Map {
         }
     }
     
-    public Map(int mapWidth, int mapHeight){
+    public Map(int mapWidth, int mapHeight, String tilesetPicture){
         
         this.mapWidth = mapWidth;
         this.mapHeight = mapHeight;
         
         try {
-            tileset = ImageIO.read(new File("res/tileset/original/tileset.png"));
-            bulletset = ImageIO.read(new File("res/tileset/original/bullets.png"));
-            effetset = ImageIO.read(new File("res/tileset/original/effets.png"));
+            tileset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/tileset.png"));
+            bulletset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/bullets.png"));
+            effetset = ImageIO.read(new File("res/tileset/"+tilesetPicture+"/effets.png"));
         } catch (IOException ex) {
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -432,19 +432,23 @@ public class Map {
                                             if(isTypeN(i-1, j, 2)){
                                                 index = 51;
                                             }
-                                        }   if(index == 36){
+                                        }
+                                        if(index == 36){
                                             if(isTypeN(i+1, j, 2)){
                                                 index = 52;
                                             }
-                                        }   if(index == 12){
+                                        }
+                                        if(index == 12){
                                             if(isTypeN(i, j-1, 2)){
                                                 index = 49;
                                             }
-                                        }   if(index == 42){
+                                        }
+                                        if(index == 42){
                                             if(isTypeN(i, j+1, 2)){
                                                 index = 54;
                                             }
-                                        }   //----------------------0
+                                        }
+                                        //----------------------0
                                         if(index == 33){
                                             if(isTypeN(i-1, j, 2)){
                                                 if(isTypeN(i, j-1, 2)){
@@ -455,7 +459,8 @@ public class Map {
                                             } else if(isTypeN(i, j-1, 2)){
                                                 index = 60;
                                             }
-                                        }   if(index == 41){
+                                        }
+                                        if(index == 41){
                                             if(isTypeN(i+1, j, 2)){
                                                 if(isTypeN(i, j-1, 2)){
                                                     index = 50;
@@ -465,7 +470,8 @@ public class Map {
                                             } else if(isTypeN(i, j-1, 2)){
                                                 index = 61;
                                             }
-                                        }   if(index == 44){
+                                        }
+                                        if(index == 44){
                                             if(isTypeN(i-1, j, 2)){
                                                 if(isTypeN(i, j+1, 2)){
                                                     index = 53; 
@@ -475,7 +481,8 @@ public class Map {
                                             } else if(isTypeN(i, j+1, 2)){
                                                 index = 62;
                                             }
-                                        }   if(index == 45){
+                                        }
+                                        if(index == 45){
                                             if(isTypeN(i+1, j, 2)){
                                                 if(isTypeN(i, j+1, 2)){
                                                     index = 55;
@@ -485,7 +492,41 @@ public class Map {
                                             } else if(isTypeN(i, j+1, 2)){
                                                 index = 63;
                                             }
-                                        }   map[i][j].setImg(tiles[index]);
+                                        }
+                                        //----------------------0
+                                        if(index == 4){
+                                            if(isTypeN(i-1, j-1, 2)){
+                                                index = 74;
+                                            }
+                                        }
+                                        if(index == 7){
+                                            if(isTypeN(i+1, j-1, 2)){
+                                                index = 75;
+                                            }
+                                        }
+                                        if(index == 26){
+                                            if(isTypeN(i-1, j+1, 2)){
+                                                index = 73;
+                                            }
+                                        }
+                                        if(index == 34){
+                                            if(isTypeN(i+1, j+1, 2)){
+                                                index = 72;
+                                            }
+                                        }
+                                        
+                                        map[i][j].setImg(tiles[index]);
+                                        
+                                        int listeConformes[] = {0, 4, 7, 12, 26, 28, 33, 34, 36, 41, 42, 44, 45, 46, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 73, 74, 75, 76};
+                                        
+                                        boolean conforme = false;
+                                        for(int k = 0; k < listeConformes.length; k++){
+                                            if(listeConformes[k] == index){
+                                                conforme = true;
+                                            }
+                                        }
+                                        map[i][j].setConforme(conforme);
+                                        
                                         break;
                                     case 1:
                                     case 2:
@@ -591,5 +632,17 @@ public class Map {
                 }
             }
         }
+    }
+    
+    public boolean mapValide(){
+        boolean valide = true;
+        for(int x = 0; x < this.getMapWidth(); x++){
+            for(int y = 0; y < this.getMapHeight(); y++){
+                if(!map[x][y].isConforme()){
+                    valide = false;
+                }
+            }
+        }
+        return valide;
     }
 }

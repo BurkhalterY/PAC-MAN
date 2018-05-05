@@ -24,6 +24,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFormattedTextField;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -59,7 +60,7 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
     private boolean spModif = false;
     
     public Editor(){
-        map = new Map(28, 36);
+        map = new Map(28, 36, "editor");
         fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         this.addMouseListener(this);
         this.addMouseMotionListener(this);
@@ -274,45 +275,49 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
             int ret = fc.showOpenDialog(this);
             if (ret == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
-                map = new Map(file.getName(), "tileset");
+                map = new Map(file.getName(), "editor");
                 this.repaint();
             }
         } else if(arg0.getSource() == btnSaveFile){
-            int ret = fc.showSaveDialog(this);
-            if (ret == JFileChooser.APPROVE_OPTION) {
-                FileWriter fstream = null, fstream2 = null;
-                try {
-                    File file = new File(fc.getSelectedFile().getPath()+"/map.txt");
-                    File file2 = new File(fc.getSelectedFile().getPath()+"/map_sp.txt");
-                    fstream = new FileWriter(file);
-                    fstream2 = new FileWriter(file2);
-                    BufferedWriter out = new BufferedWriter(fstream);
-                    BufferedWriter out2 = new BufferedWriter(fstream2);
-                    for(int y = 0; y < map.getMapHeight(); y++){
-                        for(int x = 0; x < map.getMapWidth(); x++){
-                            
-                            out.write(Integer.toString(map.getMap()[x][y].getType()));
-                            out2.write(Integer.toString(map.getMapSp()[x][y]));
-                            if(x+1 < map.getMapWidth()){
-                                out.write("\t");
-                                out2.write("\t");
-                            }
-                        }
-                        out.write("\n");
-                        out2.write("\n");
-                    }
-                    out.close();
-                    out2.close();
-                } catch (IOException ex) {
-                    Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
-                } finally {
+            if(map.mapValide()){
+                int ret = fc.showSaveDialog(this);
+                if (ret == JFileChooser.APPROVE_OPTION) {
+                    FileWriter fstream = null, fstream2 = null;
                     try {
-                        fstream.close();
-                        fstream2.close();
+                        File file = new File(fc.getSelectedFile().getPath()+"/map.txt");
+                        File file2 = new File(fc.getSelectedFile().getPath()+"/map_sp.txt");
+                        fstream = new FileWriter(file);
+                        fstream2 = new FileWriter(file2);
+                        BufferedWriter out = new BufferedWriter(fstream);
+                        BufferedWriter out2 = new BufferedWriter(fstream2);
+                        for(int y = 0; y < map.getMapHeight(); y++){
+                            for(int x = 0; x < map.getMapWidth(); x++){
+
+                                out.write(Integer.toString(map.getMap()[x][y].getType()));
+                                out2.write(Integer.toString(map.getMapSp()[x][y]));
+                                if(x+1 < map.getMapWidth()){
+                                    out.write("\t");
+                                    out2.write("\t");
+                                }
+                            }
+                            out.write("\n");
+                            out2.write("\n");
+                        }
+                        out.close();
+                        out2.close();
                     } catch (IOException ex) {
                         Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+                    } finally {
+                        try {
+                            fstream.close();
+                            fstream2.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Editor.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
                 }
+            } else {
+                JOptionPane.showMessageDialog(null, "Vous ne pouvez pas enregistrer tant\nqu'il reste des tuiles grises", "", JOptionPane.WARNING_MESSAGE);
             }
         } else if(arg0.getSource() == quad){
             repaint();
