@@ -27,7 +27,7 @@ public class Panel extends JPanel implements MouseListener{
     public static void init(String pMap, String pTileset, int nbPlayers, String[] listFantomes){
         map = new Map(pMap, pTileset, true);
         
-        if(pMap.equals("TETRIS")){
+        if(pMap.equals("TETRIS") || pMap.equals("TETRIS_2")){
             tetris = new Tetris();
         }
         

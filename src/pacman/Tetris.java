@@ -157,7 +157,7 @@ public class Tetris {
         boolean touche = false;
         for(int i = 0; i < forme.length; i++){
             if(Panel.getMap().dansLaMap(forme[i].getX(), forme[i].getY()+1)){
-                if(Panel.getMap().getMap()[forme[i].getX()][forme[i].getY()+1].getType() == 0){
+                if(Panel.getMap().getMap()[forme[i].getX()][forme[i].getY()+1].isSolide()){
                     touche = true;
                 }
             }
@@ -169,7 +169,7 @@ public class Tetris {
         boolean touche = false;
         for(int i = 0; i < forme.length; i++){
             if(Panel.getMap().dansLaMap(forme[i].getX()-1, forme[i].getY())){
-                if(Panel.getMap().getMap()[forme[i].getX()-1][forme[i].getY()].getType() == 0){
+                if(Panel.getMap().getMap()[forme[i].getX()-1][forme[i].getY()].isSolide()){
                     touche = true;
                 }
             }
@@ -181,7 +181,7 @@ public class Tetris {
         boolean touche = false;
         for(int i = 0; i < forme.length; i++){
             if(Panel.getMap().dansLaMap(forme[i].getX()+1, forme[i].getY())){
-                if(Panel.getMap().getMap()[forme[i].getX()+1][forme[i].getY()].getType() == 0){
+                if(Panel.getMap().getMap()[forme[i].getX()+1][forme[i].getY()].isSolide()){
                     touche = true;
                 }
             }

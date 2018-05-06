@@ -276,6 +276,8 @@ public class Editor extends JPanel implements ActionListener, MouseListener, Mou
             if (ret == JFileChooser.APPROVE_OPTION) {
                 File file = fc.getSelectedFile();
                 map = new Map(file.getName(), false);
+                textLargeur.setText(Integer.toString(map.getMapWidth()));
+                textHauteur.setText(Integer.toString(map.getMapHeight()));
                 this.repaint();
             }
         } else if(arg0.getSource() == btnSaveFile){
