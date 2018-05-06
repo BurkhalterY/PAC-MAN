@@ -21,7 +21,7 @@ import pacman.Entity.Direction;
  * @author Pascal
  */
 public class Tetris {
-    private Tile[] forme;
+    private Tile[] forme, copyForme;
     private int pz, tetrisRows = 1, tetrisColumns = 7, tetrisWidth, tetrisHeight;
     private BufferedImage tetriset, tetrisheet[] = new BufferedImage[tetrisColumns*tetrisRows];
     
@@ -40,7 +40,15 @@ public class Tetris {
                 tilesID++;
             }
         }
-        forme = randomForme();
+        int idForme = (int)(Math.random()*7);
+        forme = randomForme(idForme);
+        int xa = (Panel.getMap().getMapWidth()-2)/2+1;
+        for(int i = 0; i < forme.length; i++){
+            forme[i].setX(forme[i].getX()+xa);
+            forme[i].setY(forme[i].getY()+2);
+            forme[i].setImg(tetrisheet[idForme]);
+        }
+        copyForme = randomForme(idForme);
     }
     
     public void go(){
@@ -48,22 +56,30 @@ public class Tetris {
             pz = 0;
             if(!contactSol()){
                 descendre();
+                System.out.println(copyForme[2].getY());
             } else {
                 for(int i = 0; i < forme.length; i++){
                     //Panel.getMap().setTile(forme[i].getX(), forme[i].getY(), 0);
                     Panel.getMap().getMap()[forme[i].getX()][forme[i].getY()] = forme[i];
                 }
                 verifiLigne();
-                forme = randomForme();
+                int idForme = (int)(Math.random()*7);
+                forme = randomForme(idForme);
+                int xa = (Panel.getMap().getMapWidth()-2)/2+1;
+                for(int i = 0; i < forme.length; i++){
+                    forme[i].setX(forme[i].getX()+xa);
+                    forme[i].setY(forme[i].getY()+2);
+                    forme[i].setImg(tetrisheet[idForme]);
+                }
+                copyForme = randomForme(idForme);
             }
         }        
         pz++;
     }
     
-    public Tile[] randomForme(){
+    public Tile[] randomForme(int idForme){
         Tile[] forme = new Tile[4];
-        
-        int idForme = (int)(Math.random()*7);
+
         switch (idForme) {
             case 0:
                 forme[0] = new Tile(-1, -1, 0);
@@ -109,13 +125,6 @@ public class Tetris {
                 break;
             default:
                 break;
-        }
-        int xa = (Panel.getMap().getMapWidth()-2)/2+1;
-                
-        for(int i = 0; i < forme.length; i++){
-            forme[i].setX(forme[i].getX()+xa);
-            forme[i].setY(forme[i].getY()+2);
-            forme[i].setImg(tetrisheet[idForme]);
         }
         
         return forme;
@@ -180,7 +189,16 @@ public class Tetris {
     }
     
     public void rotation(){
-        
+        int prevX = forme[0].getX();
+        int prevY = forme[0].getY();
+        for(int i = 0; i < forme.length; i++){
+            int x = copyForme[i].getY();
+            int y = -copyForme[i].getX();
+            copyForme[i].setX(x);
+            copyForme[i].setY(y);
+            forme[i].setX(prevX+x);
+            forme[i].setY(prevY+y);
+        }
     }
     
     public void verifiLigne(){
@@ -195,7 +213,9 @@ public class Tetris {
             }
             if(ligne == true){
                 ligneVaincus++;
-                noLigne = y;
+                if(noLigne == 0){
+                    noLigne = y;
+                }
                 for(int x = 1; x < Panel.getMap().getMapWidth()-1; x++){
                     //Panel.getMap().setTile(x, y, 1);
                     Panel.getMap().getMap()[x][y] = new Tile(x, y, 1);
