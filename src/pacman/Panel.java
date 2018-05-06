@@ -35,13 +35,6 @@ public class Panel extends JPanel implements MouseListener{
         for(int i = 0; i < playersTab.length; i++){
             playersTab[i] = new Pacman(Player.getSpawn().getX(), Player.getSpawn().getY(), 0.8f);
         }
-        //playersTab = new Player[]{new Pacman(Player.getSpawn().getX(), Player.getSpawn().getY(), 0.8f)};
-        /*ghostsTab = new Ghost[]{
-            new Blinky(Ghost.getCage().getX()+0.5f, Ghost.getCage().getY(), 0.75f, map.getMapWidth()-3, 0),
-            new Pinky(Ghost.getCage().getX()+0.5f, Ghost.getCage().getY()+3, 0.75f, 2, 0),
-            new Inky(Ghost.getCage().getX()-1.5f, Ghost.getCage().getY()+3, 0.75f, map.getMapWidth()-1, map.getMapHeight()-1),
-            new Clyde(Ghost.getCage().getX()+2.5f, Ghost.getCage().getY()+3, 0.75f, 0, map.getMapHeight()-1)
-        };*/
         
         float listArguments[][] = {
             {Ghost.getCage().getX()+0.5f, Ghost.getCage().getY(), 0.75f, map.getMapWidth()-3, 0},

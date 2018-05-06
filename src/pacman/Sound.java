@@ -28,6 +28,7 @@ public class Sound {
     private static AudioClip largePelletLoop;
     private static AudioClip intermission;
     private static AudioClip siren;
+    private static AudioClip tetris;
     
     private static AudioClip elevator;
     
@@ -112,6 +113,14 @@ public class Sound {
         }
         
         elevator = Applet.newAudioClip(url);
+        
+        try {
+            url = new File("res/sounds/"+path+"/tetris.wav").toURI().toURL();
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(Sound.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        tetris = Applet.newAudioClip(url);
     }
     
     public static void playBeginning(){
@@ -175,12 +184,19 @@ public class Sound {
         siren.stop();
     }
 
-    
     public static void loopElevator(){
         elevator.loop();
     }
     
     public static void stopElevator(){
         elevator.stop();
+    }
+    
+    public static void loopTetris(){
+        tetris.loop();
+    }
+    
+    public static void stopTetris(){
+        tetris.stop();
     }
 }

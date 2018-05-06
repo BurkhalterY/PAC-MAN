@@ -40,6 +40,7 @@ public class Tetris {
                 tilesID++;
             }
         }
+        Sound.loopTetris();
         int idForme = (int)(Math.random()*7);
         forme = randomForme(idForme);
         int xa = (Panel.getMap().getMapWidth()-2)/2+1;
@@ -56,10 +57,8 @@ public class Tetris {
             pz = 0;
             if(!contactSol()){
                 descendre();
-                System.out.println(copyForme[2].getY());
             } else {
                 for(int i = 0; i < forme.length; i++){
-                    //Panel.getMap().setTile(forme[i].getX(), forme[i].getY(), 0);
                     Panel.getMap().getMap()[forme[i].getX()][forme[i].getY()] = forme[i];
                 }
                 verifiLigne();
@@ -132,7 +131,9 @@ public class Tetris {
     
     public void descendre(){
         for(int i = 0; i < forme.length; i++){
-            forme[i].setY(forme[i].getY()+1);
+            if(Panel.getMap().dansLaMap(forme[i].getX(), forme[i].getY()+1)){
+                forme[i].setY(forme[i].getY()+1);
+            }
         }
     }
     
@@ -213,18 +214,15 @@ public class Tetris {
             }
             if(ligne == true){
                 ligneVaincus++;
-                if(noLigne == 0){
-                    noLigne = y;
-                }
+                noLigne = y;
                 for(int x = 1; x < Panel.getMap().getMapWidth()-1; x++){
                     //Panel.getMap().setTile(x, y, 1);
                     Panel.getMap().getMap()[x][y] = new Tile(x, y, 1);
                 }
             }
         }
-        for(int y = noLigne; y > 1; y--){
+        for(int y = noLigne; y > ligneVaincus; y--){
             for(int x = 1; x < Panel.getMap().getMapWidth()-1; x++){
-                //Panel.getMap().setTile(x, y, Panel.getMap().getMap()[x][y-ligneVaincus].getType());
                 Panel.getMap().getMap()[x][y] = Panel.getMap().getMap()[x][y-ligneVaincus];
             }
         }
