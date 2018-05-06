@@ -9,7 +9,7 @@ package pacman;
  *
  * @author BuYa
  */
-public class Pacman extends Player{
+public class Pacman extends Player {
 
     public Pacman(float x, float y, float vitesse){
         super(x, y, vitesse, "pacman");

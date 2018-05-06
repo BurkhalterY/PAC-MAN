@@ -15,13 +15,13 @@ import pacman.Entity.Direction;
  */
 public class Clavier extends KeyAdapter{
     
-    private static Direction direction, direction2;
+    private Direction direction, direction2;
 
-    public static Direction getDirection() {
+    public Direction getDirection() {
         return direction;
     }
     
-    public static Direction getDirection2() {
+    public Direction getDirection2() {
         return direction2;
     }
     
