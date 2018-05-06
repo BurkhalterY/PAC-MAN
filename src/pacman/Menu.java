@@ -20,10 +20,13 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextField;
 
 /**
  *
@@ -37,6 +40,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     
     //0
     private JButton btnPlay;
+    private JButton btnPlayers;
     private JLabel labelTexturePack = new JLabel("Textures Pack :");
     private JComboBox choixTexturePack;
     private JLabel labelMap = new JLabel("Map :");
@@ -55,6 +59,14 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     //10
     private JButton btnReprendre;
     private JButton btnQuit;
+    
+    //20
+    private JTextField textIp = new JTextField();
+    private JRadioButton clt = new JRadioButton("Client");
+    private JRadioButton srv = new JRadioButton("Serveur");
+    private ButtonGroup bg = new ButtonGroup();
+    private JButton btnRejoindre;
+    
     
     public Menu(){
         try {
@@ -112,10 +124,14 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         btnPlay = new JButton("1 Player");
         btnPlay.addActionListener(this);
         
+        btnPlayers = new JButton("2 Players");
+        btnPlayers.addActionListener(this);
+        
         btnLevelEditor = new JButton("Editor");
         btnLevelEditor.addActionListener(this);
         
         this.add(btnPlay);
+        this.add(btnPlayers);
         this.add(btnLevelEditor);
         this.add(labelTexturePack);
         this.add(choixTexturePack);
@@ -151,12 +167,40 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         this.add(btnQuit);
         this.setLayout(null);
     }
+    
+    public void lanMenu(){ //20
+
+        btnRejoindre = new JButton("Rejoindre");
+        this.add(clt);
+        this.add(srv);
+        this.add(textIp);
+        clt.setSelected(true);
+        bg.add(clt);
+        bg.add(srv);
+        
+        btnRejoindre.addActionListener(this);
+        clt.addActionListener(this);
+        srv.addActionListener(this);
+
+
+        this.add(btnRejoindre);
+        
+        this.setLayout(null);
+    }
 
     public void paintComponent(Graphics g){
-        if(idMenu == 0){
-            drawSelectionMenu();
-        } else if(idMenu == 10){
-            drawPauseMenu();
+        switch (idMenu) {
+            case 0:
+                drawSelectionMenu();
+                break;
+            case 10:
+                drawPauseMenu();
+                break;
+            case 20:
+                drawLanMenu();
+                break;
+            default:
+                break;
         }
 
         float size;
@@ -179,6 +223,7 @@ public class Menu extends JPanel implements ActionListener, Runnable{
     
     public void drawSelectionMenu(){
         btnPlay.setBounds(this.getWidth()/3, (this.getHeight()-25)/2, this.getWidth()/3, 25);
+        btnPlayers.setBounds(this.getWidth()/3, (this.getHeight()-25)/2+30, this.getWidth()/3, 25);
             
         labelMap.setForeground(Color.white);
         labelMap.setBounds(0, (int) ((this.getHeight()-25)/1.5f)-50, this.getWidth()/3, 25);
@@ -215,6 +260,13 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         btnReprendre.setBounds(this.getWidth()/3, (this.getHeight()-25)/2, this.getWidth()/3, 25);
         btnQuit.setBounds(this.getWidth()/3, (this.getHeight()+50)/2, this.getWidth()/3, 25);
     }
+    
+    public void drawLanMenu(){
+        clt.setBounds(60, (this.getHeight()+50)/2, 100, 25);
+        srv.setBounds(60, (this.getHeight()+50)/2+25, 100, 25);
+        textIp.setBounds(160, (this.getHeight()+50)/2, this.getWidth()/3, 25);
+        btnRejoindre.setBounds(this.getWidth()/3, (this.getHeight()+300)/2, this.getWidth()/3, 25);
+    }
 
     @Override
     public void actionPerformed(ActionEvent arg0) {
@@ -223,12 +275,23 @@ public class Menu extends JPanel implements ActionListener, Runnable{
             this.removeAll();
             pauseMenu();
             setIdMenu(10);
+        } else if(arg0.getSource() == btnPlayers){
+            this.removeAll();
+            lanMenu();
+            setIdMenu(20);
+            repaint();
         } else if(arg0.getSource() == btnLevelEditor){
             Frame.startLevelEditor();
         } else if(arg0.getSource() == btnQuit){
             Frame.stop();
         } else if(arg0.getSource() == btnReprendre){
             Frame.setPause();
+        } else if(arg0.getSource() == clt){
+            textIp.setEditable(true);
+        } else if(arg0.getSource() == srv){
+            textIp.setEditable(false);
+        } else if(arg0.getSource() == btnRejoindre){
+            Frame.startLan();
         }
     }
 
@@ -264,5 +327,24 @@ public class Menu extends JPanel implements ActionListener, Runnable{
         this.idMenu = idMenu;
     }
     
-    
+    /**
+     * @return the textIp
+     */
+    public String getTextIp() {
+        return textIp.getText();
+    }
+
+    /**
+     * @return the clt
+     */
+    public boolean getClt() {
+        return clt.isSelected();
+    }
+
+    /**
+     * @return the srv
+     */
+    public boolean getSrv() {
+        return srv.isSelected();
+    }
 }

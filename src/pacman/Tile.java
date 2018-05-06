@@ -5,7 +5,6 @@
  */
 package pacman;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**

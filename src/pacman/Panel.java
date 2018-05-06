@@ -18,11 +18,11 @@ import javax.swing.JPanel;
  */
 public class Panel extends JPanel implements MouseListener{
     
-    private static Map map;
-    private static Tetris tetris = null;
-    private static Player playersTab[];
-    private static Ghost ghostsTab[];
-    private static boolean run = true;
+    protected static Map map;
+    protected static Tetris tetris = null;
+    protected static Player playersTab[];
+    protected static Ghost ghostsTab[];
+    protected static boolean run = true;
     
     public static void init(String pMap, String pTileset, int nbPlayers, String[] listFantomes){
         map = new Map(pMap, pTileset, true);

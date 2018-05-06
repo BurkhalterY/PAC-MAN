@@ -163,4 +163,20 @@ public class Frame extends JFrame{
     public static void setPanMouseListener(){
         pan.addMouseListener(pan);
     }
+    
+    public static void startLan() {
+        pause = false;
+        Texture.initTexture(menu.getTexturePack());
+        if(menu.getClt()){
+            pan = new Client(menu.getTextIp());
+        } else if(menu.getSrv()){
+            pan = new Server();
+        }
+        pan.init(menu.getMap(), menu.getTileset(), 2, menu.getListFantomes());
+        pan.addKeyListener(clav);
+        content.add(pan, "pan");
+        pauseLong += System.currentTimeMillis() - pauseStart;
+        t = new Thread(new Menu());
+        t.start();
+    }
 }
