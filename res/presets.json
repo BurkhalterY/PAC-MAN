@@ -1,0 +1,94 @@
+{
+	"presets": [
+		{
+			"title": "PAC-MAN",
+			"levels": [
+				{
+					"title": "PAC-MAN",
+					"difficulty": 1,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 2,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 3,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 4,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 5,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 6,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 7,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 8,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 9,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 10,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 11,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 12,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 13,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 14,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 15,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 16,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 17,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 18,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 19,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 20,
+					"repeat": 1
+				}, {
+					"title": "PAC-MAN",
+					"difficulty": 21,
+					"repeat": 1
+				}
+			]
+		}
+	]
+}

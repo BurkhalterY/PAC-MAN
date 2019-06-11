@@ -1,0 +1,15 @@
+{
+	"levels": [
+		{
+			"title": "PAC-MAN",
+			"folder": "PAC-MAN",
+			"tileset": "PAC-MAN",
+			"texture_pack": "Original"
+		}, {
+			"title": "Ms. PAC-MAN",
+			"folder": "Ms. PAC-MAN",
+			"tileset": "Ms. PAC-MAN",
+			"texture_pack": "Original"
+		}
+	]
+}
