@@ -1,0 +1,29 @@
+map.txt
+
+0 - Libre		(noir)
+1 - Mur			(bleu)
+2 - Maison fantômes	(vert)
+3 - Porte maison	(jaune)
+auto - Hors map		(rouge)
+s'en fout		(blanc)
+
+entities.txt
+
+0 - Pas d'entité
+1 - Pellet
+2 - Super Pellet
+3 - Pac-man spawn
+4 - Blinky spawn
+5 - Inky spawn
+6 - Pinky spawn
+7 - Clyde spawn
+
+
+events.txt
+
+0 - Rien
+1 - Ralentissement
+2 - Interdiction aux fantômes de monter
+3 - Interdiction aux fantômes de descendre
+4 - Interdiction aux fantômes d'aller à gauche
+5 - Interdiction aux fantômes d'aller à droite6
