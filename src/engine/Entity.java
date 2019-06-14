@@ -4,7 +4,16 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public abstract class Entity {
     
@@ -27,7 +36,32 @@ public abstract class Entity {
         this.speed = speed;
     }
     
-    public abstract void loadSprites();
+    public void loadSprites(){
+        try {
+            String
+            
+            String fileStr = new String(Files.readAllBytes(Paths.get("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/"+spritesheetLocation+".json")), "UTF-8");
+            JSONArray json = new JSONObject(fileStr).getJSONArray("sprites");
+            for(int j = 0; j < json.length(); j++){
+                
+                String name = json.getJSONArray(j).getString(0);
+                int value = json.getJSONArray(j).getInt(1);
+                
+                BufferedImage spritesheet = ImageIO.read(new File("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/"+name+".png"));
+                BufferedImage[] sprite = new BufferedImage[value];
+                for(int i = 0; i < value; i++){
+                    int width = spritesheet.getWidth()/value;
+                    int height = spritesheet.getHeight();
+                    sprite[i] = spritesheet.getSubimage(i * width, 0, width, height);
+                }
+                sprites.put(name, new Sprite(sprite));
+                
+            }
+        
+        } catch (IOException ex) {
+            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     
     public void afficher(Graphics g, int width, int height){
         int mapWidth = Game.getMap().getMapWidth();
@@ -176,4 +210,28 @@ public abstract class Entity {
     
     public abstract void updateNextDirection();
     
+    public void loadSprites(){
+        try {
+            String fileStr = new String(Files.readAllBytes(Paths.get("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/"+spritesheetLocation+".json")), "UTF-8");
+            JSONArray json = new JSONObject(fileStr).getJSONArray("sprites");
+            for(int j = 0; j < json.length(); j++){
+                
+                String name = json.getJSONArray(j).getString(0);
+                int value = json.getJSONArray(j).getInt(1);
+                
+                BufferedImage spritesheet = ImageIO.read(new File("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/"+name+".png"));
+                BufferedImage[] sprite = new BufferedImage[value];
+                for(int i = 0; i < value; i++){
+                    int width = spritesheet.getWidth()/value;
+                    int height = spritesheet.getHeight();
+                    sprite[i] = spritesheet.getSubimage(i * width, 0, width, height);
+                }
+                sprites.put(name, new Sprite(sprite));
+                
+            }
+        
+        } catch (IOException ex) {
+            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }

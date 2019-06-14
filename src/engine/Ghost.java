@@ -1,17 +1,20 @@
 package engine;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 public abstract class Ghost extends Entity {
     
@@ -21,60 +24,6 @@ public abstract class Ghost extends Entity {
         super(x, y, speed);
         this.spritesheetLocation = spritesheetLocation;
         loadSprites();
-    }
-    
-    public void loadSprites(){
-        try {
-            JSONObject json = (JSONObject)new JSONParser().parse(new FileReader("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/"+spritesheetLocation+".json"));
-            int up = ((Long)json.get("up")).intValue();
-            int down = ((Long)json.get("down")).intValue();
-            int left = ((Long)json.get("left")).intValue();
-            int right = ((Long)json.get("right")).intValue();
-            
-            BufferedImage spritesheetUp = ImageIO.read(new File("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/up.png"));
-            BufferedImage[] spriteUp = new BufferedImage[up];
-            for(int i = 0; i < up; i++){
-                int width = spritesheetUp.getWidth()/up;
-                int height = spritesheetUp.getHeight();
-                spriteUp[i] = spritesheetUp.getSubimage(i * width, 0, width, height);
-            }
-            sprites.put("up", new Sprite(spriteUp));
-            
-            BufferedImage spritesheetDown = ImageIO.read(new File("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/down.png"));
-            BufferedImage[] spriteDown = new BufferedImage[down];
-            for(int i = 0; i < down; i++){
-                int width = spritesheetDown.getWidth()/down;
-                int height = spritesheetDown.getHeight();
-                spriteDown[i] = spritesheetDown.getSubimage(i * width, 0, width, height);
-            }
-            sprites.put("down", new Sprite(spriteDown));
-            
-            BufferedImage spritesheetLeft = ImageIO.read(new File("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/left.png"));
-            BufferedImage[] spriteLeft = new BufferedImage[left];
-            for(int i = 0; i < left; i++){
-                int width = spritesheetLeft.getWidth()/left;
-                int height = spritesheetLeft.getHeight();
-                spriteLeft[i] = spritesheetLeft.getSubimage(i * width, 0, width, height);
-            }
-            sprites.put("left", new Sprite(spriteLeft));
-            
-            BufferedImage spritesheetRight = ImageIO.read(new File("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/right.png"));
-            BufferedImage[] spriteRight = new BufferedImage[right];
-            for(int i = 0; i < right; i++){
-                int width = spritesheetRight.getWidth()/right;
-                int height = spritesheetRight.getHeight();
-                spriteRight[i] = spritesheetRight.getSubimage(i * width, 0, width, height);
-            }
-            sprites.put("right", new Sprite(spriteRight));
-        
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex) {
-            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ParseException ex) {
-            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
     }
     
     public abstract void setCible();
@@ -148,16 +97,23 @@ public abstract class Ghost extends Entity {
         }
     }
     
-    /*public Direction[] calculateDirectionsPossibles(){
-        ArrayList<Direction> list = new ArrayList<>();
-        if(!collision(Direction.Up) && currentDirection != Direction.Down)
-            list.add(Direction.Up);
-        if(!collision(Direction.Left) && currentDirection != Direction.Right)
-            list.add(Direction.Left);
-        if(!collision(Direction.Down) && currentDirection != Direction.Up)
-            list.add(Direction.Down);
-        if(!collision(Direction.Right) && currentDirection != Direction.Left)
-            list.add(Direction.Right);
-        return list.toArray(new Direction[list.size()]);
-    }*/
+    public void afficherDebug(Graphics g, int width, int height){
+        int mapWidth = Game.getMap().getMapWidth();
+        int mapHeight = Game.getMap().getMapHeight();
+        
+        float size;
+        if(width/mapWidth > height/mapHeight){
+            size = (float)height/mapHeight;
+        } else {
+            size = (float)width/mapWidth;
+        }
+        
+        Graphics2D g2d = (Graphics2D)g;
+        
+        AffineTransform transformation = new AffineTransform();
+        transformation.translate((x-0.5)*size, (y-0.5)*size);
+        transformation.scale(size/spriteWidth, size/spriteHeight);
+        g2d.drawImage(sprites.getOrDefault(currentSprite, new Sprite(new BufferedImage[1])).render(), transformation, null);
+    }
+    
 }
