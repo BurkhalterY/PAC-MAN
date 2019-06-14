@@ -4,17 +4,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.imageio.ImageIO;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 public abstract class Ghost extends Entity {
     
@@ -22,30 +12,12 @@ public abstract class Ghost extends Entity {
     
     public Ghost(double x, double y, double speed, String spritesheetLocation) {
         super(x, y, speed);
+        folder = "ghosts";
         this.spritesheetLocation = spritesheetLocation;
         loadSprites();
     }
     
     public abstract void setCible();
-    
-    @Override
-    public void move(){
-        super.move();
-        switch(currentDirection){
-            case Up:
-                currentSprite = "up";
-                break;
-            case Down:
-                currentSprite = "down";
-                break;
-            case Left:
-                currentSprite = "left";
-                break;
-            case Right:
-                currentSprite = "right";
-                break;
-        }
-    }
     
     @Override
     public void updateNextDirection() {

@@ -30,6 +30,8 @@ public abstract class Entity {
     protected HashMap<String, Sprite> sprites = new HashMap<String, Sprite>();
     protected int spriteWidth = 8, spriteHeight = 8;
     
+    protected String folder = "entities";
+    
     public Entity(double x, double y, double speed) {
         this.x = x;
         this.y = y;
@@ -38,16 +40,15 @@ public abstract class Entity {
     
     public void loadSprites(){
         try {
-            String
             
-            String fileStr = new String(Files.readAllBytes(Paths.get("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/"+spritesheetLocation+".json")), "UTF-8");
+            String fileStr = new String(Files.readAllBytes(Paths.get("res/textures_pack/Original/"+folder+"/"+spritesheetLocation+"/"+spritesheetLocation+".json")), "UTF-8");
             JSONArray json = new JSONObject(fileStr).getJSONArray("sprites");
             for(int j = 0; j < json.length(); j++){
                 
                 String name = json.getJSONArray(j).getString(0);
                 int value = json.getJSONArray(j).getInt(1);
                 
-                BufferedImage spritesheet = ImageIO.read(new File("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/"+name+".png"));
+                BufferedImage spritesheet = ImageIO.read(new File("res/textures_pack/Original/"+folder+"/"+spritesheetLocation+"/"+name+".png"));
                 BufferedImage[] sprite = new BufferedImage[value];
                 for(int i = 0; i < value; i++){
                     int width = spritesheet.getWidth()/value;
@@ -92,15 +93,19 @@ public abstract class Entity {
         switch(currentDirection){
             case Up:
                 yFut -= speed;
+                currentSprite = "up";
                 break;
             case Down:
                 yFut += speed;
+                currentSprite = "down";
                 break;
             case Left:
                 xFut -= speed;
+                currentSprite = "left";
                 break;
             case Right:
                 xFut += speed;
+                currentSprite = "right";
                 break;
         }
         
@@ -131,6 +136,7 @@ public abstract class Entity {
         } else if(y <= -2){
             y = Game.getMap().getMapHeight();
         }
+        
     }
     
     public boolean collision(Direction direction){
@@ -209,29 +215,5 @@ public abstract class Entity {
     }
     
     public abstract void updateNextDirection();
-    
-    public void loadSprites(){
-        try {
-            String fileStr = new String(Files.readAllBytes(Paths.get("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/"+spritesheetLocation+".json")), "UTF-8");
-            JSONArray json = new JSONObject(fileStr).getJSONArray("sprites");
-            for(int j = 0; j < json.length(); j++){
-                
-                String name = json.getJSONArray(j).getString(0);
-                int value = json.getJSONArray(j).getInt(1);
-                
-                BufferedImage spritesheet = ImageIO.read(new File("res/textures_pack/Original/Ghosts/"+spritesheetLocation+"/"+name+".png"));
-                BufferedImage[] sprite = new BufferedImage[value];
-                for(int i = 0; i < value; i++){
-                    int width = spritesheet.getWidth()/value;
-                    int height = spritesheet.getHeight();
-                    sprite[i] = spritesheet.getSubimage(i * width, 0, width, height);
-                }
-                sprites.put(name, new Sprite(sprite));
-                
-            }
-        
-        } catch (IOException ex) {
-            Logger.getLogger(Ghost.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+   
 }
