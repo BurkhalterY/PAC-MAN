@@ -1,7 +1,7 @@
 package engine;
 
 import engine.Tile.Type;
-import ghosts.Blinky;
+import ghosts.*;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -115,6 +115,18 @@ public class Map {
                                 break;
                             case 4:
                                 Game.getGhosts().add(new Blinky(x, y, 11d/90d));
+                                break;
+                            case 5:
+                                Game.getGhosts().add(new Inky(x, y, 11d/90d));
+                                break;
+                            case 6:
+                                Game.getGhosts().add(new Pinky(x, y, 11d/90d));
+                                break;
+                            case 7:
+                                Game.getGhosts().add(new Clyde(x, y, 11d/90d));
+                                break;
+                            case 8:
+                                Game.getGhosts().add(new Sue(x, y, 11d/90d));
                                 break;
                         }
                     }
@@ -255,7 +267,7 @@ public class Map {
                 transformation.scale(size/tileWidth, size/tileHeight);
                 g2d.drawImage(map[x][y].getImg(), transformation, null);*/
                 if(map[x][y].getMapTile() == Type.Free){
-                    g.setColor(Color.cyan);
+                    g.setColor(Color.darkGray);
                 } else {
                     g.setColor(Color.orange);
                 }

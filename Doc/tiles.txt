@@ -17,6 +17,7 @@ entities.txt
 5 - Inky spawn
 6 - Pinky spawn
 7 - Clyde spawn
+8 - Sue spawn
 
 
 events.txt

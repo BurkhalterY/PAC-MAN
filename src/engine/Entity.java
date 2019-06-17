@@ -195,6 +195,10 @@ public abstract class Entity {
         return (int)(y+0.5d);
     }
     
+    public Direction getDirection(){
+        return currentDirection;
+    }
+    
     public static Direction inverseDirection(Direction direction){
         switch(direction){
             case Up:
@@ -215,5 +219,4 @@ public abstract class Entity {
     }
     
     public abstract void updateNextDirection();
-   
 }

@@ -83,9 +83,9 @@ public abstract class Ghost extends Entity {
         Graphics2D g2d = (Graphics2D)g;
         
         AffineTransform transformation = new AffineTransform();
-        transformation.translate((x-0.5)*size, (y-0.5)*size);
+        transformation.translate(xCible*size, yCible*size);
         transformation.scale(size/spriteWidth, size/spriteHeight);
-        g2d.drawImage(sprites.getOrDefault(currentSprite, new Sprite(new BufferedImage[1])).render(), transformation, null);
+        g2d.drawImage(sprites.getOrDefault("target", new Sprite(new BufferedImage[1])).render(), transformation, null);
     }
     
 }
