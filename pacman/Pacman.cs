@@ -1,6 +1,6 @@
 ﻿namespace pacman
 {
-    public class Pacman : Entity
+    public class Pacman : Player
     {
         public Pacman(Node nodeFrom, Direction direction, double distance = 0) : base(nodeFrom, direction, distance)
         {

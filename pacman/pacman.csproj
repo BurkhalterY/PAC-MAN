@@ -90,6 +90,7 @@
   <ItemGroup>
     <Compile Include="Node.cs" />
     <Compile Include="Pacman.cs" />
+    <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

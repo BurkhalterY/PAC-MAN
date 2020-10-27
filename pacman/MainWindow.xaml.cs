@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using static pacman.Game;
 
@@ -22,7 +21,6 @@ namespace pacman
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            Console.WriteLine(1);
             switch (e.Key)
             {
                 case Key.Up:

@@ -8,6 +8,7 @@ namespace pacman
     {
         public delegate void Refresh();
         public event Refresh OnRefresh;
+        public static int ticks;
 
         public List<Node> nodes = new List<Node>();
         public Pacman player;
@@ -51,18 +52,18 @@ namespace pacman
             nodes.Add(nodeF);
             nodes.Add(nodeG);
 
-            nodeA.neighbors[Direction.Up] = nodeG;
-            player = new Pacman(nodeA, Direction.Down, 0);
+            player = new Pacman(nodeA, Direction.Down);
         }
 
         public void pressKey(Direction direction)
         {
-            player.direction = direction;
+            player.nextDirection = direction;
         }
 
         private void onTick(object sender, EventArgs e)
         {
-            player.distance += 0.01;
+            player.Move();
+            ticks++;
             OnRefresh();
         }
     }

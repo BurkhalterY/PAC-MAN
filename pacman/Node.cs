@@ -8,6 +8,7 @@ namespace pacman
     {
         public double x, y;
         public Dictionary<Direction, Node> neighbors = new Dictionary<Direction, Node>() {
+            { Direction.None, null },
             { Direction.Up, null },
             { Direction.Right, null },
             { Direction.Down, null },
