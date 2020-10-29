@@ -10,7 +10,6 @@ namespace pacman
         public event Refresh OnRefresh;
         public static int ticks;
 
-        public List<Node> nodes = new List<Node>();
         public Pacman player;
 
         public Game()
@@ -21,18 +20,18 @@ namespace pacman
             timer.Start();
 
 
-            Node nodeA = new Node(2, 2);
-            Node nodeB = new Node(4, 2);
-            Node nodeC = new Node(2, 4);
-            Node nodeD = new Node(4, 4);
-            Node nodeE = new Node(6, 4);
-            Node nodeF = new Node(2, 8);
-            Node nodeG = new Node(6, 8);
+            /*Node nodeA = new Node(6, 6);
+            Node nodeB = new Node(12, 6);
+            Node nodeC = new Node(6, 12);
+            Node nodeD = new Node(12, 12);
+            Node nodeE = new Node(18, 12);
+            Node nodeF = new Node(6, 24);
+            Node nodeG = new Node(18, 24);
             nodeA.neighbors[Direction.Right] = nodeB;
             nodeA.neighbors[Direction.Down] = nodeC;
-            nodeB.neighbors[Direction.Left] = nodeA;
+            nodeB.neighbors[Direction.Left] = nodeC;
             nodeB.neighbors[Direction.Down] = nodeD;
-            nodeC.neighbors[Direction.Up] = nodeA;
+            nodeC.neighbors[Direction.Up] = nodeB;
             nodeC.neighbors[Direction.Right] = nodeD;
             nodeC.neighbors[Direction.Down] = nodeF;
             nodeD.neighbors[Direction.Up] = nodeB;
@@ -44,15 +43,11 @@ namespace pacman
             nodeF.neighbors[Direction.Right] = nodeG;
             nodeG.neighbors[Direction.Up] = nodeE;
             nodeG.neighbors[Direction.Left] = nodeF;
-            nodes.Add(nodeA);
-            nodes.Add(nodeB);
-            nodes.Add(nodeC);
-            nodes.Add(nodeD);
-            nodes.Add(nodeE);
-            nodes.Add(nodeF);
-            nodes.Add(nodeG);
+            player = new Pacman(nodeA, Direction.Down);*/
 
-            player = new Pacman(nodeA, Direction.Down);
+            Map map = new Map();
+            map.LoadMap();
+            player = new Pacman(map.tiles[6, 8].node, Direction.Down);
         }
 
         public void pressKey(Direction direction)

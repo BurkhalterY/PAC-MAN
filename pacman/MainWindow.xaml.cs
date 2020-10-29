@@ -21,6 +21,8 @@ namespace pacman
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
+            /*controller.player.Move();
+            OnRefresh();*/
             switch (e.Key)
             {
                 case Key.Up:

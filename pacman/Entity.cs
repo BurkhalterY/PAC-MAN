@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -12,15 +13,17 @@ namespace pacman
         public Direction direction;
         public Direction nextDirection;
         public double distance;
-        public double speed = 0.05;//11d / 60d;
-        public bool move = true;
+        public double speed = 11d / 60d;
+        private bool move = false;
         protected Dictionary<string, CroppedBitmap[]> sprites = new Dictionary<string, CroppedBitmap[]>();
         protected string currentSprite;
+        private int frame;
+        private bool loop;
 
         public Entity(Node nodeFrom, Direction direction, double distance = 0)
         {
             this.nodeFrom = nodeFrom;
-            this.direction = this.nextDirection = direction;
+            this.direction = nextDirection = direction;
             this.distance = distance;
             MyCanvas.toDraw.Add(this);
             LoadTextures();
@@ -48,43 +51,61 @@ namespace pacman
 
         public void Move()
         {
-            Node a = nodeFrom;
-            Node b = nodeFrom.neighbors[direction];
-            double d = Math.Sqrt(Math.Pow(a.x - b.x, 2) + Math.Pow(a.y - b.y, 2));
+            move = false;
+            double d = 0;
+            if (nodeFrom.neighbors[direction] != null) {
+                d = Node.CalculateDistance(nodeFrom, nodeFrom.neighbors[direction]);
+            }
 
             if (DirectionHelper.isOpposite(direction, nextDirection))
             {
-                nodeFrom = nodeFrom.neighbors[direction];
-                direction = nextDirection;
+                if (d != 0)
+                {
+                    nodeFrom = nodeFrom.neighbors[direction];
+                }
                 distance = d - distance;
                 move = true;
+                direction = nextDirection;
             }
+            else if (Math.Abs(distance - d) < speed)
+            {
+                if (nodeFrom.neighbors[direction] != null)
+                {
+                    nodeFrom = nodeFrom.neighbors[direction];
+                }
+                if (nodeFrom.neighbors[nextDirection] != null)
+                {
+                    if (nodeFrom.tp)
+                    {
+                        nodeFrom = nodeFrom.neighbors[nextDirection];
+                    }
+                    distance -= d;
+                    move = true;
+                    direction = nextDirection;
+                }
+                else if (nodeFrom.neighbors[direction] != null)
+                {
+                    if (nodeFrom.tp)
+                    {
+                        nodeFrom = nodeFrom.neighbors[direction];
+                    }
+                    distance -= d;
+                    move = true;
+                }
+            }
+            else
+            {
+                move = true;
+            }
+            
 
             if (move)
             {
                 distance += speed;
             }
-
-            if (Math.Abs(distance - d) < speed)
+            else
             {
-                if (nodeFrom.neighbors[direction].neighbors[nextDirection] != null)
-                {
-                    nodeFrom = nodeFrom.neighbors[direction];
-                    direction = nextDirection;
-                    distance -= d;
-                    move = true;
-                }
-                else if (nodeFrom.neighbors[direction].neighbors[direction] != null)
-                {
-                    nodeFrom = nodeFrom.neighbors[direction];
-                    distance -= d;
-                    move = true;
-                }
-                else
-                {
-                    move = false;
-                    distance = d;
-                }
+                distance = 0;
             }
         }
 
@@ -100,7 +121,19 @@ namespace pacman
             double x = nodeFrom.x + Math.Cos(angle) * distance;
             double y = nodeFrom.y + Math.Sin(angle) * distance;
 
-            dc.DrawImage(sprites[currentSprite][Game.ticks / 4 % sprites[currentSprite].Length], new Rect(x * ratio, y * ratio, ratio, ratio));
+            if (Game.ticks % 4 == 0)
+            {
+                frame += loop ? -1 : 1;
+                if (frame == sprites[currentSprite].Length - 1 || frame == 0)
+                {
+                    loop = !loop;
+                }
+            }
+
+            dc.DrawImage(sprites[currentSprite][frame], new Rect(x * ratio - ratio / 2, y * ratio - ratio / 2, ratio * 2, ratio * 2));
+
+            dc.DrawText(new FormattedText(nodeFrom.x + " ; " + nodeFrom.y, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("arial"), 40, Brushes.Red), new Point());
+            dc.DrawText(new FormattedText(distance+"", CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("arial"), 40, Brushes.Red), new Point(0, 45));
         }
     }
 }

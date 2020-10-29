@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
 
@@ -14,6 +15,7 @@ namespace pacman
             { Direction.Down, null },
             { Direction.Left, null }
         };
+        public bool tp = false;
 
         public Node(double x, double y)
         {
@@ -24,14 +26,19 @@ namespace pacman
 
         public void Draw(DrawingContext dc, double ratio)
         {
-            dc.DrawEllipse(Brushes.Red, new Pen(Brushes.Red, 1), new Point(x * ratio, y * ratio), ratio / 4, ratio / 4);
+            /*dc.DrawEllipse(Brushes.Red, new Pen(Brushes.Red, 1), new Point(x * ratio, y * ratio), ratio / 4, ratio / 4);
             foreach (var neighbor in neighbors)
             {
                 if (neighbor.Value != null)
                 {
-                    dc.DrawLine(new Pen(Brushes.Black, 1), new Point(x * ratio, y * ratio), new Point(neighbor.Value.x * ratio, neighbor.Value.y * ratio));
+                    dc.DrawLine(new Pen(Brushes.Black, 2), new Point(x * ratio, y * ratio), new Point(neighbor.Value.x * ratio, neighbor.Value.y * ratio));
                 }
-            }
+            }*/
+        }
+
+        public static double CalculateDistance(Node a, Node b)
+        {
+            return Math.Sqrt(Math.Pow(a.x - b.x, 2) + Math.Pow(a.y - b.y, 2));
         }
     }
 }

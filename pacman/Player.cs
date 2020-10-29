@@ -10,7 +10,7 @@
         public override void LoadTextures()
         {
             currentSprite = "move";
-            AddSprites("move", @"..\..\..\res\players\pac-man\move.png", 4);
+            AddSprites("move", @"..\..\..\res\players\pac-man\move.png", 3);
         }
     }
 }

@@ -73,7 +73,9 @@
     <Compile Include="Drawable.cs" />
     <Compile Include="Entity.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="Map.cs" />
     <Compile Include="MyCanvas.cs" />
+    <Compile Include="Tile.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

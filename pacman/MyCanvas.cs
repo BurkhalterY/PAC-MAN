@@ -10,7 +10,7 @@ namespace pacman
         public static List<Drawable> toDraw = new List<Drawable>();
         protected override void OnRender(DrawingContext dc)
         {
-            double ratio = Math.Min(ActualWidth, ActualHeight) / 16;
+            double ratio = Math.Min(ActualWidth / 28, ActualHeight / 36);
 
             foreach (Drawable obj in toDraw)
             {
