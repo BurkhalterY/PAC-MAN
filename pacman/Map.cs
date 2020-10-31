@@ -34,7 +34,6 @@ namespace pacman
                             tiles[x, y].node.neighbors[Direction.Up] = tiles[x, y - 1].node;
                             tiles[x, y - 1].node.neighbors[Direction.Down] = tiles[x, y].node;
                         }
-
                     }
                 }
 

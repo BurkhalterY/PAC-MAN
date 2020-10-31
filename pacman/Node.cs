@@ -35,10 +35,5 @@ namespace pacman
                 }
             }*/
         }
-
-        public static double CalculateDistance(Node a, Node b)
-        {
-            return Math.Sqrt(Math.Pow(a.x - b.x, 2) + Math.Pow(a.y - b.y, 2));
-        }
     }
 }

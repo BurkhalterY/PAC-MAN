@@ -10,7 +10,9 @@ namespace pacman
         public event Refresh OnRefresh;
         public static int ticks;
 
-        public Pacman player;
+        public static Map map;
+        public static Player player;
+        public static Ghost[] ghosts = new Ghost[4];
 
         public Game()
         {
@@ -45,9 +47,13 @@ namespace pacman
             nodeG.neighbors[Direction.Left] = nodeF;
             player = new Pacman(nodeA, Direction.Down);*/
 
-            Map map = new Map();
+            map = new Map();
             map.LoadMap();
             player = new Pacman(map.tiles[6, 8].node, Direction.Down);
+            ghosts[0] = new Blinky(map.tiles[6, 8].node, Direction.Left);
+            ghosts[1] = new Inky(map.tiles[6, 8].node, Direction.Left);
+            ghosts[2] = new Pinky(map.tiles[6, 8].node, Direction.Left);
+            ghosts[3] = new Clyde(map.tiles[6, 8].node, Direction.Left);
         }
 
         public void pressKey(Direction direction)
@@ -58,6 +64,10 @@ namespace pacman
         private void onTick(object sender, EventArgs e)
         {
             player.Move();
+            foreach (Ghost ghost in ghosts)
+            {
+                ghost.Move();
+            }
             ticks++;
             OnRefresh();
         }

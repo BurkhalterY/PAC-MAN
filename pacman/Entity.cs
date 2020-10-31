@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -14,7 +13,7 @@ namespace pacman
         public Direction nextDirection;
         public double distance;
         public double speed = 11d / 60d;
-        private bool move = false;
+        protected bool move = false;
         protected Dictionary<string, CroppedBitmap[]> sprites = new Dictionary<string, CroppedBitmap[]>();
         protected string currentSprite;
         private int frame;
@@ -49,12 +48,19 @@ namespace pacman
 
         }
 
+        public virtual void CalculateDirection()
+        {
+
+        }
+
         public void Move()
         {
+            CalculateDirection();
             move = false;
             double d = 0;
-            if (nodeFrom.neighbors[direction] != null) {
-                d = Node.CalculateDistance(nodeFrom, nodeFrom.neighbors[direction]);
+            if (nodeFrom.neighbors[direction] != null)
+            {
+                d = Helper.CalculateDistance(nodeFrom.x, nodeFrom.y, nodeFrom.neighbors[direction].x, nodeFrom.neighbors[direction].y);
             }
 
             if (DirectionHelper.isOpposite(direction, nextDirection))
@@ -97,7 +103,6 @@ namespace pacman
             {
                 move = true;
             }
-            
 
             if (move)
             {
@@ -109,7 +114,7 @@ namespace pacman
             }
         }
 
-        public void Draw(DrawingContext dc, double ratio)
+        public (double, double) GetXY()
         {
             Node a = nodeFrom;
             Node b = nodeFrom.neighbors[direction];
@@ -120,6 +125,13 @@ namespace pacman
             }
             double x = nodeFrom.x + Math.Cos(angle) * distance;
             double y = nodeFrom.y + Math.Sin(angle) * distance;
+
+            return (x, y);
+        }
+
+        public virtual void Draw(DrawingContext dc, double ratio)
+        {
+            (double x, double y) = GetXY();
 
             if (Game.ticks % 4 == 0)
             {
@@ -132,8 +144,8 @@ namespace pacman
 
             dc.DrawImage(sprites[currentSprite][frame], new Rect(x * ratio - ratio / 2, y * ratio - ratio / 2, ratio * 2, ratio * 2));
 
-            dc.DrawText(new FormattedText(nodeFrom.x + " ; " + nodeFrom.y, CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("arial"), 40, Brushes.Red), new Point());
-            dc.DrawText(new FormattedText(distance+"", CultureInfo.InvariantCulture, FlowDirection.LeftToRight, new Typeface("arial"), 40, Brushes.Red), new Point(0, 45));
+            (double targetX, double targetY) = Game.player.GetXY();
+            dc.DrawRectangle(Brushes.Transparent, new Pen(Brushes.Green, ratio / 8), new Rect((targetX + .5) * ratio, (targetY + .5) * ratio, ratio/8, ratio/8));
         }
     }
 }
