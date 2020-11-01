@@ -40,7 +40,7 @@ namespace pacman
             this.nodeFrom = nodeFrom;
             this.direction = nextDirection = direction;
             this.distance = distance;
-            MyCanvas.toDraw.Add(this);
+            MyCanvas.toDraw[2].Add(this);
             LoadTextures();
         }
 
@@ -100,14 +100,14 @@ namespace pacman
             double d = 0;
             if (nodeFrom.neighbors[direction] != null)
             {
-                d = Helper.CalculateDistance(nodeFrom.x, nodeFrom.y, nodeFrom.neighbors[direction].x, nodeFrom.neighbors[direction].y);
+                d = Helper.CalculateDistance(nodeFrom.x, nodeFrom.y, nodeFrom.neighbors[direction].node.x, nodeFrom.neighbors[direction].node.y);
             }
 
             if (DirectionHelper.IsOpposite(direction, nextDirection))
             {
                 if (d != 0)
                 {
-                    nodeFrom = nodeFrom.neighbors[direction];
+                    nodeFrom = nodeFrom.neighbors[direction].node;
                 }
                 distance = d - distance;
                 move = true;
@@ -117,13 +117,13 @@ namespace pacman
             {
                 if (nodeFrom.neighbors[direction] != null)
                 {
-                    nodeFrom = nodeFrom.neighbors[direction];
+                    nodeFrom = nodeFrom.neighbors[direction].node;
                 }
                 if (nodeFrom.neighbors[nextDirection] != null)
                 {
-                    if (nodeFrom.tp)
+                    if (nodeFrom.neighbors[nextDirection].tp)
                     {
-                        nodeFrom = nodeFrom.neighbors[nextDirection];
+                        nodeFrom = nodeFrom.neighbors[nextDirection].node;
                     }
                     distance -= d;
                     move = true;
@@ -131,9 +131,9 @@ namespace pacman
                 }
                 else if (nodeFrom.neighbors[direction] != null)
                 {
-                    if (nodeFrom.tp)
+                    if (nodeFrom.neighbors[direction].tp)
                     {
-                        nodeFrom = nodeFrom.neighbors[direction];
+                        nodeFrom = nodeFrom.neighbors[direction].node;
                     }
                     distance -= d;
                     move = true;
@@ -163,11 +163,11 @@ namespace pacman
         public (double, double) GetXY()
         {
             Node a = nodeFrom;
-            Node b = nodeFrom.neighbors[direction];
+            NodeConfig b = nodeFrom.neighbors[direction];
             double angle = 0;
             if (b != null)
             {
-                angle = Math.Atan2(b.y - a.y, b.x - a.x);
+                angle = Math.Atan2(b.node.y - a.y, b.node.x - a.x);
             }
             double x = nodeFrom.x + Math.Cos(angle) * distance;
             double y = nodeFrom.y + Math.Sin(angle) * distance;

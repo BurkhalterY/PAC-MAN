@@ -13,17 +13,20 @@ namespace pacman
         public override void AfterMove()
         {
             (int x, int y) = Game.entities.Find(e => e is Player).GetIntXY();
-            Tile tile = Game.map.tiles[x, y];
-
-            switch (tile.type)
+            if (x >= 0 && x < Game.map.tiles.GetLength(0) && y >= 0 && y < Game.map.tiles.GetLength(1))
             {
-                case TileType.Pellet:
-                    tile.type = TileType.None;
-                    break;
-                case TileType.SuperPellet:
-                    tile.type = TileType.None;
-                    Game.entities.FindAll(e => e is Ghost).ForEach(e => ((Ghost)e).mode = GhostMode.Frightened);
-                    break;
+                Tile tile = Game.map.tiles[x, y];
+
+                switch (tile.type)
+                {
+                    case TileType.Pellet:
+                        tile.type = TileType.None;
+                        break;
+                    case TileType.SuperPellet:
+                        tile.type = TileType.None;
+                        Game.entities.FindAll(e => e is Ghost).ForEach(e => ((Ghost)e).mode = GhostMode.Frightened);
+                        break;
+                }
             }
         }
 

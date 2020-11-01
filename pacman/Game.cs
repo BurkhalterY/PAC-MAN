@@ -26,7 +26,7 @@ namespace pacman
             timer.Interval = 16;
             timer.Start();
             random = new Random();
-
+            MyCanvas.Init();
 
             /*Node nodeA = new Node(6, 6);
             Node nodeB = new Node(12, 6);

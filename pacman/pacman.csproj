@@ -84,6 +84,7 @@
     <Compile Include="Map.cs" />
     <Compile Include="MsPacman.cs" />
     <Compile Include="MyCanvas.cs" />
+    <Compile Include="NodeConfig.cs" />
     <Compile Include="Pacman.cs" />
     <Compile Include="PacmanJr.cs" />
     <Compile Include="Pinky.cs" />

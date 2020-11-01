@@ -23,7 +23,7 @@ namespace pacman
             this.y = y;
             this.type = type;
             this.node = new Node(x, y);
-            MyCanvas.toDraw.Add(this);
+            MyCanvas.toDraw[8].Add(this);
         }
 
         public Tile(int x, int y, char type) : this(x, y, (TileType)type)

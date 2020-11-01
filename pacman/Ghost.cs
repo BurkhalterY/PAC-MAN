@@ -40,7 +40,7 @@ namespace pacman
                 double d = 0;
                 if (nodeFrom.neighbors[direction] != null)
                 {
-                    d = Helper.CalculateDistance(nodeFrom.x, nodeFrom.y, nodeFrom.neighbors[direction].x, nodeFrom.neighbors[direction].y);
+                    d = Helper.CalculateDistance(nodeFrom.x, nodeFrom.y, nodeFrom.neighbors[direction].node.x, nodeFrom.neighbors[direction].node.y);
                 }
 
                 if (Math.Abs(distance - d) < speed)
@@ -51,13 +51,13 @@ namespace pacman
                     Node baseNode = nodeFrom;
                     if (baseNode.neighbors[direction] != null)
                     {
-                        baseNode = baseNode.neighbors[direction];
+                        baseNode = baseNode.neighbors[direction].node;
                     }
                     foreach (Direction key in baseNode.neighbors.Keys)
                     {
                         if (baseNode.neighbors[key] != null)
                         {
-                            double distanceBetween = Helper.CalculateDistance(baseNode.neighbors[key].x, baseNode.neighbors[key].y, targetX, targetY);
+                            double distanceBetween = Helper.CalculateDistance(baseNode.neighbors[key].node.x, baseNode.neighbors[key].node.y, targetX, targetY);
                             if ((distanceBetween < minDistance || minDistance == -1) && !DirectionHelper.IsOpposite(direction, key))
                             {
                                 minDistance = distanceBetween;
