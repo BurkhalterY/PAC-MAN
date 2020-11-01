@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace pacman
@@ -9,10 +10,14 @@ namespace pacman
         public delegate void Refresh();
         public event Refresh OnRefresh;
         public static int ticks;
+        public static Random random;
 
         public static Map map;
-        public static Player player;
-        public static Ghost[] ghosts = new Ghost[4];
+        public static List<Player> players = new List<Player>();
+        public static List<Ghost> ghosts = new List<Ghost>();
+        public static GhostMode ghostMode = GhostMode.Scatter;
+        public static List<int> modeIntervals = new List<int>() { 7 * 60, 20 * 60, 7 * 60, 20 * 60, 5 * 60, 20 * 60, 5 * 60 };
+        public static int ticksMode;
 
         public Game()
         {
@@ -20,6 +25,7 @@ namespace pacman
             timer.Tick += new EventHandler(onTick);
             timer.Interval = 16;
             timer.Start();
+            random = new Random();
 
 
             /*Node nodeA = new Node(6, 6);
@@ -49,27 +55,43 @@ namespace pacman
 
             map = new Map();
             map.LoadMap();
-            player = new Pacman(map.tiles[6, 8].node, Direction.Down);
-            ghosts[0] = new Blinky(map.tiles[6, 8].node, Direction.Left);
-            ghosts[1] = new Inky(map.tiles[6, 8].node, Direction.Left);
-            ghosts[2] = new Pinky(map.tiles[6, 8].node, Direction.Left);
-            ghosts[3] = new Clyde(map.tiles[6, 8].node, Direction.Left);
+            /*entities[5] = new Pacman(map.tiles[6, 8].node, Direction.Down);
+            entities[0] = new Blinky(map.tiles[6, 8].node, Direction.Left);
+            entities[1] = new Inky(map.tiles[6, 8].node, Direction.Left);
+            entities[2] = new Pinky(map.tiles[6, 8].node, Direction.Left);
+            entities[3] = new Clyde(map.tiles[6, 8].node, Direction.Left);*/
         }
 
         public void pressKey(Direction direction)
         {
-            player.nextDirection = direction;
+            players[0].nextDirection = direction;
         }
 
         private void onTick(object sender, EventArgs e)
         {
-            player.Move();
+            CalculateGhostMode();
+            foreach (Player player in players)
+            {
+                player.Move();
+            }
             foreach (Ghost ghost in ghosts)
             {
                 ghost.Move();
             }
             ticks++;
             OnRefresh();
+        }
+
+        private void CalculateGhostMode()
+        {
+            ticksMode++;
+            if (modeIntervals.Count() > 0 && ticksMode > modeIntervals.First())
+            {
+                modeIntervals.RemoveAt(0);
+                ticksMode = 0;
+
+                ghostMode = ghostMode == GhostMode.Scatter ? GhostMode.Chase : GhostMode.Scatter;
+            }
         }
     }
 }

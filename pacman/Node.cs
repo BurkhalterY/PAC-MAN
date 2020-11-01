@@ -11,9 +11,9 @@ namespace pacman
         public Dictionary<Direction, Node> neighbors = new Dictionary<Direction, Node>() {
             { Direction.None, null },
             { Direction.Up, null },
-            { Direction.Right, null },
+            { Direction.Left, null },
             { Direction.Down, null },
-            { Direction.Left, null }
+            { Direction.Right, null }
         };
         public bool tp = false;
 

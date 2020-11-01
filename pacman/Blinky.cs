@@ -7,6 +7,8 @@ namespace pacman
         public Blinky(Node nodeFrom, Direction direction, double distance = 0) : base(nodeFrom, direction, distance)
         {
             color = Brushes.Red;
+            scatterX = Game.map.tiles.GetLength(0) - 3;
+            scatterY = 0;
         }
 
         public override void LoadTextures()
@@ -15,11 +17,9 @@ namespace pacman
             AddSprites("right", @"..\..\..\res\ghosts\blinky\right.png", 2);
         }
 
-        public override void CalculateTarget()
+        public override void CalculateTargetChaseMode()
         {
-            (double x, double y) = Game.player.GetXY();
-            targetX = (int)(x + .5);
-            targetY = (int)(y + .5);
+            (targetX, targetY) = Game.players[0].GetIntXY();
         }
     }
 }

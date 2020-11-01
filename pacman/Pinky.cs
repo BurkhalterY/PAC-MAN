@@ -7,6 +7,8 @@ namespace pacman
         public Pinky(Node nodeFrom, Direction direction, double distance = 0) : base(nodeFrom, direction, distance)
         {
             color = Brushes.Pink;
+            scatterX = 2;
+            scatterY = 0;
         }
 
         public override void LoadTextures()
@@ -15,13 +17,11 @@ namespace pacman
             AddSprites("right", @"..\..\..\res\ghosts\pinky\right.png", 2);
         }
 
-        public override void CalculateTarget()
+        public override void CalculateTargetChaseMode()
         {
-            (double x, double y) = Game.player.GetXY();
-            targetX = (int)(x + .5);
-            targetY = (int)(y + .5);
+            (targetX, targetY) = Game.players[0].GetIntXY();
 
-            switch (Game.player.direction)
+            switch (Game.players[0].direction)
             {
                 case Direction.Right:
                     targetX += 4;

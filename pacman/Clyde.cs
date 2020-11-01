@@ -1,5 +1,4 @@
-﻿using System;
-using System.Windows.Media;
+﻿using System.Windows.Media;
 
 namespace pacman
 {
@@ -18,15 +17,10 @@ namespace pacman
             AddSprites("right", @"..\..\..\res\ghosts\clyde\right.png", 2);
         }
 
-        public override void CalculateTarget()
+        public override void CalculateTargetChaseMode()
         {
-            (double x, double y) = Game.player.GetXY();
-            targetX = (int)(x + .5);
-            targetY = (int)(y + .5);
-
-            (x, y) = GetXY();
-            int myX = (int)(x + .5);
-            int myY = (int)(y + .5);
+            (targetX, targetY) = Game.players[0].GetIntXY();
+            (int myX, int myY) = GetIntXY();
 
             if (Helper.CalculateDistance(targetX, targetY, myX, myY) <= 8)
             {

@@ -1,0 +1,46 @@
+{
+	"elements": [
+		{
+			"type": "pacman",
+			"x": 14,
+			"y": 26,
+			"distance": 0.5,
+			"direction": "left"
+		},
+		{
+			"type": "blinky",
+			"x": 14,
+			"y": 14,
+			"distance": 0.5,
+			"direction": "left"
+		},
+		{
+			"type": "inky",
+			"x": 14,
+			"y": 14,
+			"distance": 0.5,
+			"direction": "left"
+		},
+		{
+			"type": "pinky",
+			"x": 14,
+			"y": 14,
+			"distance": 0.5,
+			"direction": "left"
+		},
+		{
+			"type": "clyde",
+			"x": 14,
+			"y": 14,
+			"distance": 0.5,
+			"direction": "left"
+		},
+		{
+			"type": "sue",
+			"x": 14,
+			"y": 14,
+			"distance": 0.5,
+			"direction": "left"
+		}
+	]
+}

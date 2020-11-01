@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 
@@ -7,7 +7,6 @@ namespace pacman
     public class Map
     {
         public Tile[,] tiles;
-        public List<Node> nodes = new List<Node>();
 
         public void LoadMap()
         {
@@ -44,6 +43,42 @@ namespace pacman
 
                     tiles[0, y].node.neighbors[Direction.Left] = tiles[tiles.GetLength(0) - 1, y].node;
                     tiles[tiles.GetLength(0) - 1, y].node.neighbors[Direction.Right] = tiles[0, y].node;
+                }
+            }
+            LoadEntities();
+        }
+
+        public void LoadEntities()
+        {
+            JObject obj = JObject.Parse(File.ReadAllText(@"..\..\..\res\maps\PAC-MAN\elements.json"));
+            JArray arr = obj.Value<JArray>("elements");
+            foreach (JToken element in arr)
+            {
+                int x = element.Value<int>("x");
+                int y = element.Value<int>("y");
+                double distance = element.Value<double>("distance");
+                Direction direction = DirectionHelper.FromString(element.Value<string>("direction"));
+
+                switch (element.Value<string>("type"))
+                {
+                    case "pacman":
+                        Game.players.Add(new Pacman(Game.map.tiles[x, y].node, direction, distance));
+                        break;
+                    case "blinky":
+                        Game.ghosts.Add(new Blinky(Game.map.tiles[x, y].node, direction, distance));
+                        break;
+                    case "inky":
+                        Game.ghosts.Add(new Inky(Game.map.tiles[x, y].node, direction, distance));
+                        break;
+                    case "pinky":
+                        Game.ghosts.Add(new Pinky(Game.map.tiles[x, y].node, direction, distance));
+                        break;
+                    case "clyde":
+                        Game.ghosts.Add(new Clyde(Game.map.tiles[x, y].node, direction, distance));
+                        break;
+                    case "sue":
+                        Game.ghosts.Add(new Sue(Game.map.tiles[x, y].node, direction, distance));
+                        break;
                 }
             }
         }

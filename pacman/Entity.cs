@@ -48,6 +48,16 @@ namespace pacman
 
         }
 
+        public virtual void BeforeMove()
+        {
+
+        }
+
+        public virtual void AfterMove()
+        {
+
+        }
+
         public virtual void CalculateDirection()
         {
 
@@ -55,6 +65,7 @@ namespace pacman
 
         public void Move()
         {
+            BeforeMove();
             CalculateDirection();
             move = false;
             double d = 0;
@@ -63,7 +74,7 @@ namespace pacman
                 d = Helper.CalculateDistance(nodeFrom.x, nodeFrom.y, nodeFrom.neighbors[direction].x, nodeFrom.neighbors[direction].y);
             }
 
-            if (DirectionHelper.isOpposite(direction, nextDirection))
+            if (DirectionHelper.IsOpposite(direction, nextDirection))
             {
                 if (d != 0)
                 {
@@ -112,6 +123,7 @@ namespace pacman
             {
                 distance = 0;
             }
+            AfterMove();
         }
 
         public (double, double) GetXY()
@@ -129,6 +141,14 @@ namespace pacman
             return (x, y);
         }
 
+        public (int, int) GetIntXY()
+        {
+            (double x2, double y2) = GetXY();
+            int x = (int)(x2 + .5);
+            int y = (int)(y2 + .5);
+            return (x, y);
+        }
+
         public virtual void Draw(DrawingContext dc, double ratio)
         {
             (double x, double y) = GetXY();
@@ -143,9 +163,6 @@ namespace pacman
             }
 
             dc.DrawImage(sprites[currentSprite][frame], new Rect(x * ratio - ratio / 2, y * ratio - ratio / 2, ratio * 2, ratio * 2));
-
-            (double targetX, double targetY) = Game.player.GetXY();
-            dc.DrawRectangle(Brushes.Transparent, new Pen(Brushes.Green, ratio / 8), new Rect((targetX + .5) * ratio, (targetY + .5) * ratio, ratio/8, ratio/8));
         }
     }
 }

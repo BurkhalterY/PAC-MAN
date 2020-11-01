@@ -7,6 +7,8 @@ namespace pacman
         public Inky(Node nodeFrom, Direction direction, double distance = 0) : base(nodeFrom, direction, distance)
         {
             color = Brushes.Cyan;
+            scatterX = Game.map.tiles.GetLength(0) - 1;
+            scatterY = Game.map.tiles.GetLength(1) - 1;
         }
 
         public override void LoadTextures()
@@ -15,17 +17,12 @@ namespace pacman
             AddSprites("right", @"..\..\..\res\ghosts\inky\right.png", 2);
         }
 
-        public override void CalculateTarget()
+        public override void CalculateTargetChaseMode()
         {
-            (double x, double y) = Game.player.GetXY();
-            int pacmanX = (int)(x + .5);
-            int pacmanY = (int)(y + .5);
+            (int pacmanX, int pacmanY) = Game.players[0].GetIntXY();
+            (int blinkyX, int blinkyY) = Game.ghosts[0].GetIntXY();
 
-            (x, y) = Game.ghosts[0].GetXY();
-            int blinkyX = (int)(x + .5);
-            int blinkyY = (int)(y + .5);
-
-            switch (Game.player.direction)
+            switch (Game.players[0].direction)
             {
                 case Direction.Right:
                     pacmanX += 2;
