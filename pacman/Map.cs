@@ -62,22 +62,28 @@ namespace pacman
                 switch (element.Value<string>("type"))
                 {
                     case "pacman":
-                        Game.players.Add(new Pacman(Game.map.tiles[x, y].node, direction, distance));
+                        Game.entities.Add(new Pacman(Game.map.tiles[x, y].node, direction, distance));
+                        break;
+                    case "mspacman":
+                        Game.entities.Add(new MsPacman(Game.map.tiles[x, y].node, direction, distance));
+                        break;
+                    case "jrpacman":
+                        Game.entities.Add(new PacmanJr(Game.map.tiles[x, y].node, direction, distance));
                         break;
                     case "blinky":
-                        Game.ghosts.Add(new Blinky(Game.map.tiles[x, y].node, direction, distance));
+                        Game.entities.Add(new Blinky(Game.map.tiles[x, y].node, direction, distance));
                         break;
                     case "inky":
-                        Game.ghosts.Add(new Inky(Game.map.tiles[x, y].node, direction, distance));
+                        Game.entities.Add(new Inky(Game.map.tiles[x, y].node, direction, distance));
                         break;
                     case "pinky":
-                        Game.ghosts.Add(new Pinky(Game.map.tiles[x, y].node, direction, distance));
+                        Game.entities.Add(new Pinky(Game.map.tiles[x, y].node, direction, distance));
                         break;
                     case "clyde":
-                        Game.ghosts.Add(new Clyde(Game.map.tiles[x, y].node, direction, distance));
+                        Game.entities.Add(new Clyde(Game.map.tiles[x, y].node, direction, distance));
                         break;
                     case "sue":
-                        Game.ghosts.Add(new Sue(Game.map.tiles[x, y].node, direction, distance));
+                        Game.entities.Add(new Sue(Game.map.tiles[x, y].node, direction, distance));
                         break;
                 }
             }

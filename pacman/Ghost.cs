@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows;
 using System.Windows.Media;
 
 namespace pacman
@@ -14,7 +13,7 @@ namespace pacman
 
     public class Ghost : Entity
     {
-        protected GhostMode mode = GhostMode.Scatter;
+        public GhostMode mode = GhostMode.Scatter;
         protected int targetX = 0, targetY = 0;
         protected int scatterX = 0, scatterY = 0;
         protected Brush color;
@@ -117,6 +116,42 @@ namespace pacman
                     break;
             }
             return (x, y);
+        }
+
+        public override void LoadTextures()
+        {
+            LoadTexture("up", 2);
+            LoadTexture("down", 2);
+            LoadTexture("left", 2);
+            LoadTexture("right", 2);
+
+            LoadTexture("scarred_up", 2, "ghosts\\scarred\\up");
+            LoadTexture("scarred_down", 2, "ghosts\\scarred\\down");
+            LoadTexture("scarred_left", 2, "ghosts\\scarred\\left");
+            LoadTexture("scarred_right", 2, "ghosts\\scarred\\right");
+
+            LoadTexture("scarred_white_up", 2, "ghosts\\white-scarred\\up");
+            LoadTexture("scarred_white_down", 2, "ghosts\\white-scarred\\down");
+            LoadTexture("scarred_white_left", 2, "ghosts\\white-scarred\\left");
+            LoadTexture("scarred_white_right", 2, "ghosts\\white-scarred\\right");
+
+            LoadTexture("eyes_up", 1, "ghosts\\eyes\\up");
+            LoadTexture("eyes_down", 1, "ghosts\\eyes\\down");
+            LoadTexture("eyes_left", 1, "ghosts\\eyes\\left");
+            LoadTexture("eyes_right", 1, "ghosts\\eyes\\right");
+        }
+
+        public override void SetSprite()
+        {
+            base.SetSprite();
+            if (mode == GhostMode.Frightened)
+            {
+                CurrentSprite = "scarred_" + CurrentSprite;
+            }
+            else if (mode == GhostMode.Eaten)
+            {
+                CurrentSprite = "eyes_" + CurrentSprite;
+            }
         }
 
         public override void Draw(DrawingContext dc, double ratio)

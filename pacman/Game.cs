@@ -13,11 +13,11 @@ namespace pacman
         public static Random random;
 
         public static Map map;
-        public static List<Player> players = new List<Player>();
-        public static List<Ghost> ghosts = new List<Ghost>();
+        public static List<Entity> entities = new List<Entity>();
         public static GhostMode ghostMode = GhostMode.Scatter;
         public static List<int> modeIntervals = new List<int>() { 7 * 60, 20 * 60, 7 * 60, 20 * 60, 5 * 60, 20 * 60, 5 * 60 };
         public static int ticksMode;
+        public static string texturePack = @"..\..\..\res";
 
         public Game()
         {
@@ -64,19 +64,22 @@ namespace pacman
 
         public void pressKey(Direction direction)
         {
-            players[0].nextDirection = direction;
+            entities.Find(e => e is Player).nextDirection = direction;
         }
 
         private void onTick(object sender, EventArgs e)
         {
             CalculateGhostMode();
-            foreach (Player player in players)
+            foreach (Entity entity in entities)
             {
-                player.Move();
-            }
-            foreach (Ghost ghost in ghosts)
-            {
-                ghost.Move();
+                entity.Move();
+                foreach (Entity entityCollision in entities)
+                {
+                    if (entity.GetIntXY() == entityCollision.GetIntXY())
+                    {
+                        entity.OnCollision(entityCollision);
+                    }
+                }
             }
             ticks++;
             OnRefresh();

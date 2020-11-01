@@ -52,5 +52,22 @@
                     return Direction.None;
             }
         }
+
+        public static string ToString(Direction direction)
+        {
+            switch (direction)
+            {
+                case Direction.Left:
+                    return "left";
+                case Direction.Right:
+                    return "right";
+                case Direction.Up:
+                    return "up";
+                case Direction.Down:
+                    return "down";
+                default:
+                    return "none";
+            }
+        }
     }
 }

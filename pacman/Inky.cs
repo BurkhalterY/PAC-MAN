@@ -11,18 +11,17 @@ namespace pacman
             scatterY = Game.map.tiles.GetLength(1) - 1;
         }
 
-        public override void LoadTextures()
+        protected override void Init()
         {
-            currentSprite = "right";
-            AddSprites("right", @"..\..\..\res\ghosts\inky\right.png", 2);
+            name = "ghosts/inky";
         }
 
         public override void CalculateTargetChaseMode()
         {
-            (int pacmanX, int pacmanY) = Game.players[0].GetIntXY();
-            (int blinkyX, int blinkyY) = Game.ghosts[0].GetIntXY();
+            (int pacmanX, int pacmanY) = Game.entities.Find(e => e is Player).GetIntXY();
+            (int blinkyX, int blinkyY) = Game.entities.Find(e => e is Blinky).GetIntXY();
 
-            switch (Game.players[0].direction)
+            switch (Game.entities.Find(e => e is Player).direction)
             {
                 case Direction.Right:
                     pacmanX += 2;

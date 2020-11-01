@@ -11,15 +11,14 @@ namespace pacman
             scatterY = Game.map.tiles.GetLength(1) - 1;
         }
 
-        public override void LoadTextures()
+        protected override void Init()
         {
-            currentSprite = "right";
-            AddSprites("right", @"..\..\..\res\ghosts\clyde\right.png", 2);
+            name = "ghosts/clyde";
         }
 
         public override void CalculateTargetChaseMode()
         {
-            (targetX, targetY) = Game.players[0].GetIntXY();
+            (targetX, targetY) = Game.entities.Find(e => e is Player).GetIntXY();
             (int myX, int myY) = GetIntXY();
 
             if (Helper.CalculateDistance(targetX, targetY, myX, myY) <= 8)

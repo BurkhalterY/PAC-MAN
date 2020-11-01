@@ -12,10 +12,9 @@ namespace pacman
             scatterY = Game.map.tiles.GetLength(1) - 1;
         }
 
-        public override void LoadTextures()
+        protected override void Init()
         {
-            currentSprite = "right";
-            AddSprites("right", @"..\..\..\res\ghosts\sue\right.png", 2);
+            name = "ghosts/sue";
         }
 
         public override void CalculateTargetChaseMode()

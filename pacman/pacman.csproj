@@ -82,7 +82,10 @@
     <Compile Include="Helper.cs" />
     <Compile Include="Inky.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="MsPacman.cs" />
     <Compile Include="MyCanvas.cs" />
+    <Compile Include="Pacman.cs" />
+    <Compile Include="PacmanJr.cs" />
     <Compile Include="Pinky.cs" />
     <Compile Include="Sue.cs" />
     <Compile Include="Tile.cs" />
@@ -101,7 +104,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Node.cs" />
-    <Compile Include="Pacman.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

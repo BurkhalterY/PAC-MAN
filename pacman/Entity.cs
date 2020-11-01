@@ -14,18 +14,39 @@ namespace pacman
         public double distance;
         public double speed = 11d / 60d;
         protected bool move = false;
+        protected string name;
         protected Dictionary<string, CroppedBitmap[]> sprites = new Dictionary<string, CroppedBitmap[]>();
-        protected string currentSprite;
-        private int frame;
-        private bool loop;
+        private string currentSprite = "left";
+        protected string CurrentSprite
+        {
+            get {
+                return currentSprite;
+            }
+            set {
+                if (value != currentSprite)
+                {
+                    currentSprite = value;
+                    frame = 0;
+                    loop = false;
+                }
+            }
+        }
+        protected int frame;
+        protected bool loop;
 
         public Entity(Node nodeFrom, Direction direction, double distance = 0)
         {
+            Init();
             this.nodeFrom = nodeFrom;
             this.direction = nextDirection = direction;
             this.distance = distance;
             MyCanvas.toDraw.Add(this);
             LoadTextures();
+        }
+
+        protected virtual void Init()
+        {
+
         }
 
         public void AddSprites(string name, string path, int frames)
@@ -46,6 +67,14 @@ namespace pacman
         public virtual void LoadTextures()
         {
 
+        }
+
+        public void LoadTexture(string textureName, int frames, string path = "")
+        {
+            if (path == string.Empty) {
+                path = name + "\\" + textureName;
+            }
+            AddSprites(textureName, Game.texturePack + "\\" + path + ".png", frames);
         }
 
         public virtual void BeforeMove()
@@ -126,6 +155,11 @@ namespace pacman
             AfterMove();
         }
 
+        public virtual void OnCollision(Entity entity)
+        {
+
+        }
+
         public (double, double) GetXY()
         {
             Node a = nodeFrom;
@@ -149,20 +183,27 @@ namespace pacman
             return (x, y);
         }
 
+        public virtual void SetSprite()
+        {
+            CurrentSprite = DirectionHelper.ToString(direction);
+        }
+
         public virtual void Draw(DrawingContext dc, double ratio)
         {
+            SetSprite();
+
             (double x, double y) = GetXY();
 
-            if (Game.ticks % 4 == 0)
+            if (sprites[CurrentSprite].Length > 1 && ((move && Game.ticks % 4 == 0) || (!move && frame == sprites[CurrentSprite].Length - 1)))
             {
                 frame += loop ? -1 : 1;
-                if (frame == sprites[currentSprite].Length - 1 || frame == 0)
+                if (frame == sprites[CurrentSprite].Length - 1 || frame == 0)
                 {
                     loop = !loop;
                 }
             }
 
-            dc.DrawImage(sprites[currentSprite][frame], new Rect(x * ratio - ratio / 2, y * ratio - ratio / 2, ratio * 2, ratio * 2));
+            dc.DrawImage(sprites[CurrentSprite][frame], new Rect(x * ratio - ratio / 2, y * ratio - ratio / 2, ratio * 2, ratio * 2));
         }
     }
 }

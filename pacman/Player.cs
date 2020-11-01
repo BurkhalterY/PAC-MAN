@@ -1,4 +1,7 @@
-﻿namespace pacman
+﻿using System;
+using System.Linq;
+
+namespace pacman
 {
     public class Player : Entity
     {
@@ -7,15 +10,9 @@
 
         }
 
-        public override void LoadTextures()
-        {
-            currentSprite = "move";
-            AddSprites("move", @"..\..\..\res\players\pac-man\move.png", 3);
-        }
-
         public override void AfterMove()
         {
-            (int x, int y) = Game.players[0].GetIntXY();
+            (int x, int y) = Game.entities.Find(e => e is Player).GetIntXY();
             Tile tile = Game.map.tiles[x, y];
 
             switch (tile.type)
@@ -25,8 +22,38 @@
                     break;
                 case TileType.SuperPellet:
                     tile.type = TileType.None;
+                    Game.entities.FindAll(e => e is Ghost).ForEach(e => ((Ghost)e).mode = GhostMode.Frightened);
                     break;
             }
+        }
+
+        public override void OnCollision(Entity entity)
+        {
+            if (entity is Ghost)
+            {
+                Ghost ghost = (Ghost)entity;
+                if (ghost.mode == GhostMode.Chase || ghost.mode == GhostMode.Scatter)
+                {
+                    GameOver();
+                }
+                else if(ghost.mode == GhostMode.Frightened)
+                {
+                    ghost.mode = GhostMode.Eaten;
+                }
+            }
+        }
+
+        public void GameOver()
+        {
+            Console.WriteLine("Game Over!");
+        }
+
+        public override void LoadTextures()
+        {
+            LoadTexture("up", 3);
+            LoadTexture("down", 3);
+            LoadTexture("left", 3);
+            LoadTexture("right", 3);
         }
     }
 }

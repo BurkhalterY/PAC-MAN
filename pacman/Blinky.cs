@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Linq;
+using System.Windows.Media;
 
 namespace pacman
 {
@@ -11,15 +12,14 @@ namespace pacman
             scatterY = 0;
         }
 
-        public override void LoadTextures()
+        protected override void Init()
         {
-            currentSprite = "right";
-            AddSprites("right", @"..\..\..\res\ghosts\blinky\right.png", 2);
+            name = "ghosts/blinky";
         }
 
         public override void CalculateTargetChaseMode()
         {
-            (targetX, targetY) = Game.players[0].GetIntXY();
+            (targetX, targetY) = Game.entities.Find(e => e is Player).GetIntXY();
         }
     }
 }
