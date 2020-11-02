@@ -18,7 +18,7 @@ namespace pacman
         public static List<int> modeIntervals = new List<int>() { 7 * 60, 20 * 60, 7 * 60, 20 * 60, 5 * 60, 20 * 60, 5 * 60 };
         public static int ticksMode;
         public static string texturePack = @"..\..\..\res";
-        public static bool debug = true;
+        public static bool debug = false;
 
         public Game()
         {

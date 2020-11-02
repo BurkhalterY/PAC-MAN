@@ -33,7 +33,11 @@ namespace pacman
             offsetX = Math.Max(0, Math.Min(offsetX, Game.map.tiles.GetLength(0) - screenWidth));
             offsetY = Math.Max(0, Math.Min(offsetY, Game.map.tiles.GetLength(1) - screenHeight));
 
+            offsetY -= 3;
+
             Point offset = new Point(offsetX, offsetY);
+
+            dc.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 1), new Rect(0, 0, screenWidth * ratio, (screenHeight + 5) * ratio));
 
             for (int i = toDraw.Length-1; i >= 0; i--)
             {
@@ -43,8 +47,8 @@ namespace pacman
                 }
             }
 
-            dc.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 1), new Rect(ratio * screenWidth, 0, ActualWidth, ActualHeight));
-            dc.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 1), new Rect(0, ratio * screenHeight, ActualWidth, ActualHeight));
+            dc.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 1), new Rect(screenWidth * ratio, 0, ActualWidth, ActualHeight));
+            dc.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 1), new Rect(0, (screenHeight + 3) * ratio, ActualWidth, ActualHeight));
         }
     }
 }

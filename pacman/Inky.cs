@@ -68,10 +68,10 @@ namespace pacman
                         break;
                 }
 
-                targetX = pacmanX - (blinkyX - pacmanX);
-                targetY = pacmanY - (blinkyY - pacmanY);
+                int targetX = pacmanX - (blinkyX - pacmanX);
+                int targetY = pacmanY - (blinkyY - pacmanY);
 
-                dc.DrawLine(new Pen(color, ratio / 8), new Point((blinkyX - offset.X) * ratio, (blinkyY - offset.Y) * ratio), new Point((targetX - offset.X) * ratio, (targetY - offset.Y) * ratio));
+                dc.DrawLine(new Pen(color, ratio / 8), new Point((blinkyX + .5 - offset.X) * ratio, (blinkyY + .5 - offset.Y) * ratio), new Point((targetX + .5 - offset.X) * ratio, (targetY + .5 - offset.Y) * ratio));
             }
         }
     }

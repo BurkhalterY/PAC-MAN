@@ -3,42 +3,42 @@
 		{
 			"type": "pacman",
 			"x": 26,
-			"y": 22,
+			"y": 19,
 			"distance": 0.5,
 			"direction": "left"
 		},
 		{
 			"type": "blinky",
 			"x": 26,
-			"y": 10,
+			"y": 7,
 			"distance": 0.5,
 			"direction": "left"
 		},
 		{
 			"type": "inky",
 			"x": 26,
-			"y": 10,
+			"y": 7,
 			"distance": 0.5,
 			"direction": "left"
 		},
 		{
 			"type": "pinky",
 			"x": 26,
-			"y": 10,
+			"y": 7,
 			"distance": 0.5,
 			"direction": "left"
 		},
 		{
 			"type": "clyde",
 			"x": 26,
-			"y": 10,
+			"y": 7,
 			"distance": 0.5,
 			"direction": "left"
 		},
 		{
 			"type": "sue",
 			"x": 26,
-			"y": 10,
+			"y": 7,
 			"distance": 0.5,
 			"direction": "left"
 		}
