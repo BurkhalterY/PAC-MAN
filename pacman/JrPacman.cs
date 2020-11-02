@@ -1,8 +1,8 @@
 ﻿namespace pacman
 {
-    public class PacmanJr : Player
+    public class JrPacman : Player
     {
-        public PacmanJr(Node nodeFrom, Direction direction, double distance = 0) : base(nodeFrom, direction, distance)
+        public JrPacman(Node nodeFrom, Direction direction, double distance = 0) : base(nodeFrom, direction, distance)
         {
 
         }

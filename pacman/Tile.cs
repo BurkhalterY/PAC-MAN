@@ -22,7 +22,7 @@ namespace pacman
             this.x = x;
             this.y = y;
             this.type = type;
-            this.node = new Node(x, y);
+            node = new Node(x, y);
             MyCanvas.toDraw[8].Add(this);
         }
 
@@ -31,7 +31,7 @@ namespace pacman
 
         }
 
-        public void Draw(DrawingContext dc, double ratio)
+        public void Draw(DrawingContext dc, double ratio, Point offset)
         {
             Brush brush = Brushes.Transparent;
 
@@ -54,7 +54,7 @@ namespace pacman
                     break;
             }
 
-            dc.DrawRectangle(brush, new Pen(brush, 1), new Rect(x * ratio, y * ratio, ratio, ratio));
+            dc.DrawRectangle(brush, new Pen(brush, 1), new Rect((x - offset.X) * ratio, (y - offset.Y) * ratio, ratio, ratio));
         }
     }
 }

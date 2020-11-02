@@ -18,6 +18,7 @@ namespace pacman
         public static List<int> modeIntervals = new List<int>() { 7 * 60, 20 * 60, 7 * 60, 20 * 60, 5 * 60, 20 * 60, 5 * 60 };
         public static int ticksMode;
         public static string texturePack = @"..\..\..\res";
+        public static bool debug = true;
 
         public Game()
         {
@@ -54,7 +55,8 @@ namespace pacman
             player = new Pacman(nodeA, Direction.Down);*/
 
             map = new Map();
-            map.LoadMap();
+            map.LoadMap("PAC-MAN");
+            //map.LoadMap("Jr. PAC-MAN (2)");
             /*entities[5] = new Pacman(map.tiles[6, 8].node, Direction.Down);
             entities[0] = new Blinky(map.tiles[6, 8].node, Direction.Left);
             entities[1] = new Inky(map.tiles[6, 8].node, Direction.Left);

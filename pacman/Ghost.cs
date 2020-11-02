@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Media;
 
 namespace pacman
@@ -154,10 +155,13 @@ namespace pacman
             }
         }
 
-        public override void Draw(DrawingContext dc, double ratio)
+        public override void Draw(DrawingContext dc, double ratio, Point offset)
         {
-            base.Draw(dc, ratio);
-            //dc.DrawRectangle(Brushes.Transparent, new Pen(color, ratio/8), new Rect(targetX * ratio, targetY * ratio, ratio, ratio));
+            base.Draw(dc, ratio, offset);
+            if (Game.debug)
+            {
+                dc.DrawRectangle(Brushes.Transparent, new Pen(color, ratio / 8), new Rect((targetX - offset.X) * ratio, (targetY - offset.Y) * ratio, ratio, ratio));
+            }
         }
     }
 }

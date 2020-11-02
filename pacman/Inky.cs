@@ -1,4 +1,5 @@
-﻿using System.Windows.Media;
+﻿using System.Windows;
+using System.Windows.Media;
 
 namespace pacman
 {
@@ -40,6 +41,38 @@ namespace pacman
 
             targetX = pacmanX - (blinkyX - pacmanX);
             targetY = pacmanY - (blinkyY - pacmanY);
+        }
+
+        public override void Draw(DrawingContext dc, double ratio, Point offset)
+        {
+            base.Draw(dc, ratio, offset);
+            if (Game.debug)
+            {
+                (int pacmanX, int pacmanY) = Game.entities.Find(e => e is Player).GetIntXY();
+                (int blinkyX, int blinkyY) = Game.entities.Find(e => e is Blinky).GetIntXY();
+
+                switch (Game.entities.Find(e => e is Player).direction)
+                {
+                    case Direction.Right:
+                        pacmanX += 2;
+                        break;
+                    case Direction.Left:
+                        pacmanX -= 2;
+                        break;
+                    case Direction.Down:
+                        pacmanY += 2;
+                        break;
+                    case Direction.Up:
+                        pacmanY -= 2;
+                        pacmanX -= 2;
+                        break;
+                }
+
+                targetX = pacmanX - (blinkyX - pacmanX);
+                targetY = pacmanY - (blinkyY - pacmanY);
+
+                dc.DrawLine(new Pen(color, ratio / 8), new Point((blinkyX - offset.X) * ratio, (blinkyY - offset.Y) * ratio), new Point((targetX - offset.X) * ratio, (targetY - offset.Y) * ratio));
+            }
         }
     }
 }

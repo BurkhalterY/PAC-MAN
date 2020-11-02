@@ -86,7 +86,7 @@
     <Compile Include="MyCanvas.cs" />
     <Compile Include="NodeConfig.cs" />
     <Compile Include="Pacman.cs" />
-    <Compile Include="PacmanJr.cs" />
+    <Compile Include="JrPacman.cs" />
     <Compile Include="Pinky.cs" />
     <Compile Include="Sue.cs" />
     <Compile Include="Tile.cs" />

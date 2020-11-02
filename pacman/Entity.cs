@@ -188,7 +188,7 @@ namespace pacman
             CurrentSprite = DirectionHelper.ToString(direction);
         }
 
-        public virtual void Draw(DrawingContext dc, double ratio)
+        public virtual void Draw(DrawingContext dc, double ratio, Point offset)
         {
             SetSprite();
 
@@ -203,7 +203,7 @@ namespace pacman
                 }
             }
 
-            dc.DrawImage(sprites[CurrentSprite][frame], new Rect(x * ratio - ratio / 2, y * ratio - ratio / 2, ratio * 2, ratio * 2));
+            dc.DrawImage(sprites[CurrentSprite][frame], new Rect((x - offset.X - .5) * ratio, (y - offset.Y - .5) * ratio, ratio * 2, ratio * 2));
         }
     }
 }

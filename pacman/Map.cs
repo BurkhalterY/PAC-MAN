@@ -7,9 +7,9 @@ namespace pacman
     {
         public Tile[,] tiles;
 
-        public void LoadMap()
+        public void LoadMap(string name)
         {
-            string[] lines = File.ReadAllLines(@"..\..\..\res\maps\PAC-MAN\map.txt");
+            string[] lines = File.ReadAllLines($@"..\..\..\res\maps\{name}\map.txt");
 
             tiles = new Tile[lines[0].Length, lines.Length];
 
@@ -55,12 +55,12 @@ namespace pacman
                     //tiles[tiles.GetLength(0) - 1, y].node.neighbors[Direction.Right] = new NodeConfig(tiles[0, y].node) { tp = true };
                 }
             }
-            LoadEntities();
+            LoadEntities(name);
         }
 
-        public void LoadEntities()
+        public void LoadEntities(string name)
         {
-            JObject obj = JObject.Parse(File.ReadAllText(@"..\..\..\res\maps\PAC-MAN\elements.json"));
+            JObject obj = JObject.Parse(File.ReadAllText($@"..\..\..\res\maps\{name}\elements.json"));
             JArray arr = obj.Value<JArray>("elements");
             foreach (JToken element in arr)
             {
@@ -78,7 +78,7 @@ namespace pacman
                         Game.entities.Add(new MsPacman(Game.map.tiles[x, y].node, direction, distance));
                         break;
                     case "jrpacman":
-                        Game.entities.Add(new PacmanJr(Game.map.tiles[x, y].node, direction, distance));
+                        Game.entities.Add(new JrPacman(Game.map.tiles[x, y].node, direction, distance));
                         break;
                     case "blinky":
                         Game.entities.Add(new Blinky(Game.map.tiles[x, y].node, direction, distance));

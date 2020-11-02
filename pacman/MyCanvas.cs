@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
@@ -19,15 +20,31 @@ namespace pacman
 
         protected override void OnRender(DrawingContext dc)
         {
-            double ratio = Math.Min(ActualWidth / 28, ActualHeight / 36);
+            double screenWidth = 28;
+            double screenHeight = 36;
+
+            double ratio = Math.Min(ActualWidth / screenWidth, ActualHeight / screenHeight);
+
+            (double offsetX, double offsetY) = Game.entities.Find(e => e is Player).GetXY();
+
+            offsetX -= screenWidth / 2;
+            offsetY -= screenHeight / 2;
+
+            offsetX = Math.Max(0, Math.Min(offsetX, Game.map.tiles.GetLength(0) - screenWidth));
+            offsetY = Math.Max(0, Math.Min(offsetY, Game.map.tiles.GetLength(1) - screenHeight));
+
+            Point offset = new Point(offsetX, offsetY);
 
             for (int i = toDraw.Length-1; i >= 0; i--)
             {
                 foreach (Drawable obj in toDraw[i])
                 {
-                    obj.Draw(dc, ratio);
+                    obj.Draw(dc, ratio, offset);
                 }
             }
+
+            dc.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 1), new Rect(ratio * screenWidth, 0, ActualWidth, ActualHeight));
+            dc.DrawRectangle(Brushes.Black, new Pen(Brushes.Black, 1), new Rect(0, ratio * screenHeight, ActualWidth, ActualHeight));
         }
     }
 }
