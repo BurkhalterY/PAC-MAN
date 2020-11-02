@@ -10,6 +10,9 @@ namespace pacman
     {
         public static List<Drawable>[] toDraw = new List<Drawable>[10];
 
+        public static double screenWidth = 28;
+        public static double screenHeight = 36;
+
         public static void Init()
         {
             for (int i = 0; i < toDraw.Length; i++)
@@ -20,9 +23,6 @@ namespace pacman
 
         protected override void OnRender(DrawingContext dc)
         {
-            double screenWidth = 28;
-            double screenHeight = 36;
-
             double ratio = Math.Min(ActualWidth / screenWidth, ActualHeight / screenHeight);
 
             (double offsetX, double offsetY) = Game.entities.Find(e => e is Player).GetXY();
@@ -31,7 +31,7 @@ namespace pacman
             offsetY -= screenHeight / 2;
 
             offsetX = Math.Max(0, Math.Min(offsetX, Game.map.tiles.GetLength(0) - screenWidth));
-            offsetY = Math.Max(0, Math.Min(offsetY, Game.map.tiles.GetLength(1) - screenHeight));
+            offsetY = Math.Max(0, Math.Min(offsetY, Game.map.tiles.GetLength(1) - screenHeight + 3));
 
             offsetY -= 3;
 

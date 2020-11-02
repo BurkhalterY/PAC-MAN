@@ -8,6 +8,13 @@
 			"direction": "left"
 		},
 		{
+			"type": "mspacman",
+			"x": 13,
+			"y": 23,
+			"distance": 0.5,
+			"direction": "right"
+		},
+		{
 			"type": "blinky",
 			"x": 14,
 			"y": 11,

@@ -2,50 +2,50 @@
 	"elements": [
 		{
 			"type": "pacman",
-			"x": 26,
-			"y": 22,
+			"x": 53,
+			"y": 72,
 			"distance": 0.5,
 			"direction": "left"
 		},
 		{
 			"type": "mspacman",
-			"x": 25,
-			"y": 22,
+			"x": 54,
+			"y": 72,
 			"distance": 0.5,
 			"direction": "right"
 		},
 		{
 			"type": "blinky",
-			"x": 26,
-			"y": 10,
+			"x": 53,
+			"y": 36,
 			"distance": 0.5,
 			"direction": "left"
 		},
 		{
 			"type": "inky",
-			"x": 26,
-			"y": 10,
+			"x": 53,
+			"y": 36,
 			"distance": 0.5,
 			"direction": "left"
 		},
 		{
 			"type": "pinky",
-			"x": 26,
-			"y": 10,
+			"x": 53,
+			"y": 36,
 			"distance": 0.5,
 			"direction": "left"
 		},
 		{
 			"type": "clyde",
-			"x": 26,
-			"y": 10,
+			"x": 53,
+			"y": 36,
 			"distance": 0.5,
 			"direction": "left"
 		},
 		{
 			"type": "sue",
-			"x": 26,
-			"y": 10,
+			"x": 53,
+			"y": 36,
 			"distance": 0.5,
 			"direction": "left"
 		}

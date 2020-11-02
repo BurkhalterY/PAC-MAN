@@ -55,7 +55,8 @@ namespace pacman
             player = new Pacman(nodeA, Direction.Down);*/
 
             map = new Map();
-            map.LoadMap("PAC-MAN");
+            map.LoadMap("Wallpaper");
+            //map.LoadMap("PAC-MAN");
             //map.LoadMap("Jr. PAC-MAN (2)");
             /*entities[5] = new Pacman(map.tiles[6, 8].node, Direction.Down);
             entities[0] = new Blinky(map.tiles[6, 8].node, Direction.Left);
@@ -64,9 +65,13 @@ namespace pacman
             entities[3] = new Clyde(map.tiles[6, 8].node, Direction.Left);*/
         }
 
-        public void pressKey(Direction direction)
+        public void pressKey(Direction direction, int playerNumero = 0)
         {
-            entities.Find(e => e is Player).nextDirection = direction;
+            List<Entity> players = entities.FindAll(e => e is Player);
+            if (playerNumero < players.Count)
+            {
+                players[playerNumero].nextDirection = direction;
+            }
         }
 
         private void onTick(object sender, EventArgs e)

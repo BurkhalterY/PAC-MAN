@@ -1,0 +1,169 @@
+{
+	"tiles": [
+		{
+			"x": 12,
+			"y": 2,
+			"pattern": "???? ????"
+		},
+		{
+			"x": 12,
+			"y": 2,
+			"pattern": "????E????"
+		},
+		{
+			"x": 13,
+			"y": 2,
+			"pattern": "????.????"
+		},
+		{
+			"x": 15,
+			"y": 2,
+			"pattern": "????O????"
+		},
+		{
+			"x": 0,
+			"y": 3,
+			"pattern": "?X?XXX?X?"
+		},
+		{
+			"x": 7,
+			"y": 1,
+			"pattern": "____XX_XS"
+		},
+		{
+			"x": 6,
+			"y": 1,
+			"pattern": "___XX_SX_"
+		},
+		{
+			"x": 11,
+			"y": 1,
+			"pattern": "_XS_XX___"
+		},
+		{
+			"x": 10,
+			"y": 1,
+			"pattern": "SX_XX____"
+		},
+		{
+			"x": 14,
+			"y": 0,
+			"pattern": "?_?XXX?X?"
+		},
+		{
+			"x": 4,
+			"y": 1,
+			"pattern": "?X?XXX?_?"
+		},
+		{
+			"x": 8,
+			"y": 1,
+			"pattern": "?X?XX_?X?"
+		},
+		{
+			"x": 9,
+			"y": 1,
+			"pattern": "?X?_XX?X?"
+		},
+		{
+			"x": 2,
+			"y": 2,
+			"pattern": "XXXXXXXX_"
+		},
+		{
+			"x": 3,
+			"y": 2,
+			"pattern": "XXXXXX_XX"
+		},
+		{
+			"x": 4,
+			"y": 2,
+			"pattern": "XX_XXXXXX"
+		},
+		{
+			"x": 5,
+			"y": 2,
+			"pattern": "_XXXXXXXX"
+		},
+		{
+			"x": 0,
+			"y": 0,
+			"pattern": "EEEXXE_XE"
+		},
+		{
+			"x": 1,
+			"y": 0,
+			"pattern": "EEEEXXEX_"
+		},
+		{
+			"x": 4,
+			"y": 0,
+			"pattern": "_XEXXEEEE"
+		},
+		{
+			"x": 5,
+			"y": 0,
+			"pattern": "EX_EXXEEE"
+		},
+		{
+			"x": 2,
+			"y": 0,
+			"pattern": "?S?_XE?S?"
+		},
+		{
+			"x": 3,
+			"y": 0,
+			"pattern": "?S?EX_?S?"
+		},
+		{
+			"x": 10,
+			"y": 0,
+			"pattern": "?E?SXS?_?"
+		},
+		{
+			"x": 12,
+			"y": 0,
+			"pattern": "?_?SXS?E?"
+		},
+		{
+			"x": 6,
+			"y": 0,
+			"pattern": "_X?XXE?X?"
+		},
+		{
+			"x": 7,
+			"y": 0,
+			"pattern": "?X_EXX?X?"
+		},
+		{
+			"x": 8,
+			"y": 0,
+			"pattern": "?X?XXE_X?"
+		},
+		{
+			"x": 9,
+			"y": 0,
+			"pattern": "?X?EXX?X_"
+		},
+		{
+			"x": 10,
+			"y": 2,
+			"pattern": "?E?XXX?X_"
+		},
+		{
+			"x": 11,
+			"y": 2,
+			"pattern": "?E?XXX_X?"
+		},
+		{
+			"x": 1,
+			"y": 3,
+			"pattern": "?X_XXX?E?"
+		},
+		{
+			"x": 2,
+			"y": 3,
+			"pattern": "_X?XXX?E?"
+		}
+	]
+}

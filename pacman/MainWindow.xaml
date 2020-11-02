@@ -8,7 +8,7 @@
         Title="MainWindow" Height="450" Width="800"
         KeyDown="Window_KeyDown">
     <Grid>
-        <local:MyCanvas x:Name="scene" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+        <local:MyCanvas x:Name="scene" RenderOptions.EdgeMode="Aliased" RenderOptions.BitmapScalingMode="NearestNeighbor"/>
 
     </Grid>
 </Window>

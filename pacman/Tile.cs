@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace pacman
 {
@@ -8,20 +9,35 @@ namespace pacman
         Wall = 'X',
         None = ' ',
         Pellet = '.',
-        SuperPellet = 'O'
+        SuperPellet = 'O',
+        External = 'E'
     }
 
     public class Tile : Drawable
     {
         public int x, y;
-        public TileType type;
+        private TileType type;
+        public TileType Type
+        {
+            get
+            {
+                return type;
+            }
+            set
+            {
+                type = value;
+                Game.map.AutoTiling(x, y);
+            }
+        }
+
         public Node node;
+        public CroppedBitmap texture;
 
         public Tile(int x, int y, TileType type)
         {
             this.x = x;
             this.y = y;
-            this.type = type;
+            Type = type;
             node = new Node(x, y);
             MyCanvas.toDraw[8].Add(this);
         }
@@ -33,28 +49,40 @@ namespace pacman
 
         public void Draw(DrawingContext dc, double ratio, Point offset)
         {
-            Brush brush = Brushes.Transparent;
+            Rect rect = new Rect((x - offset.X) * ratio, (y - offset.Y) * ratio, ratio, ratio);
 
-            switch (type)
+            if (rect.X + rect.Width >= 0 && rect.X <= MyCanvas.screenWidth * ratio && rect.Y + rect.Height >= 0 && rect.Y <= MyCanvas.screenHeight * ratio)
             {
-                case TileType.Wall:
-                    brush = Brushes.Blue;
-                    break;
-                case TileType.None:
-                    brush = Brushes.Black;
-                    break;
-                case TileType.Pellet:
-                    brush = Brushes.Beige;
-                    break;
-                case TileType.SuperPellet:
-                    brush = Brushes.Orange;
-                    break;
-                default:
-                    brush = Brushes.Green;
-                    break;
-            }
+                if (texture != null)
+                {
+                    dc.DrawImage(texture, rect);
+                }
+                else
+                {
+                    Brush brush;
 
-            dc.DrawRectangle(brush, new Pen(brush, 1), new Rect((x - offset.X) * ratio, (y - offset.Y) * ratio, ratio, ratio));
+                    switch (Type)
+                    {
+                        case TileType.Wall:
+                            brush = Brushes.Blue;
+                            break;
+                        case TileType.None:
+                            brush = Brushes.Black;
+                            break;
+                        case TileType.Pellet:
+                            brush = Brushes.Beige;
+                            break;
+                        case TileType.SuperPellet:
+                            brush = Brushes.Orange;
+                            break;
+                        default:
+                            brush = Brushes.Red;
+                            break;
+                    }
+
+                    dc.DrawRectangle(brush, null, rect);
+                }
+            }
         }
     }
 }

@@ -26,20 +26,28 @@ namespace pacman
             switch (e.Key)
             {
                 case Key.Up:
-                case Key.W:
                     controller.pressKey(Direction.Up);
                     break;
+                case Key.W:
+                    controller.pressKey(Direction.Up, 1);
+                    break;
                 case Key.Right:
-                case Key.D:
                     controller.pressKey(Direction.Right);
                     break;
+                case Key.D:
+                    controller.pressKey(Direction.Right, 1);
+                    break;
                 case Key.Down:
-                case Key.S:
                     controller.pressKey(Direction.Down);
                     break;
+                case Key.S:
+                    controller.pressKey(Direction.Down, 1);
+                    break;
                 case Key.Left:
-                case Key.A:
                     controller.pressKey(Direction.Left);
+                    break;
+                case Key.A:
+                    controller.pressKey(Direction.Left, 1);
                     break;
             }
         }
