@@ -75,8 +75,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Entities\Ghosts\Blinky.cs" />
-    <Compile Include="Entities\Ghosts\Clyde.cs" />
+    <Compile Include="Ghosts\Blinky.cs" />
+    <Compile Include="Ghosts\Clyde.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="Drawable.cs" />
     <Compile Include="Editor.cs" />
@@ -89,15 +89,18 @@
     <Compile Include="GameCanvas.cs" />
     <Compile Include="Ghost.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="Entities\Ghosts\Inky.cs" />
+    <Compile Include="Ghosts\Inky.cs" />
     <Compile Include="Map.cs" />
-    <Compile Include="Entities\Players\MsPacman.cs" />
+    <Compile Include="MenuWindow.xaml.cs">
+      <DependentUpon>MenuWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Players\MsPacman.cs" />
     <Compile Include="MyCanvas.cs" />
     <Compile Include="NodeConfig.cs" />
-    <Compile Include="Entities\Players\Pacman.cs" />
-    <Compile Include="Entities\Players\JrPacman.cs" />
-    <Compile Include="Entities\Ghosts\Pinky.cs" />
-    <Compile Include="Entities\Ghosts\Sue.cs" />
+    <Compile Include="Players\Pacman.cs" />
+    <Compile Include="Players\JrPacman.cs" />
+    <Compile Include="Ghosts\Pinky.cs" />
+    <Compile Include="Ghosts\Sue.cs" />
     <Compile Include="Tile.cs" />
     <Page Include="EditorWindow.xaml">
       <SubType>Designer</SubType>
@@ -115,6 +118,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MenuWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Node.cs" />
@@ -136,6 +143,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Fonts\ARCADECLASSIC.TTF" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
