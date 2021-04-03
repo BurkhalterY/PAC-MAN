@@ -17,13 +17,13 @@ namespace pacman
             {
                 Tile tile = Game.map.tiles[x, y];
 
-                switch (tile.Type)
+                switch (tile.type)
                 {
                     case TileType.Pellet:
-                        tile.Type = TileType.None;
+                        tile.SetTile(TileType.None);
                         break;
                     case TileType.SuperPellet:
-                        tile.Type = TileType.None;
+                        tile.SetTile(TileType.None);
                         Game.entities.FindAll(e => e is Ghost).ForEach(e => ((Ghost)e).mode = GhostMode.Frightened);
                         break;
                 }

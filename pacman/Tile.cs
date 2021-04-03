@@ -16,42 +16,36 @@ namespace pacman
     public class Tile : Drawable
     {
         public int x, y;
-        private TileType type;
-        public TileType Type
-        {
-            get
-            {
-                return type;
-            }
-            set
-            {
-                type = value;
-                Game.map.AutoTiling(x, y);
-            }
-        }
+        private Map map;
+        public TileType type;
 
-        public Node node;
         public CroppedBitmap texture;
 
-        public Tile(int x, int y, TileType type)
+        public Tile(int x, int y, Map map, TileType type)
         {
             this.x = x;
             this.y = y;
-            Type = type;
-            node = new Node(x, y);
+            this.map = map;
+            this.type = type;
             MyCanvas.toDraw[8].Add(this);
         }
 
-        public Tile(int x, int y, char type) : this(x, y, (TileType)type)
+        public Tile(int x, int y, Map map, char type) : this(x, y, map, (TileType)type)
         {
 
+        }
+
+        public void SetTile(TileType type)
+        {
+            this.type = type;
+            map.AutoTiling(x, y);
         }
 
         public void Draw(DrawingContext dc, double ratio, Point offset)
         {
             Rect rect = new Rect((x - offset.X) * ratio, (y - offset.Y) * ratio, ratio, ratio);
 
-            if (rect.X + rect.Width >= 0 && rect.X <= MyCanvas.screenWidth * ratio && rect.Y + rect.Height >= 0 && rect.Y <= MyCanvas.screenHeight * ratio)
+            if (rect.X + rect.Width >= 0 && rect.X <= GameCanvas.screenWidth * ratio && rect.Y + rect.Height >= 0 && rect.Y <= GameCanvas.screenHeight * ratio)
             {
                 if (texture != null)
                 {
@@ -61,7 +55,7 @@ namespace pacman
                 {
                     Brush brush;
 
-                    switch (Type)
+                    switch (type)
                     {
                         case TileType.Wall:
                             brush = Brushes.Blue;
@@ -83,6 +77,11 @@ namespace pacman
                     dc.DrawRectangle(brush, null, rect);
                 }
             }
+        }
+
+        public static bool TileIsSolid(TileType tile)
+        {
+            return tile == TileType.Wall || tile == TileType.External;
         }
     }
 }

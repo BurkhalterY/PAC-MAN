@@ -27,7 +27,6 @@ namespace pacman
             timer.Interval = 16;
             timer.Start();
             random = new Random();
-            MyCanvas.Init();
 
             /*Node nodeA = new Node(6, 6);
             Node nodeB = new Node(12, 6);
@@ -54,9 +53,10 @@ namespace pacman
             nodeG.neighbors[Direction.Left] = nodeF;
             player = new Pacman(nodeA, Direction.Down);*/
 
-            map = new Map();
-            map.LoadMap("Wallpaper");
-            //map.LoadMap("PAC-MAN");
+            map = new Map("PAC-MAN");
+            //map = new Map("Wallpaper");
+            map.LoadMap();
+            map.LoadEntities();
             //map.LoadMap("Jr. PAC-MAN (2)");
             /*entities[5] = new Pacman(map.tiles[6, 8].node, Direction.Down);
             entities[0] = new Blinky(map.tiles[6, 8].node, Direction.Left);

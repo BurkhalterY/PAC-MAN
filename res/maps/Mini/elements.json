@@ -1,0 +1,11 @@
+{
+	"elements": [
+		{
+			"type": "pacman",
+			"x": 1,
+			"y": 5,
+			"distance": 0,
+			"direction": "right"
+		}
+	]
+}

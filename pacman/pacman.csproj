@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>pacman.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -72,24 +75,34 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Blinky.cs" />
-    <Compile Include="Clyde.cs" />
+    <Compile Include="Entities\Ghosts\Blinky.cs" />
+    <Compile Include="Entities\Ghosts\Clyde.cs" />
     <Compile Include="Direction.cs" />
     <Compile Include="Drawable.cs" />
+    <Compile Include="Editor.cs" />
+    <Compile Include="EditorCanvas.cs" />
+    <Compile Include="EditorWindow.xaml.cs">
+      <DependentUpon>EditorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Entity.cs" />
     <Compile Include="Game.cs" />
+    <Compile Include="GameCanvas.cs" />
     <Compile Include="Ghost.cs" />
     <Compile Include="Helper.cs" />
-    <Compile Include="Inky.cs" />
+    <Compile Include="Entities\Ghosts\Inky.cs" />
     <Compile Include="Map.cs" />
-    <Compile Include="MsPacman.cs" />
+    <Compile Include="Entities\Players\MsPacman.cs" />
     <Compile Include="MyCanvas.cs" />
     <Compile Include="NodeConfig.cs" />
-    <Compile Include="Pacman.cs" />
-    <Compile Include="JrPacman.cs" />
-    <Compile Include="Pinky.cs" />
-    <Compile Include="Sue.cs" />
+    <Compile Include="Entities\Players\Pacman.cs" />
+    <Compile Include="Entities\Players\JrPacman.cs" />
+    <Compile Include="Entities\Ghosts\Pinky.cs" />
+    <Compile Include="Entities\Ghosts\Sue.cs" />
     <Compile Include="Tile.cs" />
+    <Page Include="EditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

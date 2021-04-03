@@ -7,13 +7,13 @@
 			"distance": 0.5,
 			"direction": "left"
 		},
-		{
+		/*{
 			"type": "mspacman",
 			"x": 25,
 			"y": 22,
 			"distance": 0.5,
 			"direction": "right"
-		},
+		},*/
 		{
 			"type": "blinky",
 			"x": 26,

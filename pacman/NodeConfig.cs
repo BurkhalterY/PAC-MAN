@@ -4,6 +4,7 @@
     {
         public Node node;
         public bool tp = false;
+        public bool red = false;
 
         public NodeConfig(Node node)
         {

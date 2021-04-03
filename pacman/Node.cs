@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Windows;
 using System.Windows.Media;
 
@@ -27,12 +26,17 @@ namespace pacman
         {
             if (Game.debug)
             {
-                //dc.DrawEllipse(Brushes.Red, new Pen(Brushes.Red, 1), new Point((x - offset.X + .5) * ratio, (y - offset.Y + .5) * ratio), ratio / 4, ratio / 4);
                 foreach (var neighbor in neighbors)
                 {
                     if (neighbor.Value != null && !neighbor.Value.tp)
                     {
-                        dc.DrawLine(new Pen(Brushes.White, ratio / 8), new Point((x - offset.X + .5) * ratio, (y - offset.Y + .5) * ratio), new Point((neighbor.Value.node.x - offset.X + .5) * ratio, (neighbor.Value.node.y - offset.Y + .5) * ratio));
+                        Point p1 = new Point((x - offset.X + .5) * ratio, (y - offset.Y + .5) * ratio);
+                        Point p2 = new Point((neighbor.Value.node.x - offset.X + .5) * ratio, (neighbor.Value.node.y - offset.Y + .5) * ratio);
+                        if (p1.X >= 0 && p1.X < GameCanvas.screenWidth * ratio && p1.Y >= 0 && p1.Y < GameCanvas.screenHeight * ratio
+                         || p2.X >= 0 && p2.X < GameCanvas.screenWidth * ratio && p2.Y >= 0 && p2.Y < GameCanvas.screenHeight * ratio)
+                        {
+                            dc.DrawLine(new Pen(neighbor.Value.red ? Brushes.Red : Brushes.White, ratio / 8), p1, p2);
+                        }
                     }
                 }
             }

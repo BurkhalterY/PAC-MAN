@@ -6,11 +6,13 @@ namespace pacman
 {
     public partial class MainWindow : Window
     {
-        public Game controller = new Game();
+        public Game controller;
 
         public MainWindow()
         {
             InitializeComponent();
+            MyCanvas.Init();
+            controller = new Game();
             controller.OnRefresh += new Refresh(OnRefresh);
         }
 
